@@ -56,7 +56,7 @@ class _CreateState extends State<Create> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 10),
             decoration: BoxDecoration(
               color: Colors.green[100],
               borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -278,7 +278,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             labelText: widget.labelText,
             hintText: widget.hintText,
             hintStyle: TextStyle(color: Colors.grey),
-            prefixIcon: Icon(widget.prefixIcon, size: 20),
+            prefixIcon: Icon(widget.prefixIcon, size: 15,color: Colors.brown[800],),
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.black, width: 2),
             ),
