@@ -4,11 +4,13 @@ class Create extends StatefulWidget {
   const Create({super.key});
 
   @override
-  _CreateState createState() => _CreateState();
+  State<Create> createState() => _CreateState();
 }
 
 class _CreateState extends State<Create> {
   String? _selectedAnswer;
+  final TextEditingController _questionController = TextEditingController();
+  final List<TextEditingController> _optionControllers = List.generate(4, (_) => TextEditingController());
 
   Widget _buildCircle(Color color) {
     return Container(
@@ -47,6 +49,42 @@ class _CreateState extends State<Create> {
         ),
       ),
     );
+  }
+
+  void _addQuestion() {
+    final question = _questionController.text;
+    final options = _optionControllers.map((controller) => controller.text).toList();
+
+    // Check if any field is empty
+    if (question.isEmpty || options.any((option) => option.isEmpty) || _selectedAnswer == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill in all fields and select an answer.')),
+      );
+      return;
+    }
+
+    // If all fields are filled, print the data
+    print('Question: $question');
+    print('Options: ${options.join(', ')}');
+    print('Selected Answer: $_selectedAnswer');
+
+    // Reset the fields
+    _questionController.clear();
+    for (var controller in _optionControllers) {
+      controller.clear();
+    }
+    setState(() {
+      _selectedAnswer = null; // Reset selected answer
+    });
+  }
+
+  @override
+  void dispose() {
+    _questionController.dispose();
+    for (var controller in _optionControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -155,10 +193,34 @@ class _CreateState extends State<Create> {
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 5),
-                const CustomTextField(
-                  hintText: "Type Question",
-                  prefixIcon: Icons.question_mark,
-                  labelText: "Question",
+                TextField(
+                  controller: _questionController,
+                  decoration: InputDecoration(
+                    labelText: "Question",
+                    hintText: "Type Question",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.question_mark, size: 10, color: Colors.brown[800]),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.brown, width: 2),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.green, width: 2),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.red, width: 2),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.red, width: 2),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -166,30 +228,37 @@ class _CreateState extends State<Create> {
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 5),
-                const CustomTextField(
-                  hintText: "Enter text here",
-                  prefixIcon: Icons.circle,
-                  labelText: "Option A",
-                ),
-                const SizedBox(height: 10),
-                const CustomTextField(
-                  hintText: "Enter text here",
-                  prefixIcon: Icons.circle,
-                  labelText: "Option B",
-                ),
-                const SizedBox(height: 10),
-                const CustomTextField(
-                  hintText: "Enter text here",
-                  prefixIcon: Icons.circle,
-                  labelText: "Option C",
-                ),
-                const SizedBox(height: 10),
-                const CustomTextField(
-                  hintText: "Enter text here",
-                  prefixIcon: Icons.circle,
-                  labelText: "Option D",
-                ),
-                const SizedBox(height: 10),
+                for (int i = 0; i < 4; i++) ...[
+                  TextField(
+                    controller: _optionControllers[i],
+                    decoration: InputDecoration(
+                      labelText: "Option ${String.fromCharCode(65 + i)}",
+                      hintText: "Enter text here",
+                      prefixIcon: Icon(Icons.circle, size: 10, color: Colors.brown[800]),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.brown, width: 2),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.brown, width: 2),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.green, width: 2),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.red, width: 2),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.red, width: 2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10), // Add spacing after each option
+                ],
                 const Text(
                   "Select correct answer",
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
@@ -206,9 +275,7 @@ class _CreateState extends State<Create> {
                 ),
                 const SizedBox(height: 15),
                 InkWell(
-                  onTap: () {
-                    // Add your onTap logic here
-                  },
+                  onTap: _addQuestion,
                   child: Container(
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
@@ -236,79 +303,3 @@ class _CreateState extends State<Create> {
     );
   }
 }
-
-// Custom TextField class
-class CustomTextField extends StatefulWidget {
-  final String hintText;
-  final IconData prefixIcon;
-  final String labelText;
-
-  const CustomTextField({
-    required this.hintText,
-    required this.prefixIcon,
-    this.labelText = '',
-    super.key,
-  });
-
-  @override
-  _CustomTextFieldState createState() => _CustomTextFieldState();
-}
-
-class _CustomTextFieldState extends State<CustomTextField> {
-  final TextEditingController _controller = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
-  String? _errorText;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: _controller,
-          focusNode: _focusNode,
-          decoration: InputDecoration(
-            labelText: widget.labelText,
-            hintText: widget.hintText,
-            hintStyle: TextStyle(color: Colors.grey),
-            prefixIcon: Icon(widget.prefixIcon, size: 10, color: Colors.brown[800]),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.black, width: 2),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.black, width: 2),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.green, width: 2),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.red, width: 2),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.red, width: 2),
-            ),
-            errorText: _errorText,
-          ),
-          onChanged: (value) {
-            setState(() {
-              _errorText = value.isEmpty ? 'This field is required' : null;
-            });
-          },
-        ),
-      ],
-    );
-  }
-}
-

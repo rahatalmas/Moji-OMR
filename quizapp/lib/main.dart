@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/Widgets/create.dart';
+import 'package:quizapp/Widgets/omrCreatePage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,17 +32,17 @@ class Root extends StatefulWidget {
 }
 
 class _Root extends State<Root> {
-  int _currentIndex = 0; // Current index for the bottom navigation
+  int _currentIndex = 0;
 
   final List<Widget> _children = [
     const Create(),
-    const Center(child: Text("Result")),
+    const OmrCreatePage(),
     const Center(child: Text("Dashboard")),
   ];
 
   void onTabTapped(int index) {
     setState(() {
-      _currentIndex = index; // Update current index
+      _currentIndex = index;
     });
   }
 
