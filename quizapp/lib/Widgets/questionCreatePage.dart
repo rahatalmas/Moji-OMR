@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quizapp/models/question.dart';
+import 'package:quizapp/providers/questionProvider.dart';
 
-class Create extends StatefulWidget {
-  const Create({super.key});
+class QuestionCreatePage extends StatefulWidget {
+  const QuestionCreatePage({super.key});
 
   @override
-  State<Create> createState() => _CreateState();
+  State<QuestionCreatePage> createState() => _QuestionCreatePage();
 }
 
-class _CreateState extends State<Create> {
+class _QuestionCreatePage extends State<QuestionCreatePage> {
   String? _selectedAnswer;
   final TextEditingController _questionController = TextEditingController();
   final List<TextEditingController> _optionControllers = List.generate(4, (_) => TextEditingController());
@@ -58,15 +61,20 @@ class _CreateState extends State<Create> {
     // Check if any field is empty
     if (question.isEmpty || options.any((option) => option.isEmpty) || _selectedAnswer == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all fields and select an answer.')),
+        const SnackBar(duration: Duration.zero,content: Text('Please fill in all fields and select an answer.')),
       );
       return;
     }
 
-    // If all fields are filled, print the data
-    print('Question: $question');
-    print('Options: ${options.join(', ')}');
-    print('Selected Answer: $_selectedAnswer');
+    // Create a new Question object
+    final newQuestion = Question(
+      questionText: question,
+      options: options,
+      correctAnswer: _selectedAnswer!,
+    );
+
+    // Use the provider to add the question
+    Provider.of<QuestionProvider>(context, listen: false).addQuestion(newQuestion);
 
     // Reset the fields
     _questionController.clear();
@@ -77,7 +85,6 @@ class _CreateState extends State<Create> {
       _selectedAnswer = null; // Reset selected answer
     });
   }
-
   @override
   void dispose() {
     _questionController.dispose();

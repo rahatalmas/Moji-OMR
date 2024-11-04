@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/Widgets/create.dart';
+import 'package:provider/provider.dart';
+import 'package:quizapp/Widgets/QuestionTemplate.dart';
+import 'package:quizapp/Widgets/questionCreatePage.dart';
 import 'package:quizapp/Widgets/omrCreatePage.dart';
+import 'package:quizapp/providers/questionProvider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers:[
+        ChangeNotifierProvider(create: (context)=>QuestionProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,9 +45,9 @@ class _Root extends State<Root> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [
-    const Create(),
+    const QuestionCreatePage(),
     const OmrCreatePage(),
-    const Center(child: Text("Dashboard")),
+    const QuestionTemplate(),
   ];
 
   void onTabTapped(int index) {
