@@ -1,172 +1,243 @@
 import 'package:flutter/material.dart';
 
-
-class Create extends StatelessWidget{
+class Create extends StatefulWidget {
   const Create({super.key});
 
   @override
-  Widget build(BuildContext context){
+  _CreateState createState() => _CreateState();
+}
+
+class _CreateState extends State<Create> {
+  String? _selectedAnswer;
+
+  Widget _buildCircle(Color color) {
+    return Container(
+      width: 10,
+      height: 10,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+
+  Widget _answerCircle(BuildContext context, String label) {
+    final isSelected = _selectedAnswer == label;
+
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedAnswer = label;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$label selected'), duration: Duration.zero),
+        );
+      },
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isSelected ? Colors.green : Colors.blue,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-             padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-             decoration: BoxDecoration(
-                color: Colors.green[100],
-               borderRadius: const BorderRadius.all(Radius.circular(10)),
-               border: Border.all(color: Colors.black87,width: 2)
-             ),
-            child: const Column(
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.green[100],
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.black87, width: 2),
+            ),
+            child: Stack(
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.question_answer_outlined),
-                        Text("Question Maker",style: TextStyle(fontSize: 17),)
+                        Row(
+                          children: [
+                            Icon(Icons.question_answer_outlined),
+                            Text(
+                              "Question Maker",
+                              style: TextStyle(fontSize: 17),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Edit",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Icon(Icons.settings, size: 20),
+                          ],
+                        ),
                       ],
                     ),
-                    Row(
+                    const SizedBox(height: 5),
+                    const Row(
                       children: [
-                        Text("Edit",style: TextStyle(fontSize: 17),),
-                        Icon(Icons.settings,size: 20,)
+                        Text("Total: 10"),
+                        SizedBox(width: 20),
+                        Text("Added: 7"),
+                        SizedBox(width: 20),
+                        Text("Remaining: 3"),
                       ],
-                    )
+                    ),
+                    const SizedBox(height: 2),
+                    const Row(
+                      children: [
+                        Text("Options per Question: 4"),
+                      ],
+                    ),
                   ],
                 ),
-                SizedBox(height: 5,),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Total: 10"),
-                    SizedBox(width: 20,),
-                    Text("Added: 7"),
-                    SizedBox(width: 20,),
-                    Text("Remaining: 3")
-                  ],
-
+                Positioned(
+                  bottom: 0,
+                  right: 5,
+                  child: Image.asset(
+                    "assets/images/brainchip.png",
+                    height: 35,
+                  ),
                 ),
-                SizedBox(height: 2,),
-                Row(
-                  children: [
-                    Text("Options per Question: 4"),
-                  ],
-                )
               ],
             ),
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(height: 10),
           Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-              //margin: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
-              decoration: BoxDecoration(
-                  color: Colors.orange[100],
-                  borderRadius: const BorderRadius.all(Radius.circular(10))
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Question- 1",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400),),
-                  const SizedBox(height: 2,),
-                  const Text("Type Your Question",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                  const SizedBox(height: 5,),
-                  const CustomTextField(hintText: "Type Question",prefixIcon: Icons.question_mark,labelText: "Question",),
-                  const SizedBox(height: 10,),
-
-                  const Text("Type Options",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                  const SizedBox(height: 5,),
-                  const CustomTextField(hintText: "Enter text here",prefixIcon: Icons.circle,labelText: "Option A",),
-
-                  const SizedBox(height: 10,),
-                  const CustomTextField(hintText: "Enter text here",prefixIcon: Icons.circle,labelText: "Option B",),
-
-                  const SizedBox(height: 10,),
-                  const CustomTextField(hintText: "Enter text here",prefixIcon: Icons.circle,labelText: "Option C",),
-
-                  const SizedBox(height: 10,),
-                  const CustomTextField(hintText: "Enter text here",prefixIcon: Icons.circle,labelText: "Option D"),
-
-                  const SizedBox(height: 15,),
-                  InkWell(
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                          color: Colors.green[100],
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(color: Colors.black87,width: 2)
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Add",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                          Icon(Icons.add)
-                        ],
-                      ),
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.orange[100],
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Question- 1",
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                     ),
-                  )
-                ],
-              )
-          ),
-          /*ListView.builder(
-              physics:const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount:10,
-              itemBuilder: (context, index) {
-                return Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-                    margin: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
-                    decoration: BoxDecoration(
-                        color: Colors.orange[100],
-                        borderRadius: const BorderRadius.all(Radius.circular(10))
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Text("Question- 1",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400),),
-                        SizedBox(height: 2,),
-                        Text("Type Your Question",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                        SizedBox(height: 5,),
-                        CustomTextField(hintText: "Type Question",prefixIcon: Icons.question_mark,labelText: "Question",),
-                        SizedBox(height: 10,),
-
-                        Text("Type Options",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                        SizedBox(height: 5,),
-                        CustomTextField(hintText: "Enter text here",prefixIcon: Icons.circle,labelText: "Option A",),
-
-                        SizedBox(height: 10,),
-                        CustomTextField(hintText: "Enter text here",prefixIcon: Icons.circle,labelText: "Option B",),
-
-                        SizedBox(height: 10,),
-                        CustomTextField(hintText: "Enter text here",prefixIcon: Icons.circle,labelText: "Option C",),
-
-                        SizedBox(height: 10,),
-                        CustomTextField(hintText: "Enter text here",prefixIcon: Icons.circle,labelText: "Option D"),
+                        _buildCircle(Colors.orange),
+                        SizedBox(width: 5),
+                        _buildCircle(Colors.blue),
+                        SizedBox(width: 5),
+                        _buildCircle(Colors.green),
                       ],
-                    )
-                );
-              },
-          )*/
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  "Type Your Question",
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                const CustomTextField(
+                  hintText: "Type Question",
+                  prefixIcon: Icons.question_mark,
+                  labelText: "Question",
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Type Options",
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                const CustomTextField(
+                  hintText: "Enter text here",
+                  prefixIcon: Icons.circle,
+                  labelText: "Option A",
+                ),
+                const SizedBox(height: 10),
+                const CustomTextField(
+                  hintText: "Enter text here",
+                  prefixIcon: Icons.circle,
+                  labelText: "Option B",
+                ),
+                const SizedBox(height: 10),
+                const CustomTextField(
+                  hintText: "Enter text here",
+                  prefixIcon: Icons.circle,
+                  labelText: "Option C",
+                ),
+                const SizedBox(height: 10),
+                const CustomTextField(
+                  hintText: "Enter text here",
+                  prefixIcon: Icons.circle,
+                  labelText: "Option D",
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Select correct answer",
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _answerCircle(context, 'A'),
+                    _answerCircle(context, 'B'),
+                    _answerCircle(context, 'C'),
+                    _answerCircle(context, 'D'),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                InkWell(
+                  onTap: () {
+                    // Add your onTap logic here
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: Colors.green[100],
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      border: Border.all(color: Colors.black87, width: 2),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Add",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Icon(Icons.add),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }
 
-
-
-
-// struct later
-
-
+// Custom TextField class
 class CustomTextField extends StatefulWidget {
   final String hintText;
   final IconData prefixIcon;
@@ -176,6 +247,7 @@ class CustomTextField extends StatefulWidget {
     required this.hintText,
     required this.prefixIcon,
     this.labelText = '',
+    super.key,
   });
 
   @override
@@ -206,7 +278,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             labelText: widget.labelText,
             hintText: widget.hintText,
             hintStyle: TextStyle(color: Colors.grey),
-            prefixIcon: Icon(widget.prefixIcon,size: 10,),
+            prefixIcon: Icon(widget.prefixIcon, size: 20),
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.black, width: 2),
             ),
@@ -225,15 +297,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
             errorText: _errorText,
           ),
           onChanged: (value) {
-            if (value.isEmpty) {
-              setState(() {
-                _errorText = 'This field is required';
-              });
-            } else {
-              setState(() {
-                _errorText = null;
-              });
-            }
+            setState(() {
+              _errorText = value.isEmpty ? 'This field is required' : null;
+            });
           },
         ),
       ],

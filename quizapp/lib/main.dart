@@ -55,7 +55,7 @@ class _Root extends State<Root> {
         //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         backgroundColor: Colors.deepOrange[200],
         title: Text(widget.title),
-        leading:const Icon(Icons.stacked_line_chart),
+        leading:Image.asset("assets/images/leading2.png"),
         actions: const [
           Icon(Icons.content_paste_search),
           SizedBox(width: 10,),
