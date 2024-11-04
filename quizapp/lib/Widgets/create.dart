@@ -278,20 +278,25 @@ class _CustomTextFieldState extends State<CustomTextField> {
             labelText: widget.labelText,
             hintText: widget.hintText,
             hintStyle: TextStyle(color: Colors.grey),
-            prefixIcon: Icon(widget.prefixIcon, size: 10,color: Colors.brown[800],),
+            prefixIcon: Icon(widget.prefixIcon, size: 10, color: Colors.brown[800]),
             border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.black, width: 2),
             ),
             enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.black, width: 2),
             ),
             focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.green, width: 2),
             ),
             errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.red, width: 2),
             ),
             focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.red, width: 2),
             ),
             errorText: _errorText,
@@ -306,3 +311,4 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 }
+
