@@ -278,7 +278,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             labelText: widget.labelText,
             hintText: widget.hintText,
             hintStyle: TextStyle(color: Colors.grey),
-            prefixIcon: Icon(widget.prefixIcon, size: 15,color: Colors.brown[800],),
+            prefixIcon: Icon(widget.prefixIcon, size: 10,color: Colors.brown[800],),
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.black, width: 2),
             ),
