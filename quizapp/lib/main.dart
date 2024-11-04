@@ -53,9 +53,10 @@ class _Root extends State<Root> {
         elevation: 5,
         shadowColor: Colors.black,
         //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        backgroundColor: Colors.deepOrange[200],
-        title: Text(widget.title),
-        leading:Image.asset("assets/images/leading2.png"),
+        backgroundColor: Colors.yellow[200],
+        title: Image.asset("assets/images/logotemp2.png",width: 150,),
+        //title: Text("MOJI OMR"),
+        //leading:Image.asset("assets/images/leading2.png"),
         actions: const [
           Icon(Icons.content_paste_search),
           SizedBox(width: 10,),
@@ -69,8 +70,8 @@ class _Root extends State<Root> {
       ), // Display the selected screen
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        backgroundColor: Colors.deepOrange[200],// Current selected index
-        onTap: onTabTapped, // Callback for tab change
+        backgroundColor: Colors.yellow[200],
+        onTap: onTabTapped,
         items:const [
           BottomNavigationBarItem(
             icon: const Icon(Icons.create),
