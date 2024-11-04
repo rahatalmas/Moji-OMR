@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/Widgets/utility/pdfGenerator.dart';
 import 'package:quizapp/providers/questionProvider.dart';
 
 class QuestionTemplate extends StatelessWidget {
@@ -11,44 +12,72 @@ class QuestionTemplate extends StatelessWidget {
       builder: (context, questionProvider, child) {
         // Check if there are questions
         if (questionProvider.questions.isEmpty) {
-          return const Center(child: Text('No questions added yet.'));
+          return Center(
+            child: const Text(
+              'No questions added yet.',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+          );
         }
 
-        return ListView.builder(
-          itemCount: questionProvider.questions.length,
-          itemBuilder: (context, index) {
-            final question = questionProvider.questions[index];
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: questionProvider.questions.length,
+                itemBuilder: (context, index) {
+                  final question = questionProvider.questions[index];
 
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Q${index + 1}: ${question.questionText}',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Q${index + 1}: ${question.questionText}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 5),
+                          ...question.options.asMap().entries.map((entry) {
+                            final optionIndex = entry.key;
+                            final option = entry.value;
+                            return Text(
+                              'Option ${String.fromCharCode(65 + optionIndex)}: $option',
+                              style: const TextStyle(fontSize: 14),
+                            );
+                          }),
+                          const SizedBox(height: 5),
+                          Text(
+                            'Correct Answer: ${question.correctAnswer}',
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 5),
-                    ...question.options.asMap().entries.map((entry) {
-                      final optionIndex = entry.key;
-                      final option = entry.value;
-                      return Text(
-                        'Option ${String.fromCharCode(65 + optionIndex)}: $option',
-                        style: const TextStyle(fontSize: 14),
-                      );
-                    }).toList(),
-                    const SizedBox(height: 5),
-                    Text(
-                      'Correct Answer: ${question.correctAnswer}',
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  );
+                },
+              ),
+              SizedBox(
+                width: double.infinity, // Make button take full width
+                child: ElevatedButton(
+                  onPressed: () {
+                    PdfGenerator.generatePdf(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // Set your desired border radius
                     ),
-                  ],
+                  ),
+                  child: const Text('Generate PDF'),
                 ),
               ),
-            );
-          },
+            ],
+          ),
         );
       },
     );

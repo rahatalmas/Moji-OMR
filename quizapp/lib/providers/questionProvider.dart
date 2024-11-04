@@ -6,6 +6,8 @@ class QuestionProvider with ChangeNotifier {
 
   List<Question> get questions => List.unmodifiable(_questions);
 
+  get questionCount => _questions.length;
+
   // Method to get questions
   List<Question> getQuestions() {
     return _questions;

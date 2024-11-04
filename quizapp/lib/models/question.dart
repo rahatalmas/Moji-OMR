@@ -1,11 +1,11 @@
 class Question {
   String questionText;
   List<String> options;
-  String? correctAnswer;
+  String correctAnswer;
 
   Question({
     required this.questionText,
     required this.options,
-    this.correctAnswer,
+    required this.correctAnswer,
   });
 }
