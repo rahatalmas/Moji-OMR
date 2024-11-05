@@ -283,7 +283,7 @@ class _QuestionCreatePage extends State<QuestionCreatePage> {
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             decoration: BoxDecoration(
-              color: Colors.orange[50],
+              color: Colors.orange[100],
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             child: Column(

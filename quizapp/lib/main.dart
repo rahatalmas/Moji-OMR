@@ -78,7 +78,7 @@ class _Root extends State<Root> {
         ],
       ),
       body: Padding(
-          padding:const EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+          padding:const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
           child: _children[_currentIndex],
       ), // Display the selected screen
       bottomNavigationBar: BottomNavigationBar(
