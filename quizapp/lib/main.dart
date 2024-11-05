@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Widgets/QuestionTemplate.dart';
+import 'package:quizapp/Widgets/createPage.dart';
 import 'package:quizapp/Widgets/questionCreatePage.dart';
 import 'package:quizapp/Widgets/omrCreatePage.dart';
 import 'package:quizapp/providers/questionProvider.dart';
@@ -45,9 +46,10 @@ class _Root extends State<Root> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [
-    const QuestionCreatePage(),
-    const OmrCreatePage(),
+    CreatePage(),
     const QuestionTemplate(),
+    //const OmrCreatePage(),
+    const QuestionCreatePage()
   ];
 
   void onTabTapped(int index) {
@@ -90,11 +92,11 @@ class _Root extends State<Root> {
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.camera),
-            label: 'Result',
+            label: 'Preview',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.dashboard_outlined),
-            label: 'Dashboard',
+            icon: const Icon(Icons.sailing),
+            label: 'Result',
           ),
         ],
       ),

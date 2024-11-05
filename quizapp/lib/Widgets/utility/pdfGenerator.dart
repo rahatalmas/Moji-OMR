@@ -23,7 +23,7 @@ class PdfGenerator {
         build: (pw.Context context) {
           return pw.Column(
             children: [
-              pw.Text('Quiz Questions', style: pw.TextStyle(fontSize: 24)),
+              pw.Text('Quiz Questions', style: const pw.TextStyle(fontSize: 24)),
               pw.SizedBox(height: 20),
               ...questionProvider.questions.map((question) {
                 return pw.Column(
