@@ -44,17 +44,39 @@ class Root extends StatefulWidget {
 
 class _Root extends State<Root> {
   int _currentIndex = 0;
+  bool editMode = false;
+  late List<Widget> components;
 
-  final List<Widget> _children = [
-    CreatePage(),
-    const QuestionTemplate(),
-    //const OmrCreatePage(),
-    const QuestionCreatePage()
-  ];
+  late final List<Widget> _children;
+
+  @override
+  void initState() {
+    super.initState();
+
+    components = [
+      CreatePage(updateComponent: updateComponent),
+      const QuestionCreatePage(),
+      const OmrCreatePage(),
+    ];
+
+    _children = [
+      components[0],
+      const QuestionTemplate(),
+      const QuestionCreatePage(),
+    ];
+  }
+  void updateComponent(int index) {
+    setState(() {
+      _children[0] = components[index];
+    });
+  }
 
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
+      if(editMode==false){
+        updateComponent(0);
+      }
     });
   }
 

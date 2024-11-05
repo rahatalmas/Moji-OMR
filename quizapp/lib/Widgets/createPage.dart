@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/Widgets/omrCreatePage.dart';
-import 'package:quizapp/Widgets/questionCreatePage.dart';
 
 class CreatePage extends StatelessWidget {
-  const CreatePage({super.key});
+  final Function(int) updateComponent;
+  const CreatePage({super.key, required this.updateComponent});
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +76,9 @@ class CreatePage extends StatelessWidget {
                   Text("Type and Go",style: TextStyle(color: Colors.white,fontSize: 15,letterSpacing: 1,fontWeight:FontWeight.bold),),
                   SizedBox(height: 10,),
                   InkWell(
+                    onTap: (){
+                      updateComponent(1);
+                    },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 10,horizontal: 50),
                       decoration: BoxDecoration(
@@ -106,6 +108,9 @@ class CreatePage extends StatelessWidget {
                 Text("Set and Go",style: TextStyle(color: Colors.white,fontSize: 15,letterSpacing: 1,fontWeight:FontWeight.bold),),
                 SizedBox(height: 10,),
                 InkWell(
+                  onTap: (){
+                    updateComponent(2);
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10,horizontal: 50),
                     decoration: BoxDecoration(
