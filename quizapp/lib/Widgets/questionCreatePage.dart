@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/models/question.dart';
+import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
 
 class QuestionCreatePage extends StatefulWidget {
@@ -190,7 +191,7 @@ class _QuestionCreatePage extends State<QuestionCreatePage> {
 
     // Use the provider to add the question
     Provider.of<QuestionProvider>(context, listen: false).addQuestion(newQuestion);
-
+    Provider.of<ActionStatusProvider>(context,listen: false).turnActionStatusOn();
     // Reset the fields
     _questionController.clear();
     for (var controller in _optionControllers) {
@@ -206,7 +207,6 @@ class _QuestionCreatePage extends State<QuestionCreatePage> {
   Widget build(BuildContext context) {
     final addedQuestions = Provider.of<QuestionProvider>(context).questions.length;
     final remainingQuestions = totalQuestions - addedQuestions;
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +230,7 @@ class _QuestionCreatePage extends State<QuestionCreatePage> {
                           children: [
                             Icon(Icons.question_answer_outlined),
                             Text(
-                              "Question Maker",
+                              "Question Maker ",
                               style: TextStyle(fontSize: 17),
                             ),
                           ],
