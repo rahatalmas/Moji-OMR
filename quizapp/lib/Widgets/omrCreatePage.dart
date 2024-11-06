@@ -12,7 +12,30 @@ class _OmrCreatePage extends State<OmrCreatePage>{
     return SingleChildScrollView(
       child: Column(
         children: [
-          Text("OMR CREATOR")
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.green[300],
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.panorama_fish_eye),
+                    Text("OMR Sheet Creator")
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text("Edit"),
+                    Icon(Icons.settings)
+                  ],
+                )
+              ],
+            ),
+          )
         ],
       ),
     );

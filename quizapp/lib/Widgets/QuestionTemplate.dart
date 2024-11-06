@@ -12,11 +12,14 @@ class QuestionTemplate extends StatelessWidget {
       builder: (context, questionProvider, child) {
         // Check if there are questions
         if (questionProvider.questions.isEmpty) {
-          return Center(
-            child: const Text(
-              'No questions added yet.',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset("assets/images/worker.png",),
+              SizedBox(height: 20,),
+              Text("Nothing to Preview",style: TextStyle(fontSize:15,fontWeight: FontWeight.w500,color: Colors.black87),)
+            ],
           );
         }
 
