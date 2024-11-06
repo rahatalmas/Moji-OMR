@@ -64,6 +64,35 @@ class CreatePage extends StatelessWidget {
           ),
           SizedBox(height: 10,),
           Container(
+            padding: const EdgeInsets.all(15),
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: Colors.blue[800],
+                borderRadius: const BorderRadius.all(Radius.circular(15))
+            ), // Add some padding for better tap area
+            child: Column(
+              children: [
+                Text("Create Exam Planning",style: TextStyle(color: Colors.white,fontSize: 25,letterSpacing: 1,fontWeight:FontWeight.bold),),
+                Text("Register and Generate",style: TextStyle(color: Colors.white,fontSize: 15,letterSpacing: 1,fontWeight:FontWeight.bold),),
+                SizedBox(height: 10,),
+                InkWell(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10,horizontal: 50),
+                    decoration: BoxDecoration(
+                        color: Colors.green[600],
+                        borderRadius: const BorderRadius.all(Radius.circular(25)),
+                        border: Border.all(color: Colors.black,width: 3.5)
+
+                    ),
+                    child: Text("Exam Room",style: TextStyle(color: Colors.white,fontSize: 20,letterSpacing: 1,fontWeight:FontWeight.bold),),
+
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10,),
+          Container(
               padding: const EdgeInsets.all(15),
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
@@ -143,7 +172,7 @@ class CreatePage extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10,horizontal: 50),
                     decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: Colors.green[600],
                         borderRadius: const BorderRadius.all(Radius.circular(25)),
                         border: Border.all(color: Colors.black,width: 3.5)
 
