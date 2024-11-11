@@ -1,9 +1,12 @@
+
+const keys=["admin_key","editor_key","public_key"]
+
 const roles = {
     admin_key:"admin",
     editor_key:"editor",
     public_key:"public"
 }
 
-const r = "admin_key"
-
-console.log(roles[r])
+module.exports = {
+    keys,roles
+};

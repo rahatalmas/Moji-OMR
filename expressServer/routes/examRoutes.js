@@ -1,6 +1,7 @@
 const express = require('express');
 const examRouter = express.Router();
 const {authCheck} = require('../controllers/middlewares');
+const { getExamList } = require('../controllers/exam');
 
 const result = [
     {
@@ -18,8 +19,6 @@ examRouter.get("/result",(req,res)=>{
 })
 
 examRouter.use(authCheck);
-examRouter.get("/history/list",(req,res)=>{
-    res.status(201).json({"name":"O LEVEL EXAM"});
-})
+examRouter.get("/history/list",getExamList);
 
 module.exports = examRouter;

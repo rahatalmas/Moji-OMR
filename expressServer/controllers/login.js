@@ -1,5 +1,6 @@
 const {generateHash,hashCompare} = require('../controllers/utility/hash');
 const {generateAccessToken,generateRefreshToken} = require('../controllers/utility/jwt');
+const { keys } = require('./utility/keys');
 //const hashedpassword = await generateHash(password) //123456$
 const hashpassword = "$2b$10$ydta7s1xfVGt4Gkt8qLdGOBcobbO21blY1Wxl.YPMBhExc6X4pT/."
 
@@ -12,8 +13,8 @@ const login = async (req,res)=>{
         const result = await hashCompare(password,hashpassword)
         console.log("hash compare result: ",result);
         if(result){
-            const accesstoken = await generateAccessToken({username:username});
-            const refreshtoken = await generateRefreshToken({username:username});
+            const accesstoken = await generateAccessToken({username:username,key:keys[0]});
+            const refreshtoken = await generateRefreshToken({username:username,key:keys[0]});
             console.log("Access Token: ",accesstoken);
             console.log("Access Token: ",refreshtoken);
             /*
