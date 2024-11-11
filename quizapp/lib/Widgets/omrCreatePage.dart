@@ -23,7 +23,7 @@ class _OmrCreatePage extends State<OmrCreatePage>{
               children: [
                 Row(
                   children: [
-                    Icon(Icons.panorama_fish_eye),
+                    Icon(Icons.panorama_fish_eye,color: Colors.red,),SizedBox(width: 5),
                     Text("OMR Sheet Creator")
                   ],
                 ),
