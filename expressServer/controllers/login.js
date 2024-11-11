@@ -9,7 +9,6 @@ const login = async (req,res)=>{
     try{
         const {username,password} = req.body
         const [user] = await db.query("SELECT * FROM admin WHERE username=?",[username]);
-        console.log(user[0],user.length)
         if(user.length<1){
             res.status(404).json({"message":"No User Found"});
             return;
@@ -20,9 +19,13 @@ const login = async (req,res)=>{
             const refreshtoken = await generateRefreshToken({username:username,key:keys[0]});
             console.log("Access Token: ",accesstoken);
             console.log("Access Token: ",refreshtoken);
-            /*
-              // set refreshing token to cookies with http secure
-            */
+            res.cookie('refreshToken',refreshtoken,{
+                httpOnly:true,
+                secure:true,
+                //secure: process.env.NODE_ENV === 'production',  // Only sent over HTTPS in production
+                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
+                sameSite: 'Strict'
+            });
             res.status(201).json({
                 "message":"Login Successful",
                 "username":username,
