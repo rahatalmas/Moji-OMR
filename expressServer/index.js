@@ -1,7 +1,8 @@
-const express = require('express')
-const cors = require('cors')
-const userRouter = require('./routes/userRoutes')
-const examRouter = require('./routes/examRoutes')
+const express = require('express');
+const cors = require('cors');
+const userRouter = require('./routes/userRoutes');
+const examRouter = require('./routes/examRoutes');
+
 const app = express()
 app.use(cors())
 app.use(express.json())
