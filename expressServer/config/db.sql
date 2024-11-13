@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS admins (
+    admin_id INT NOT NULL AUTO_INCREMENT,
+    admin_username VARCHAR(50),
+    admin_password VARCHAR(255),
+    admin_role_key VARCHAR(255),
+    PRIMARY KEY (admin_id)
+);
+
+
 CREATE TABLE IF NOT EXISTS exams (
     exam_id INT NOT NULL AUTO_INCREMENT,
     exam_name VARCHAR(255) NOT NULL,
@@ -47,52 +56,3 @@ CREATE TABLE IF NOT EXISTS results (
     CONSTRAINT fk_candidate FOREIGN KEY (serial_number) REFERENCES candidates(serial_number),
     CONSTRAINT fk_exam_result FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
 );
-
-
-
-
-
-
--- for primary keys change 
--- ALTER TABLE exams ADD CONSTRAINT pk_exam PRIMARY KEY (exam_id);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- adding primary keys
--- Step 1: Drop the existing primary key
---ALTER TABLE exams
---DROP PRIMARY KEY;
--- Step 2: Add a composite primary key (exam_id, exam_name)
---ALTER TABLE exams
---ADD CONSTRAINT pk_exam PRIMARY KEY (exam_id, exam_name);
---ALTER TABLE exams ADD PRIMARY KEY(exam_id,exam_name);
-
---all constrains ..
--- SELECT 
---    CONSTRAINT_NAME,
---    CONSTRAINT_TYPE,
---    TABLE_NAME
---FROM 
---    INFORMATION_SCHEMA.TABLE_CONSTRAINTS
---WHERE 
---    TABLE_NAME = 'exams';  -- Replace 'exams' with your table name
-
-
-
-
---To drop a DEFAULT constraint, use the following SQL:
-
---ALTER TABLE table_name
--- ALTER colum_name DROP DEFAULT;

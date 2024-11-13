@@ -1,9 +1,8 @@
 const { verifyToken } = require("./utility/jwt");
 
-const authCheck = (req,res,next)=>{
+const authCheck = (req,res,next) =>{
         const auth = req.headers['authorization'];
         const token = auth && auth.split(' ')[1];
-        console.log("Token by send user req: ",token);
         if(!token){
             res.status(401).json({"message":"No Authorization Token found"});
             return;

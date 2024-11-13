@@ -8,18 +8,18 @@ const { keys } = require('./utility/keys');
 const login = async (req,res)=>{
     try{
         const {username,password} = req.body
-        const [user] = await db.query("SELECT * FROM admin WHERE username=?",[username]);
+        const [user] = await db.query("SELECT * FROM admins WHERE admin_username=?",[username]);
         if(user.length<1){
             res.status(404).json({"message":"No User Found"});
             return;
         }
-        const result = await hashCompare(password,user[0].password);
+        const result = await hashCompare(password,user[0].admin_password);
         if(!result){
             res.status(401).json({"message":"Incorrect Password"})
             return;
         }
-        const accesstoken = generateAccessToken({ username: username, key: keys[0] });
-        const refreshtoken = generateRefreshToken({ username: username, key: keys[0] });
+        const accesstoken = generateAccessToken({ username: username, key: user[0].admin_role_key });
+        const refreshtoken = generateRefreshToken({ username: username, key: keys[0].admin_role_key });
         console.log("Access Token: ",accesstoken);
         console.log("Access Token: ",refreshtoken);
         res.cookie('refreshToken',refreshtoken,{
