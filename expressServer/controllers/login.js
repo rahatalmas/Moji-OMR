@@ -14,26 +14,26 @@ const login = async (req,res)=>{
             return;
         }
         const result = await hashCompare(password,user[0].password);
-        if(result){
-            const accesstoken = await generateAccessToken({username:username,key:keys[0]});
-            const refreshtoken = await generateRefreshToken({username:username,key:keys[0]});
-            console.log("Access Token: ",accesstoken);
-            console.log("Access Token: ",refreshtoken);
-            res.cookie('refreshToken',refreshtoken,{
-                httpOnly:true,
-                secure:true,
-                //secure: process.env.NODE_ENV === 'production',  // Only sent over HTTPS in production
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
-                sameSite: 'Strict'
-            });
-            res.status(201).json({
-                "message":"Login Successful",
-                "username":username,
-                "accesstoken":accesstoken
-            })
-        }else{
+        if(!result){
             res.status(401).json({"message":"Incorrect Password"})
+            return;
         }
+        const accesstoken = generateAccessToken({ username: username, key: keys[0] });
+        const refreshtoken = generateRefreshToken({ username: username, key: keys[0] });
+        console.log("Access Token: ",accesstoken);
+        console.log("Access Token: ",refreshtoken);
+        res.cookie('refreshToken',refreshtoken,{
+            httpOnly:true,
+            secure:true,
+            //secure: process.env.NODE_ENV === 'production',  // Only sent over HTTPS in production
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
+            sameSite: 'Strict'
+        });
+        res.status(201).json({
+            "message":"Login Successful",
+            "username":username,
+            "accesstoken":accesstoken
+        })
     }catch(err){
         console.log(err)
         return res.status(500).json({ message: 'Server error. Please try again later.' });
