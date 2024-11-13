@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS exams (
     exam_date DATETIME NOT NULL,
     exam_location VARCHAR(255) NOT NULL,
     exam_duration INT NOT NULL,
+    question_count INT NOT NULL,
     candidate_count INT NOT NULL,
     UNIQUE (exam_name, exam_date),
     PRIMARY KEY (exam_id)
@@ -30,7 +31,7 @@ CREATE TABLE IF NOT EXISTS candidates (
 
 CREATE TABLE IF NOT EXISTS questions (
     question_id INT NOT NULL AUTO_INCREMENT,
-    question_count INT NOT NULL,
+    question_text VARCHAR(255) NOT NULL,
     options_per_question INT NOT NULL,
     exam_id INT NOT NULL,
     PRIMARY KEY(question_id),
@@ -40,7 +41,7 @@ CREATE TABLE IF NOT EXISTS questions (
 
 CREATE TABLE IF NOT EXISTS options (
     option_id INT NOT NULL AUTO_INCREMENT,
-    option_count INT NOT NULL,
+    option_text VARCHAR(255) NOT NULL,
     question_id INT NOT NULL,
     PRIMARY KEY(option_id),
     CONSTRAINT fk_question FOREIGN KEY (question_id) REFERENCES questions(question_id)
