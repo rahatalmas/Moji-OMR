@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS candidates (
     class_level VARCHAR(25) NOT NULL,
     exam_id INT NOT NULL,
     PRIMARY KEY(serial_number),
-    CONSTRAINT fk_exam FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
+    CONSTRAINT fk_exam_candidates FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
 );
 
 CREATE TABLE IF NOT EXISTS questions (
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS questions (
     options_per_question INT NOT NULL,
     exam_id INT NOT NULL,
     PRIMARY KEY(question_id),
-    CONSTRAINT fk_exam FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
+    CONSTRAINT fk_exam_questions FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
 );
 
 
