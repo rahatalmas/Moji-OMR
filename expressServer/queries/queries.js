@@ -6,7 +6,7 @@ const adminsQ = {
                 VALUES
                    (?, ?, ?);`,
     editAdmin: `UPDATE admins SET username=?, password=?, rolekey=? WHERE id=?`,
-    deleteAdmin: `DELETE FROM admins WHERE id=?`
+    deleteAdmin: `DELETE FROM admins WHERE admin_id=?`
 }
 
 const examsQ = {
@@ -15,7 +15,7 @@ const examsQ = {
                   (exam_name, exam_date, exam_location, exam_duration, candidate_count)
               VALUES 
                   (?, ?, ?, ?, ?);`,
-    editAdmin: `UPDATE exams SET exam_name=?, exam_date=?, exam_location=?, exam_duration=?, candidate_count=? WHERE exam_id=?`, 
+    editExam: `UPDATE exams SET exam_name=?, exam_date=?, exam_location=?, exam_duration=?, candidate_count=? WHERE exam_id=?`, 
 }
 
 module.exports = {

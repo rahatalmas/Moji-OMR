@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const {generateHash,hashCompare} = require('../controllers/utility/hash');
 const {generateAccessToken,generateRefreshToken} = require('../controllers/utility/jwt');
+const { adminsQ } = require('../queries/queries');
 const { keys } = require('./utility/keys');
 //const hashedpassword = await generateHash(password) //123456$
 //const hashpassword = "$2b$10$ydta7s1xfVGt4Gkt8qLdGOBcobbO21blY1Wxl.YPMBhExc6X4pT/."
@@ -8,7 +9,7 @@ const { keys } = require('./utility/keys');
 const login = async (req,res)=>{
     try{
         const {username,password} = req.body
-        const [user] = await db.query("SELECT * FROM admins WHERE admin_username=?",[username]);
+        const [user] = await db.query(adminsQ.getSpecific,[username]);
         if(user.length<1){
             res.status(404).json({"message":"No User Found"});
             return;
@@ -19,7 +20,7 @@ const login = async (req,res)=>{
             return;
         }
         const accesstoken = generateAccessToken({ username: username, key: user[0].admin_role_key });
-        const refreshtoken = generateRefreshToken({ username: username, key: keys[0].admin_role_key });
+        const refreshtoken = generateRefreshToken({ username: username, key: user[0].admin_role_key });
         console.log("Access Token: ",accesstoken);
         console.log("Access Token: ",refreshtoken);
         res.cookie('refreshToken',refreshtoken,{
