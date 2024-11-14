@@ -9,7 +9,7 @@ const { keys } = require('./utility/keys');
 const login = async (req,res)=>{
     try{
         const {username,password} = req.body
-        const [user] = await db.query(adminsQ.getSpecific,[username]);
+        const [user] = await db.query(adminsQ.getSpecificByName,[username]);
         if(user.length<1){
             res.status(404).json({"message":"No User Found"});
             return;

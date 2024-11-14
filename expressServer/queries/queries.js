@@ -1,11 +1,13 @@
 const adminsQ = {
     getList: "SELECT * FROM admins",
-    getSpecific:"SELECT * FROM admins WHERE admin_username=?",
+    getSpecificById:"SELECT * FROM admins WHERE admin_id=?",
+    getSpecificByName:"SELECT * FROM admins WHERE admin_username=?",
     addAdmin: `INSERT INTO admins 
                    (admin_username, admin_password, admin_role_key)
                 VALUES
                    (?, ?, ?);`,
-    editAdmin: `UPDATE admins SET username=?, password=?, rolekey=? WHERE id=?`,
+    editAdminUsername: `UPDATE admins SET admin_username=? WHERE admin_id=?`,
+    editAdminPassword: `UPDATE admins SET password=? WHERE admin_id=?`,
     deleteAdmin: `DELETE FROM admins WHERE admin_id=?`
 }
 

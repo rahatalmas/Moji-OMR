@@ -49,9 +49,40 @@ const userList = async (req,res)=>{
     }
 }
 
-const updateUser = async (req,res)=>{
+const indiVidualUser = async (req,res) =>{
     try{
-        res.status(201).json({"message":"update request..."});
+        const userId = req.params.id;
+        console.log("user ID: ",userId);
+        const [result] = await db.query(adminsQ.getSpecificById,[userId]);
+        console.log(result);
+        res.status(200).json(result[0]);
+    }catch(err){
+        console.log(err.message);
+        res.status(500).json({"message":"Internal Server Error"});
+    }
+}
+
+const updateUserName = async (req,res)=>{
+    try{
+        const {admin_id,username} = req.body;
+        if(!admin_id || !username){
+            res.status(406).json({"message":"Invalid Request"});
+            return;
+
+        }
+        console.log("update request: ",{admin_id,username});
+        const [user] = await db.query(adminsQ.getSpecificById,[admin_id]);
+        console.log(user.length);
+        if(user.length<=0 || user.length>1){
+            res.status(404).json({"message":"Invalid User Reference"});
+            return;
+        }else if(user[0].admin_username === username){
+            res.status(409).json({"message":"username already Exist"});
+            return;
+        }
+        const [result] = await db.execute(adminsQ.editAdminUsername,[username,admin_id]);
+        console.log("update result: ",result);
+        res.status(201).json({"message":"user data updated"});
     }catch(err){
         console.log(err.message)
         res.status(500).json({"message":"Internal Server Error"});
@@ -75,6 +106,7 @@ const deleteUser = async (req,res)=>{
 module.exports = {
     addUser,
     userList,
-    updateUser,
+    indiVidualUser,
+    updateUserName,
     deleteUser
 }
