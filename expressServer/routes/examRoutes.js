@@ -1,8 +1,8 @@
 const express = require('express');
 const examRouter = express.Router();
 const {authCheck} = require('../controllers/middlewares');
-const { getExamList } = require('../controllers/exam');
 const db = require('../config/db');
+const { getExamList } = require('../controllers/exam/examController');
 
 const res = [
     {

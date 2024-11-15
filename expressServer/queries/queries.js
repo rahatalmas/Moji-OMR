@@ -8,6 +8,7 @@ const adminsQ = {
                    (?, ?, ?);`,
     editAdminUsername: `UPDATE admins SET admin_username=? WHERE admin_id=?`,
     editAdminPassword: `UPDATE admins SET admin_password=? WHERE admin_id=?`,
+    editAdminRole: `UPDATE admins SET admin_role_key=? WHERE admin_id=?`,
     deleteAdmin: `DELETE FROM admins WHERE admin_id=?`
 }
 

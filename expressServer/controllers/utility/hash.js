@@ -31,7 +31,6 @@ const hashCompare = async (data,hashedData)=>{
     return result
 }
 
-
 module.exports = {
     generateHash,
     hashCompare

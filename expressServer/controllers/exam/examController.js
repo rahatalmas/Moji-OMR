@@ -1,4 +1,4 @@
-const { roles } = require("./utility/keys");
+const { roles } = require("../utility/keys");
 
 const getExamList = (req,res)=>{
     try{

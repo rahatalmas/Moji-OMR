@@ -115,6 +115,36 @@ const updateUserPassword = async (req,res)=>{
     }
 }
 
+const updateUserRole = async (req,res)=>{
+    try{
+        const {admin_id,role} = req.body;
+        if(!admin_id || !role){
+            res.status(406).json({"message":"Invalid Request"});
+            return;
+
+        }
+        let role_key = "";
+        if(role == "admin"){
+            role_key = "admin_key";
+        }else if(role == "editor"){
+            role_key = "editor_key"
+        }else{
+            role_key = "user_key"
+        }
+        const [user] = await db.query(adminsQ.getSpecificById,[admin_id]);
+        if(user.length<=0 || user.length>1){
+            res.status(404).json({"message":"Invalid User Reference"});
+            return;
+        }
+        const [result] = await db.execute(adminsQ.editAdminRole,[role_key,admin_id]);
+        console.log("update result: ",result);
+        res.status(201).json({"message":"user data updated"});
+    }catch(err){
+        console.log(err.message)
+        res.status(500).json({"message":"Internal Server Error"});
+    }
+}
+
 const deleteUser = async (req,res)=>{
     try{
         const id = req.params.id;
@@ -128,12 +158,12 @@ const deleteUser = async (req,res)=>{
     }
 }
 
-
 module.exports = {
     addUser,
     userList,
     indiVidualUser,
     updateUserName,
     updateUserPassword,
+    updateUserRole,
     deleteUser
 }
