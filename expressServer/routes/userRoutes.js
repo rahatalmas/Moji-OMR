@@ -6,6 +6,7 @@ const { userList,
         deleteUser,
         indiVidualUser,
         updateUserName,
+        updateUserPassword,
         
 } = require('../controllers/user/userController');
 
@@ -16,6 +17,7 @@ userRouter.use(authCheck);
 userRouter.get("/list",userList);
 userRouter.post("/register",addUser);
 userRouter.put("/update/name",updateUserName);
+userRouter.put("/update/password",updateUserPassword);
 userRouter.delete("/delete/:id",deleteUser);
 userRouter.get("/list/:id",indiVidualUser);
 
