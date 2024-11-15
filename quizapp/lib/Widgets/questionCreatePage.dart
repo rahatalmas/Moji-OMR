@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quizapp/models/question.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
+
+import '../database/models/question.dart';
 
 class QuestionCreatePage extends StatefulWidget {
   const QuestionCreatePage({super.key});

@@ -7,6 +7,7 @@ import 'package:quizapp/Widgets/questionCreatePage.dart';
 import 'package:quizapp/Widgets/omrCreatePage.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
+import 'package:quizapp/screens/auth/login.dart';
 
 void main() {
   runApp(
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
       ),
-      home: const Root(title: 'MOJI OMR'),
+      home: const LoginScreen(),
     );
   }
 }

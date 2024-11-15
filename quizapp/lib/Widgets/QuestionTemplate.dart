@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quizapp/Widgets/utility/pdfGenerator.dart';
 import 'package:quizapp/providers/questionProvider.dart';
+
+import '../utils/pdfGenerator.dart';
 
 class QuestionTemplate extends StatelessWidget {
   const QuestionTemplate({super.key});
