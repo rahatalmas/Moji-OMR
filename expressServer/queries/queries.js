@@ -13,12 +13,14 @@ const adminsQ = {
 }
 
 const examsQ = {
-    getList: "SELECT * FROM exam",
+    getList: "SELECT * FROM exams",
     addExam: `INSERT INTO exams
-                  (exam_name, exam_date, exam_location, exam_duration, candidate_count)
+                  (exam_name, exam_date, exam_location, exam_duration, question_count, candidate_count)
               VALUES 
-                  (?, ?, ?, ?, ?);`,
-    editExam: `UPDATE exams SET exam_name=?, exam_date=?, exam_location=?, exam_duration=?, candidate_count=? WHERE exam_id=?`, 
+                  (?, ?, ?, ?, ?, ?);`,
+    editExam: `UPDATE exams SET 
+              exam_name=?, exam_date=?, exam_location=?, exam_duration=?, question_count=?, candidate_count=?
+              WHERE exam_id=?`,
 }
 
 module.exports = {

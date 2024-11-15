@@ -39,7 +39,7 @@ const login = async (req,res)=>{
         }else{
             permissions = 3;
         }
-        res.status(201).json({
+        res.status(200).json({
             "message":"Login Successful",
             "username":username,
             "accesstoken":accesstoken,

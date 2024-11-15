@@ -6,7 +6,7 @@ const { roles } = require("../utility/keys");
 const userList = async (req,res)=>{
     try{
         const [adminList] = await db.query(adminsQ.getList);
-        res.status(201).json(adminList);
+        res.status(200).json(adminList);
     }catch(err){
         console.log(err.message)
         res.status(500).json({"message":"Internal Server Error"});
@@ -55,7 +55,7 @@ const addUser = async (req,res) =>{
         }
         const result = await db.execute(adminsQ.addAdmin,[username,hashedPassword,role_key]);
         console.log(result);
-        res.status(200).json({"message":"New User Added"});
+        res.status(201).json({"message":"New User Added"});
     }catch(err){
         console.log(err.message)
         res.status(500).json({"message":"Internal Server Error","err":err.message});
@@ -108,7 +108,7 @@ const updateUserPassword = async (req,res)=>{
         }
         const hashedNewPassword = await generateHash(newpassword);
         const [result] = await db.execute(adminsQ.editAdminPassword,[hashedNewPassword,admin_id]);
-        res.status(201).json({"message":"user password updated"});
+        res.status(200).json({"message":"user password updated"});
     }catch(err){
         console.log(err.message)
         res.status(500).json({"message":"Internal Server Error"});
@@ -138,7 +138,7 @@ const updateUserRole = async (req,res)=>{
         }
         const [result] = await db.execute(adminsQ.editAdminRole,[role_key,admin_id]);
         console.log("update result: ",result);
-        res.status(201).json({"message":"user data updated"});
+        res.status(200).json({"message":"user data updated"});
     }catch(err){
         console.log(err.message)
         res.status(500).json({"message":"Internal Server Error"});
