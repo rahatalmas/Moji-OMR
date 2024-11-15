@@ -2,7 +2,7 @@ const db = require('../config/db');
 const {generateHash,hashCompare} = require('../controllers/utility/hash');
 const {generateAccessToken,generateRefreshToken} = require('../controllers/utility/jwt');
 const { adminsQ } = require('../queries/queries');
-const { keys } = require('./utility/keys');
+const { keys, roles } = require('./utility/keys');
 //const hashedpassword = await generateHash(password) //123456$
 //const hashpassword = "$2b$10$ydta7s1xfVGt4Gkt8qLdGOBcobbO21blY1Wxl.YPMBhExc6X4pT/."
 
@@ -21,8 +21,8 @@ const login = async (req,res)=>{
         }
         const accesstoken = generateAccessToken({ username: username, key: user[0].admin_role_key });
         const refreshtoken = generateRefreshToken({ username: username, key: user[0].admin_role_key });
-        console.log("Access Token: ",accesstoken);
-        console.log("Access Token: ",refreshtoken);
+        //console.log("Access Token: ",accesstoken);
+        //console.log("Access Token: ",refreshtoken);
         res.cookie('refreshToken',refreshtoken,{
             httpOnly:true,
             secure:true,
@@ -30,10 +30,20 @@ const login = async (req,res)=>{
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
             sameSite: 'Strict'
         });
+        const role = roles[user[0].admin_role_key];
+        let permissions;
+        if(role == "admin"){
+            permissions = 1;
+        }else if(role == "editor"){
+            permissions = 2;
+        }else{
+            permissions = 3;
+        }
         res.status(201).json({
             "message":"Login Successful",
             "username":username,
-            "accesstoken":accesstoken
+            "accesstoken":accesstoken,
+            "permission":permissions,
         })
     }catch(err){
         console.log(err)
