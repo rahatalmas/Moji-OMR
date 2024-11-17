@@ -227,6 +227,7 @@ class _AdminPageState extends State<AdminPage> {
                     CircleAvatar(
                       child: Image.asset("assets/images/leading1.png"),
                       radius: 35,
+                      backgroundColor: Colors.white,
                     ),
                     const SizedBox(width: 15),
                     Expanded(
@@ -375,7 +376,7 @@ class _AdminPageState extends State<AdminPage> {
                         children: [
                           IconButton(
                             onPressed: () => showEditUserDialog(index), // Edit
-                            icon: const Icon(Icons.edit, color: Colors.green),
+                            icon: const Icon(Icons.edit, color: kColorPrimary),
                           ),
                           IconButton(
                             onPressed: () {
@@ -383,7 +384,7 @@ class _AdminPageState extends State<AdminPage> {
                                 adminList.removeAt(index); // Delete
                               });
                             },
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon:  Icon(Icons.delete, color: Colors.red[700]),
                           ),
                         ],
                       ),

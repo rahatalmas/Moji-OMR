@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:quizapp/Screens/candidate/candidatepage.dart';
+import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Widgets/menuButton.dart';
 import 'package:quizapp/Widgets/omrCreatePage.dart';
-import 'package:quizapp/Widgets/questionCreatePage.dart';
+import 'package:quizapp/Screens/question/questionCreatePage.dart';
 import 'package:quizapp/constant.dart';
 
 class Dashboard extends StatelessWidget {
@@ -10,7 +12,8 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _menuoptions = [
-      const Center(child: Text("Create exam")),
+      const ExamCreatePage(),
+      const CandidateCreatePage(),
       const QuestionCreatePage(),
       const OmrCreatePage(),
       const Center(child: Text("Result Generator")),
@@ -31,6 +34,8 @@ class Dashboard extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+
+
           Container(
             padding: const EdgeInsets.all(15),
             width: MediaQuery.of(context).size.width,
@@ -119,7 +124,7 @@ class Dashboard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               MenuButton(
-                title: "Set Question",
+                title: "Register Candidate",
                 image: "assets/images/leading3.png",
                 onTap: () => changeMenu(1),
               ),
@@ -129,13 +134,29 @@ class Dashboard extends StatelessWidget {
           Row(
             children: [
               MenuButton(
-                title: "Generate OMR",
+                title: "Create Question",
                 image: "assets/images/leading4.png",
                 onTap: () => changeMenu(2),
               ),
               const SizedBox(width: 10),
               MenuButton(
-                title: "Paper Check",
+                title: "Generate OMR",
+                image: "assets/images/leading3.png",
+                onTap: () => changeMenu(3),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              MenuButton(
+                title: "Check paper",
+                image: "assets/images/leading4.png",
+                onTap: () => changeMenu(2),
+              ),
+              const SizedBox(width: 10),
+              MenuButton(
+                title: "Pending exams",
                 image: "assets/images/leading3.png",
                 onTap: () => changeMenu(3),
               ),
@@ -177,6 +198,7 @@ class Dashboard extends StatelessWidget {
               ),
             ],
           ),
+
         ],
       ),
     );

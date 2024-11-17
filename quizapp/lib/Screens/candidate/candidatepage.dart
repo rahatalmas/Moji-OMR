@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:quizapp/Screens/question/QuestionTemplate.dart';
-import 'package:quizapp/Screens/question/questionEditor.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/models/question.dart';
-import 'package:quizapp/providers/actionProvider.dart';
-import 'package:quizapp/providers/questionProvider.dart';
 
-class QuestionCreatePage extends StatefulWidget {
-  const QuestionCreatePage({super.key});
+class CandidateCreatePage extends StatefulWidget {
+  const CandidateCreatePage({super.key});
 
   @override
-  State<QuestionCreatePage> createState() => _QuestionCreatePage();
+  State<CandidateCreatePage> createState() => _CandidateCreatePage();
 }
 
-class _QuestionCreatePage extends State<QuestionCreatePage> {
+class _CandidateCreatePage extends State<CandidateCreatePage> {
   int _selectedIndex = 0; // To track the selected tab
 
   // List of widgets for each section
   final List<Widget> _widgetOptions = <Widget>[
-    QuestionEditor(),
-    QuestionTemplate()
+    Center(child: Text("editor"),),
+    Center(child: Text("preview"),),
   ];
 
   // Method to handle bottom navigation tap
@@ -35,7 +29,7 @@ class _QuestionCreatePage extends State<QuestionCreatePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Question Creation",
+          "Candidate Registration",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: kColorPrimary,

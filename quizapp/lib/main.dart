@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/question/QuestionTemplate.dart';
 import 'package:quizapp/Widgets/adminPage.dart';
 import 'package:quizapp/Widgets/dashboard.dart';
-import 'package:quizapp/Widgets/questionCreatePage.dart';
+import 'package:quizapp/Screens/question/questionCreatePage.dart';
 import 'package:quizapp/Widgets/omrCreatePage.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
