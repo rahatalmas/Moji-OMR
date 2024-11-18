@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:quizapp/constant.dart';
 
 class ExamCreatePage extends StatefulWidget {
@@ -13,8 +14,10 @@ class _ExamCreatePage extends State<ExamCreatePage> {
   final TextEditingController _examDateController = TextEditingController();
   final TextEditingController _examLocationController = TextEditingController();
   final TextEditingController _examDurationController = TextEditingController();
-  final TextEditingController _questionCountController = TextEditingController();
-  final TextEditingController _candidateCountController = TextEditingController();
+  final TextEditingController _questionCountController =
+      TextEditingController();
+  final TextEditingController _candidateCountController =
+      TextEditingController();
 
   final InputDecoration _textFieldDecoration = InputDecoration(
     labelText: "Type here...",
@@ -73,7 +76,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
         );
         setState(() {
           _examDateController.text =
-          "${fullDateTime.day}/${fullDateTime.month}/${fullDateTime.year} ${selectedTime.format(context)}";
+              "${fullDateTime.day}/${fullDateTime.month}/${fullDateTime.year} ${selectedTime.format(context)}";
         });
       }
     }
@@ -92,6 +95,8 @@ class _ExamCreatePage extends State<ExamCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isKeyboardVisible =
+        KeyboardVisibilityProvider.isKeyboardVisible(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -113,7 +118,11 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset("assets/images/leading3.png",height: 250,width: 250,)
+                    Image.asset(
+                      "assets/images/leading3.png",
+                      height: 250,
+                      width: 250,
+                    )
                   ],
                 ),
 
@@ -123,8 +132,10 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                   decoration: _textFieldDecoration.copyWith(
                       labelText: "Exam Name",
                       hintText: "Enter exam name",
-                      prefixIcon: Icon(Icons.terminal_sharp,size: 25,)
-                  ),
+                      prefixIcon: Icon(
+                        Icons.terminal_sharp,
+                        size: 25,
+                      )),
                 ),
                 const SizedBox(height: 10),
                 // Exam Date Field with DateTime Picker
@@ -136,7 +147,9 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                       decoration: _textFieldDecoration.copyWith(
                         labelText: "Exam Date & Time",
                         hintText: "Select date and time",
-                        prefixIcon: const Icon(Icons.calendar_today,),
+                        prefixIcon: const Icon(
+                          Icons.calendar_today,
+                        ),
                       ),
                     ),
                   ),
@@ -149,8 +162,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                   decoration: _textFieldDecoration.copyWith(
                       labelText: "Exam Location",
                       hintText: "e.g., School Auditorium",
-                      prefixIcon: const Icon(Icons.location_on_outlined)
-                  ),
+                      prefixIcon: const Icon(Icons.location_on_outlined)),
                 ),
                 const SizedBox(height: 10),
 
@@ -164,8 +176,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                         decoration: _textFieldDecoration.copyWith(
                             labelText: "Duration (min)",
                             hintText: "e.g., 90",
-                            prefixIcon: const Icon(Icons.timer)
-                        ),
+                            prefixIcon: const Icon(Icons.timer)),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -176,8 +187,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                         decoration: _textFieldDecoration.copyWith(
                             labelText: "Questions",
                             hintText: "e.g., 50",
-                            prefixIcon: const Icon(Icons.numbers)
-                        ),
+                            prefixIcon: const Icon(Icons.numbers)),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -188,13 +198,12 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                         decoration: _textFieldDecoration.copyWith(
                             labelText: "Candidates",
                             hintText: "e.g., 100",
-                            prefixIcon: const Icon(Icons.numbers)
-                        ),
+                            prefixIcon: const Icon(Icons.numbers)),
                       ),
                     ),
                   ],
                 ),
-               /* InkWell(
+                /* InkWell(
                   onTap: (){},
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -208,34 +217,35 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                     ),
                   ),
                 )*/
-
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: InkWell(
-              onTap: (){},
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding:EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: kColorPrimary,
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                child: Center(
-                  child: Text("Save",style: TextStyle(color: kColorSecondary,fontSize: 18,fontWeight: FontWeight.bold),),
-                ),
-              ),
-            )
-
+          Visibility(
+            visible: !isKeyboardVisible,
+            child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: kColorPrimary,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      "Save",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: kColorSecondary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )),
           )
         ],
       ),
     );
   }
 }
-
-
-
-

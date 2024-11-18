@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/question/QuestionTemplate.dart';
 import 'package:quizapp/Widgets/adminPage.dart';
@@ -27,13 +28,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Moji OMR',
-      theme: ThemeData(
-        useMaterial3: true,
+    return KeyboardVisibilityProvider(
+      child: KeyboardDismissOnTap(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Moji OMR',
+          theme: ThemeData(
+            useMaterial3: true,
+          ),
+          home: const Root(title: 'MOJI OMR'),
+        ),
       ),
-      home: const Root(title: 'MOJI OMR'),
     );
   }
 }
