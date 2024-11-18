@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizapp/Screens/candidate/candidateAddPage.dart';
 import 'package:quizapp/constant.dart';
 
 class CandidateCreatePage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _CandidateCreatePage extends State<CandidateCreatePage> {
 
   // List of widgets for each section
   final List<Widget> _widgetOptions = <Widget>[
-    Center(child: Text("editor"),),
+    CandidateEditor(),
     Center(child: Text("preview"),),
   ];
 
@@ -35,6 +36,7 @@ class _CandidateCreatePage extends State<CandidateCreatePage> {
         backgroundColor: kColorPrimary,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
+      backgroundColor: kColorSecondary,
       body: Padding(
         padding: EdgeInsets.all(10),
         child: _widgetOptions[_selectedIndex],

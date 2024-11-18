@@ -38,6 +38,7 @@ class _QuestionCreatePage extends State<QuestionCreatePage> {
         backgroundColor: kColorPrimary,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
+      backgroundColor: kColorSecondary,
       body: Padding(
         padding: EdgeInsets.all(10),
         child: _widgetOptions[_selectedIndex],

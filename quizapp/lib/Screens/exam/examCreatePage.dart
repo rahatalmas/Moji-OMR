@@ -106,7 +106,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
         backgroundColor: kColorPrimary,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      backgroundColor: kColorSecondary2,
+      backgroundColor: kColorSecondary,
       //resizeToAvoidBottomInset: false,
       body: Column(
         children: [

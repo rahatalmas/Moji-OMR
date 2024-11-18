@@ -22,9 +22,9 @@ class MenuButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
-                color: kColorSecondary,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                boxShadow: [BoxShadow(color: Colors.grey,blurRadius: 1)]
+                color: kColorSecondary2,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                boxShadow: [BoxShadow(color: Colors.grey,blurRadius: 1,)]
             ), // Add some padding for better tap area
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
