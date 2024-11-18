@@ -101,25 +101,29 @@ class _ExamCreatePage extends State<ExamCreatePage> {
         backgroundColor: kColorPrimary,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: kColorSecondary2,
-              borderRadius: BorderRadius.circular(15)
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: kColorSecondary2,
+      //resizeToAvoidBottomInset: false,
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.all(10),
               children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/leading3.png",height: 250,width: 250,)
+                  ],
+                ),
+
                 // Exam Name Field
                 TextField(
                   controller: _examNameController,
                   decoration: _textFieldDecoration.copyWith(
-                    labelText: "Exam Name",
-                    hintText: "Enter exam name",
-                    prefixIcon: Icon(Icons.terminal_sharp,size: 25,)
+                      labelText: "Exam Name",
+                      hintText: "Enter exam name",
+                      prefixIcon: Icon(Icons.terminal_sharp,size: 25,)
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -143,9 +147,9 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                 TextField(
                   controller: _examLocationController,
                   decoration: _textFieldDecoration.copyWith(
-                    labelText: "Exam Location",
-                    hintText: "e.g., School Auditorium",
-                    prefixIcon: const Icon(Icons.location_on_outlined)
+                      labelText: "Exam Location",
+                      hintText: "e.g., School Auditorium",
+                      prefixIcon: const Icon(Icons.location_on_outlined)
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -158,9 +162,9 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                         controller: _examDurationController,
                         keyboardType: TextInputType.number,
                         decoration: _textFieldDecoration.copyWith(
-                          labelText: "Duration (min)",
-                          hintText: "e.g., 90",
-                          prefixIcon: const Icon(Icons.timer)
+                            labelText: "Duration (min)",
+                            hintText: "e.g., 90",
+                            prefixIcon: const Icon(Icons.timer)
                         ),
                       ),
                     ),
@@ -170,8 +174,8 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                         controller: _questionCountController,
                         keyboardType: TextInputType.number,
                         decoration: _textFieldDecoration.copyWith(
-                          labelText: "Questions",
-                          hintText: "e.g., 50",
+                            labelText: "Questions",
+                            hintText: "e.g., 50",
                             prefixIcon: const Icon(Icons.numbers)
                         ),
                       ),
@@ -182,36 +186,56 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                         controller: _candidateCountController,
                         keyboardType: TextInputType.number,
                         decoration: _textFieldDecoration.copyWith(
-                          labelText: "Candidates",
-                          hintText: "e.g., 100",
+                            labelText: "Candidates",
+                            hintText: "e.g., 100",
                             prefixIcon: const Icon(Icons.numbers)
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                // Submit Button
-                
-                InkWell(
+               /* InkWell(
                   onTap: (){},
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding:EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: kColorPrimary,
-                      borderRadius: BorderRadius.circular(10)
+                        color: kColorPrimary,
+                        borderRadius: BorderRadius.circular(10)
                     ),
                     child: Center(
                       child: Text("Save",style: TextStyle(color: kColorSecondary,fontSize: 18,fontWeight: FontWeight.bold),),
                     ),
                   ),
-                )
+                )*/
+
               ],
             ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: InkWell(
+              onTap: (){},
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding:EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: kColorPrimary,
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                child: Center(
+                  child: Text("Save",style: TextStyle(color: kColorSecondary,fontSize: 18,fontWeight: FontWeight.bold),),
+                ),
+              ),
+            )
+
           )
-        ),
+        ],
       ),
     );
   }
 }
+
+
+
+
