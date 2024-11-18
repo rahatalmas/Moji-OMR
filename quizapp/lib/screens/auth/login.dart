@@ -103,10 +103,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             InkWell(
-              onTap: () {
+              onTap: () async {
                 // todo: make login functionality
-                print("login");
-                ApiHandler().loginApi();
+                String? isLoggedIn = await ApiHandler().loginApi();
+                if(isLoggedIn != null){
+                  print("logged in $isLoggedIn");
+                }
               },
               child: Container(
                 height: 56,

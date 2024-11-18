@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'login.g.dart';
 
@@ -7,7 +9,7 @@ class Login {
   Login({
     this.message = "",
     this.username = "",
-    this.accessToken = "",
+    this.accesstoken = "",
     this.permission = 0,
   });
 
@@ -18,7 +20,7 @@ class Login {
   final String username;
 
   @JsonKey(defaultValue: "")
-  final String accessToken;
+  final String accesstoken;
 
   @JsonKey(defaultValue: 0)
   final int permission;
@@ -28,4 +30,24 @@ class Login {
   }
 
   Map<String, dynamic> toJson() => _$LoginToJson(this);
+}
+
+class LoginProvider extends ChangeNotifier {
+  Login _login = Login.fromJson({});
+  bool _dataUpdated = false;
+
+  bool get dataUpdated => _dataUpdated;
+
+  Login get login => _login;
+
+  Future<bool?> hasAccessToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var hasToken = prefs.getString('accessToken')?.isNotEmpty;
+    return hasToken;
+  }
+
+  void updateToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('accessToken', token);
+  }
 }
