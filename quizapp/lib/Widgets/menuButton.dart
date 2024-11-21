@@ -1,5 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/constant.dart';
+import 'package:quizapp/constant.dart';  // Replace with your actual constants
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Menu Button Example')),
+        body: Center(
+          child: MenuButton(
+            title: 'Home',
+            image: 'assets/home_icon.png', // Replace with your image path
+            onTap: () {
+              print('Menu button tapped!');
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class MenuButton extends StatelessWidget {
   const MenuButton({
@@ -15,28 +39,43 @@ class MenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child:  InkWell(
+    return Container(
+      width: MediaQuery.of(context).size.width / 2.25,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+            color: kColorPrimary
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
           onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-                color: kColorSecondary2,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                boxShadow: [BoxShadow(color: Colors.grey,blurRadius: 1,)]
-            ), // Add some padding for better tap area
+          borderRadius: BorderRadius.circular(10),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(image,height: 50,width: 50,),
-                SizedBox(height: 3,),
-                Text(title,style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400,color: kColorPrimary),),
+                Image.asset(
+                  image,
+                  height: 50,
+                  width: 50,
+                ),
+                SizedBox(height: 3),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: appText, // Your text color
+                  ),
+                ),
               ],
             ),
           ),
         ),
+      ),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Widgets/adminPage.dart';
-import 'package:quizapp/Widgets/dashboard.dart';
+import 'package:quizapp/Widgets/home.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
 
@@ -48,104 +48,108 @@ class Root extends StatefulWidget {
   State<Root> createState() => _Root();
 }
 
-class _Root extends State<Root> {
-  int _currentIndex = 0;
+class _Root extends State<Root> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   final List<Widget> _children = [
     const Dashboard(),
-    const Center(child: Text("Result Generator"),),
-    const AdminPage()
+    const Center(child: Text("Result Generator")),
   ];
-  late bool editMode;
 
   // Global key to access the scaffold state
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+  @override
+  void initState() {
+    super.initState();
+    // Ensure the TabController length matches the number of tabs and views
+    _tabController = TabController(length: _children.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     bool editModeOn = Provider.of<ActionStatusProvider>(context, listen: true).actionInfo;
+
     return Scaffold(
-      key: _scaffoldKey,  // Assign the scaffold key
-      backgroundColor: kColorSecondary,
+      key: _scaffoldKey, // Assign the scaffold key
+      //backgroundColor: Colors.orange,
       appBar: AppBar(
         centerTitle: true,
         elevation: 3,
         shadowColor: Colors.black,
         backgroundColor: kColorPrimary,
         leading: IconButton(
-          icon: Icon(Icons.menu, color: appBarText, size: 28),
+          icon: Icon(Icons.menu, color: appTextPrimary, size: 28),
           onPressed: () {
-            // Open the drawer when the menu icon is tapped
-            _scaffoldKey.currentState?.openDrawer();  // Use the scaffold key to open the drawer
+            _scaffoldKey.currentState?.openDrawer();
           },
         ),
         title: Text(
           "Home",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: appBarText),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: appTextPrimary),
         ),
         actions: [
-          Icon(Icons.content_paste_search, color: appBarText),
-          SizedBox(width: 10),
+          Icon(Icons.content_paste_search, color: appTextPrimary),
+          const SizedBox(width: 10),
           editModeOn
               ? InkWell(
-              child: Icon(Icons.sunny, color: appBarText),
-              onTap: () {
-                Provider.of<ActionStatusProvider>(context, listen: false).turnActionStatusOff();
-              })
-              : Icon(Icons.mode_night, color: appBarText),
-          SizedBox(width: 15)
+            child: Icon(Icons.sunny, color: appTextPrimary),
+            onTap: () {
+              Provider.of<ActionStatusProvider>(context, listen: false).turnActionStatusOff();
+            },
+          )
+              : Icon(Icons.mode_night, color: appTextPrimary),
+          const SizedBox(width: 15),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: _children[_currentIndex],
-      ), // Display the selected screen
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        backgroundColor: kColorPrimary,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        onTap: onTabTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.dashboard_outlined),
-            label: 'Dashboard',
-            backgroundColor: kColorPrimary,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.sailing),
-            label: 'Result',
-            backgroundColor: Colors.indigo[900],
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person),
-            label: 'Admin',
-            backgroundColor: Colors.indigo[900],
-          ),
-        ],
+        padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 12.0),
+        child: TabBarView(
+          controller: _tabController,
+          children: _children,
+        ),
       ),
-      // Add Drawer Navigation
+      bottomNavigationBar: Container(
+        color: kColorPrimary,
+        margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 16),
+        child: TabBar(
+          controller: _tabController,
+          dividerColor: Colors.transparent,
+          indicator: BoxDecoration(
+            color: Colors.green, // Green color for the selected tab
+            borderRadius: BorderRadius.circular(5), // Optional rounded corners
+          ),
+          indicatorSize: TabBarIndicatorSize.tab, // Ensures the indicator spans the full tab width
+          labelPadding: EdgeInsets.zero, // Removes padding around the label
+          labelColor: Colors.white, // Text and icon color for the selected tab
+          unselectedLabelColor: Colors.grey, // Text and icon color for unselected tabs
+          tabs: const [
+            Tab(icon: Icon(Icons.home_outlined), text: "Home"),
+            Tab(icon: Icon(Icons.sailing), text: "Result"),
+          ],
+        ),
+      ),
       drawer: Drawer(
-        backgroundColor: kColorSecondary, // Set background color for the drawer
+        backgroundColor: kColorSecondary,
         child: Column(
           children: [
-            // User Info Section (Avatar + Name) - Set header color to kPrimary
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
-                color: kColorPrimary, // Set the header background color to kColorPrimary
+                color: kColorPrimary,
               ),
-              accountName: const Text("Admin"), // Replace with dynamic name if needed
-              accountEmail: const Text("Admin@gmail.com"), // Replace with dynamic email if needed
+              accountName: const Text("Admin"),
+              accountEmail: const Text("Admin@gmail.com"),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: kColorPrimary,
                 child: ClipOval(
                   child: Image.asset(
-                    'assets/images/leading3.png', // Replace with the path to the user's avatar image
+                    'assets/images/leading3.png',
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,
@@ -153,47 +157,40 @@ class _Root extends State<Root> {
                 ),
               ),
             ),
-            // Drawer Menu Items with a background color of kColorSecondary2
             ListTile(
               leading: Icon(Icons.person),
               title: Text("Admin"),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                setState(() {
-                  _currentIndex = 2; // Navigate to the Admin Page
-                });
+                Navigator.pop(context);
+                _tabController.animateTo(0); // Navigate to the Admin Page
               },
             ),
             ListTile(
               leading: Icon(Icons.article),
               title: Text("All Exams"),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                // Navigate to All Exams (Implement the page if needed)
+                Navigator.pop(context);
               },
             ),
             ListTile(
               leading: Icon(Icons.list),
               title: Text("All Results"),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                // Navigate to All Results (Implement the page if needed)
+                Navigator.pop(context);
               },
             ),
             ListTile(
               leading: Icon(Icons.question_answer),
               title: Text("All Questions"),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                // Navigate to All Questions (Implement the page if needed)
+                Navigator.pop(context);
               },
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text("Logout"),
               onTap: () {
-                Navigator.pop(context); // Close the drawer
-                // Perform logout logic here
+                Navigator.pop(context);
               },
             ),
           ],
