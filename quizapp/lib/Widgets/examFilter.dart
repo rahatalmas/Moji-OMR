@@ -72,33 +72,41 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              _selectedExam == null ? "Select Exam" : _selectedExam!.name,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            GestureDetector(
-              onTap: () => _showExamFilterModal(context),
-              child: const Icon(Icons.filter_list, color: Colors.black),
-            ),
+     return(
+       Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15)
+          ),
+          child: Column(
+         crossAxisAlignment: CrossAxisAlignment.start,
+         children: [
+           Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+             children: [
+               Text(
+                 _selectedExam == null ? "Select Exam" : _selectedExam!.name,
+                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+               ),
+               GestureDetector(
+                 onTap: () => _showExamFilterModal(context),
+                 child: const Icon(Icons.filter_list, color: Colors.black),
+               ),
+             ],
+           ),
+           if (_selectedExam != null) ...[
+             const SizedBox(height: 10),
+             Text("Details for: ${_selectedExam!.name}"),
+             Text("Date & Time: ${_selectedExam!.dateTime}"),
+             Text("Location: ${_selectedExam!.location}"),
+             Text("Duration: ${_selectedExam!.duration} minutes"),
+             Text("Total Questions: ${_selectedExam!.totalQuestions}"),
+             Text("Options per Question: ${_selectedExam!.optionsPerQuestion}"),
+            ],
           ],
-        ),
-        if (_selectedExam != null) ...[
-          const SizedBox(height: 10),
-          Text("Details for: ${_selectedExam!.name}"),
-          Text("Date & Time: ${_selectedExam!.dateTime}"),
-          Text("Location: ${_selectedExam!.location}"),
-          Text("Duration: ${_selectedExam!.duration} minutes"),
-          Text("Total Questions: ${_selectedExam!.totalQuestions}"),
-          Text("Options per Question: ${_selectedExam!.optionsPerQuestion}"),
-        ],
-      ],
-    );
+         )
+       )
+     );
   }
 }
 
