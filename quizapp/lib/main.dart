@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quizapp/Widgets/adminPage.dart';
 import 'package:quizapp/Widgets/home.dart';
 import 'package:quizapp/providers/actionProvider.dart';
+import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
 
 import 'constant.dart';
@@ -12,6 +13,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => ExamProvider()),
         ChangeNotifierProvider(create: (context) => QuestionProvider()),
         ChangeNotifierProvider(create: (context) => ActionStatusProvider())
       ],

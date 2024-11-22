@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/models/exammodel.dart';
+import 'package:quizapp/providers/examProvider.dart';
 
 class ExamCreatePage extends StatefulWidget {
   const ExamCreatePage({super.key});
@@ -14,10 +17,8 @@ class _ExamCreatePage extends State<ExamCreatePage> {
   final TextEditingController _examDateController = TextEditingController();
   final TextEditingController _examLocationController = TextEditingController();
   final TextEditingController _examDurationController = TextEditingController();
-  final TextEditingController _questionCountController =
-      TextEditingController();
-  final TextEditingController _candidateCountController =
-      TextEditingController();
+  final TextEditingController _questionCountController = TextEditingController();
+  final TextEditingController _candidateCountController = TextEditingController();
 
   final InputDecoration _textFieldDecoration = InputDecoration(
     labelText: "Type here...",
@@ -74,13 +75,14 @@ class _ExamCreatePage extends State<ExamCreatePage> {
           selectedTime.hour,
           selectedTime.minute,
         );
+
         setState(() {
-          _examDateController.text =
-              "${fullDateTime.day}/${fullDateTime.month}/${fullDateTime.year} ${selectedTime.format(context)}";
+          _examDateController.text = fullDateTime.toIso8601String(); // Use ISO 8601 format
         });
       }
     }
   }
+
 
   @override
   void dispose() {
@@ -95,6 +97,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ExamProvider>(context);
     final bool isKeyboardVisible =
         KeyboardVisibilityProvider.isKeyboardVisible(context);
     return Scaffold(
@@ -227,8 +230,39 @@ class _ExamCreatePage extends State<ExamCreatePage> {
             child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: InkWell(
-                  onTap: () {
-                    print(_examDateController.value.text);
+                  onTap: () async {
+                    print(_examDateController.text);
+                    Exam exam = new Exam.forPost(
+                        name: _examNameController.value.text,
+                        dateTime: _examDateController.value.text,
+                        location: _examLocationController.value.text,
+                        duration: int.parse(_examDurationController.value.text),
+                        totalQuestions: int.parse(_questionCountController.value.text),
+                        numberOfCandidates: int.parse(_candidateCountController.value.text)
+                    );
+                    print(exam);
+                    bool isSuccess = await provider.addExam('http://192.168.31.184:8080/api/exam/add', exam);
+                    if (isSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Exam added successfully!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      _examNameController.clear();
+                      _examDateController.clear();
+                      _examLocationController.clear();
+                      _examDurationController.clear();
+                      _questionCountController.clear();
+                      _candidateCountController.clear();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to add exam: ${provider.message}'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,

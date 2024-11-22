@@ -31,6 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.1.2
+  json_annotation: ^4.9.0
+  http: ^1.0.0
   pdf: ^3.11.1
   printing: ^5.13.4
   path_provider: ^2.1.5
@@ -51,6 +53,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.6
+  json_serializable: ^6.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -90,6 +94,7 @@ flutter:
      - assets/images/fourteen.svg
      - assets/images/fifteen.svg
      - assets/images/sixteen.svg
+     - assets/images/filter.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

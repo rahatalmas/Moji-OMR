@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/Screens/candidate/candidatepage.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
+import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/omr/omrCreatePage.dart';
 import 'package:quizapp/Widgets/menuButton.dart';
 import 'package:quizapp/Widgets/omrCreatePage.dart';
@@ -41,7 +42,7 @@ class Dashboard extends StatelessWidget {
       const CandidateCreatePage(),
       const QuestionCreatePage(),
       const omrCreatePage(),
-      const Center(child: Text("Result Generator")),
+      ExamScreen(),
     ];
 
     return ListView(

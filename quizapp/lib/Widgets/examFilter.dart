@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/models/exammodel.dart';
 
@@ -100,7 +101,7 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      Icon(Icons.filter_alt_outlined)
+                      SvgPicture.asset("assets/images/filter.svg")
                     ],
                   ),
                 )

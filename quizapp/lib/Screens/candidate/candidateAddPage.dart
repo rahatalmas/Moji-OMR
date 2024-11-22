@@ -178,7 +178,23 @@ class _CandidateEditor extends State<CandidateEditor> {
                       ],
                     ),
                   )
-            /*ListView.builder(
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _serialNumberController.dispose();
+    _candidateNameController.dispose();
+    _schoolNameController.dispose();
+    _classLevelController.dispose();
+    super.dispose();
+  }
+}
+
+/*ListView.builder(
               itemCount: _selectedExam!.numberOfCandidates,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -236,18 +252,3 @@ class _CandidateEditor extends State<CandidateEditor> {
                 );
               },
             )*/
-          ],
-        ),
-      ],
-    );
-  }
-
-  @override
-  void dispose() {
-    _serialNumberController.dispose();
-    _candidateNameController.dispose();
-    _schoolNameController.dispose();
-    _classLevelController.dispose();
-    super.dispose();
-  }
-}
