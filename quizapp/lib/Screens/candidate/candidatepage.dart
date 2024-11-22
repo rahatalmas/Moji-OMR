@@ -9,8 +9,9 @@ class CandidateCreatePage extends StatefulWidget {
   State<CandidateCreatePage> createState() => _CandidateCreatePage();
 }
 
-class _CandidateCreatePage extends State<CandidateCreatePage> {
+class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerProviderStateMixin{
   int _selectedIndex = 0; // To track the selected tab
+  late TabController _tabController;
 
   // List of widgets for each section
   final List<Widget> _widgetOptions = <Widget>[
@@ -24,6 +25,18 @@ class _CandidateCreatePage extends State<CandidateCreatePage> {
       _selectedIndex = index;
     });
   }
+  @override
+  void initState() {
+    super.initState();
+    // Ensure the TabController length matches the number of tabs and views
+    _tabController = TabController(length: _widgetOptions.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,32 +44,40 @@ class _CandidateCreatePage extends State<CandidateCreatePage> {
       appBar: AppBar(
         title: const Text(
           "Candidate Registration",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: appTextPrimary),
         ),
         backgroundColor: kColorPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: appTextPrimary),
+        elevation: 3,
+        shadowColor: Colors.grey,
       ),
-      backgroundColor: kColorSecondary,
+      backgroundColor: kColorPrimary,
       body: Padding(
-        padding: EdgeInsets.all(10),
-        child: _widgetOptions[_selectedIndex],
+        padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 12.0),
+        child: TabBarView(
+          controller: _tabController,
+          children: _widgetOptions,
+        ),
       ), // Display the selected widget
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: kColorPrimary,
-        selectedItemColor: kColorSecondary,
-        unselectedItemColor: kColorSecondary2,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.edit),
-            label: 'Edit',
+      bottomNavigationBar: Container(
+        color: kColorPrimary,
+        margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 16),
+        child: TabBar(
+          controller: _tabController,
+          dividerColor: Colors.transparent,
+          indicator: BoxDecoration(
+            color: brandMinus2, // Green color for the selected tab
+            borderRadius: BorderRadius.circular(10), // Optional rounded corners
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.preview),
-            label: 'Preview',
-          ),
-        ],
+          indicatorSize: TabBarIndicatorSize.tab, // Ensures the indicator spans the full tab width
+          labelPadding: EdgeInsets.zero, // Removes padding around the label
+          labelColor:colorPrimary, // Text and icon color for the selected tab
+          unselectedLabelColor: Colors.grey, // Text and icon color for unselected tabs
+          tabs: const [
+            Tab(icon: Icon(Icons.edit_note), text: "Editor"),
+            Tab(icon: Icon(Icons.preview), text: "Preview"),
+          ],
+        ),
       ),
     );
   }

@@ -13,7 +13,8 @@ class CandidateEditor extends StatefulWidget {
 
 class _CandidateEditor extends State<CandidateEditor> {
   final TextEditingController _serialNumberController = TextEditingController();
-  final TextEditingController _candidateNameController = TextEditingController();
+  final TextEditingController _candidateNameController =
+      TextEditingController();
   final TextEditingController _schoolNameController = TextEditingController();
   final TextEditingController _classLevelController = TextEditingController();
 
@@ -24,7 +25,8 @@ class _CandidateEditor extends State<CandidateEditor> {
   void _onExamSelected(Exam exam) {
     setState(() {
       _selectedExam = exam;
-      totalCandidates = exam.numberOfCandidates; // Set number of candidates based on selected exam
+      totalCandidates = exam
+          .numberOfCandidates; // Set number of candidates based on selected exam
     });
   }
 
@@ -35,7 +37,10 @@ class _CandidateEditor extends State<CandidateEditor> {
     final schoolName = _schoolNameController.text;
     final classLevel = _classLevelController.text;
 
-    if (serialNumber.isEmpty || candidateName.isEmpty || schoolName.isEmpty || classLevel.isEmpty) {
+    if (serialNumber.isEmpty ||
+        candidateName.isEmpty ||
+        schoolName.isEmpty ||
+        classLevel.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all fields')),
       );
@@ -57,7 +62,7 @@ class _CandidateEditor extends State<CandidateEditor> {
     hintText: "Enter value",
     hintStyle: const TextStyle(color: Colors.black),
     labelStyle: const TextStyle(color: Colors.black),
-    prefixIcon: const Icon(Icons.input, size: 30, color: kColorPrimary),
+    prefixIcon: const Icon(Icons.input, size: 20, color: appTextPrimary),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15.0),
       borderSide: const BorderSide(color: kColorSecondary, width: 2.5),
@@ -95,103 +100,50 @@ class _CandidateEditor extends State<CandidateEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Exam filter widget (to select exam)
-          ExamFilterWidget(
-            examList: examList,
-            onExamSelected: (exam) {
-              _onExamSelected(exam);
-            },
-          ),
-          const SizedBox(height: 10),
-          /*if (_selectedExam != null) ...[
-            // Loop through the number of candidates and create input containers
-            for (int i = 0; i < totalCandidates; i++) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                decoration: BoxDecoration(
-                  color: kColorSecondary2,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 1)],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Candidate - ${i + 1}",
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    return ListView(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Exam filter widget (to select exam)
+            ExamFilterWidget(
+              examList: examList,
+              onExamSelected: (exam) {
+                _onExamSelected(exam);
+              },
+            ),
+            const SizedBox(height: 10),
+            _selectedExam == null
+                ? Center(
+                    child: Column(
+                      children: [
+                        Image.asset("assets/images/leading4.png",height: 300,width: 300,),
+                        SizedBox(height: 25,),
+                        Text("Select an exam to add Candidate",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),)
+                      ],
                     ),
-                    const SizedBox(height: 5),
-                    // Input fields for each candidate
-                    _buildTextField("Serial Number", _serialNumberController),
-                    const SizedBox(height: 10),
-                    _buildTextField("Candidate Name", _candidateNameController),
-                    const SizedBox(height: 10),
-                    _buildTextField("School Name", _schoolNameController),
-                    const SizedBox(height: 10),
-                    _buildTextField("Class Level", _classLevelController),
-                    const SizedBox(height: 15),
-                    InkWell(
-                      onTap: _addCandidate,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: kColorPrimary,
-                          borderRadius: const BorderRadius.all(Radius.circular(15)),
-                          border: Border.all(color: Colors.black87, width: 2),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text(
-                              "Add Candidate",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            Icon(Icons.add, color: Colors.white),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-            ],
-          ]*/
-          _selectedExam == null ? Center(child: Text("Noting selected"),):
-          ListView.builder(
-            itemCount: _selectedExam!.numberOfCandidates,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context,index){
-              return  Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  )
+                : Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 10),
                     decoration: BoxDecoration(
-                      color: kColorSecondary2,
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 1)],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Candidate - ${index + 1}",
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          "Candidate - ${1}",
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w400),
                         ),
                         const SizedBox(height: 5),
                         // Input fields for each candidate
-                        _buildTextField("Serial Number", _serialNumberController),
+                        _buildTextField(
+                            "Serial Number", _serialNumberController),
                         const SizedBox(height: 10),
-                        _buildTextField("Candidate Name", _candidateNameController),
+                        _buildTextField(
+                            "Candidate Name", _candidateNameController),
                         const SizedBox(height: 10),
                         _buildTextField("School Name", _schoolNameController),
                         const SizedBox(height: 10),
@@ -202,15 +154,17 @@ class _CandidateEditor extends State<CandidateEditor> {
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: kColorPrimary,
-                              borderRadius: const BorderRadius.all(Radius.circular(15)),
-                              border: Border.all(color: Colors.black87, width: 2),
+                              color: colorPrimary,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(15)),
+                              border:
+                                  Border.all(color: Colors.black87, width: 2),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
                                 Text(
-                                  "Add Candidate",
+                                  "Add",
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -223,15 +177,68 @@ class _CandidateEditor extends State<CandidateEditor> {
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 15),
+                  )
+            /*ListView.builder(
+              itemCount: _selectedExam!.numberOfCandidates,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context,index){
+                return  Container(
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    color: Colors.indigo,
 
-                ],
-              );
-            },
-          )
-        ],
-      ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Candidate - ${index + 1}",
+                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 5),
+                      // Input fields for each candidate
+                      _buildTextField("Serial Number", _serialNumberController),
+                      const SizedBox(height: 10),
+                      _buildTextField("Candidate Name", _candidateNameController),
+                      const SizedBox(height: 10),
+                      _buildTextField("School Name", _schoolNameController),
+                      const SizedBox(height: 10),
+                      _buildTextField("Class Level", _classLevelController),
+                      const SizedBox(height: 15),
+                      InkWell(
+                        onTap: _addCandidate,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            border: Border.all(color: Colors.black87, width: 2),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                "Add",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              Icon(Icons.add, color: Colors.white),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )*/
+          ],
+        ),
+      ],
     );
   }
 

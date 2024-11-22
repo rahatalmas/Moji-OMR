@@ -1,29 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quizapp/constant.dart';  // Replace with your actual constants
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Menu Button Example')),
-        body: Center(
-          child: MenuButton(
-            title: 'Home',
-            image: 'assets/home_icon.png', // Replace with your image path
-            onTap: () {
-              print('Menu button tapped!');
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class MenuButton extends StatelessWidget {
   const MenuButton({
@@ -43,21 +21,22 @@ class MenuButton extends StatelessWidget {
       width: MediaQuery.of(context).size.width / 2.25,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-            color: kColorPrimary
+            color: neutralBG,
+        boxShadow: [BoxShadow(color:Colors.black26,blurRadius: 0.3,spreadRadius: 0.3)],
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
+                SvgPicture.asset(
                   image,
                   height: 50,
                   width: 50,
@@ -67,7 +46,7 @@ class MenuButton extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                     color: appText, // Your text color
                   ),
                 ),

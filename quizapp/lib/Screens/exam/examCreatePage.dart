@@ -101,12 +101,14 @@ class _ExamCreatePage extends State<ExamCreatePage> {
       appBar: AppBar(
         title: const Text(
           "Exam Creation",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: kColorPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: neutralWhite,
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 3,
+        shadowColor: Colors.grey,
       ),
-      backgroundColor: kColorSecondary,
+      backgroundColor: neutralWhite,
       //resizeToAvoidBottomInset: false,
       body: Column(
         children: [
@@ -225,18 +227,20 @@ class _ExamCreatePage extends State<ExamCreatePage> {
             child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    print(_examDateController.value.text);
+                  },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        color: kColorPrimary,
+                        color: colorPrimary,
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       "Save",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: kColorSecondary,
+                        color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),

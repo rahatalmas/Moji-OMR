@@ -15,24 +15,24 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     List _menuOptions = [
       {
-        "title": "Create Exam",
-        "image": "assets/images/leading4.png",
+        "title": "New Exam",
+        "image": "assets/images/thirteen.svg",
       },
       {
-        "title": "Create 1",
-        "image": "assets/images/leading4.png",
+        "title": "Register Candidate",
+        "image": "assets/images/fourteen.svg",
       },
       {
-        "title": "Create 2",
-        "image": "assets/images/leading4.png",
+        "title": "Add Question",
+        "image": "assets/images/sixteen.svg",
       },
       {
-        "title": "Create 3",
-        "image": "assets/images/leading4.png",
+        "title": "OMR Generate",
+        "image": "assets/images/three.svg",
       },
       {
-        "title": "Create 4",
-        "image": "assets/images/leading4.png",
+        "title": "Result",
+        "image": "assets/images/four.svg",
       },
     ];
 
@@ -110,7 +110,25 @@ class Dashboard extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
+
+        Row(
+          children: [
+            Row(
+              children: [
+                Icon(Icons.menu_open, color: appTextPrimary),
+                Text(
+                  "Menu",
+                  style: TextStyle(
+                      color: appTextPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
         Wrap(
           spacing: 10.0,
           runSpacing: 10.0,
@@ -126,23 +144,7 @@ class Dashboard extends StatelessWidget {
           }).toList(),
         ),
         // Menu Section
-        // Row(
-        //   children: [
-        //     Row(
-        //       children: [
-        //         Icon(Icons.menu_open, color: kColorPrimary),
-        //         Text(
-        //           "Menu",
-        //           style: TextStyle(
-        //               color: kColorPrimary,
-        //               fontWeight: FontWeight.bold,
-        //               fontSize: 15),
-        //         ),
-        //       ],
-        //     ),
-        //   ],
-        // ),
-        // const SizedBox(height: 10),
+        //
         // Row(
         //   children: [
         //     MenuButton(
@@ -226,6 +228,50 @@ class Dashboard extends StatelessWidget {
         //     ),
         //   ],
         // ),
+
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Row(
+              children: [
+                Icon(Icons.shortcut, color: colorPrimary),
+                SizedBox(width: 3,),
+                Text(
+                  "Shortcuts",
+                  style: TextStyle(
+                      color: appTextPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        //shortcuts ...
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 120,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: 10,
+            itemBuilder: (BuildContext context, int index) {
+              //will replaced by shortcut buttons
+              return Container(
+                width: 120,
+                padding: EdgeInsets.all(25),
+                margin: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: neutralBG,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [BoxShadow(color: Colors.black26,blurRadius: 0.1)]
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }

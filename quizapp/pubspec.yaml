@@ -39,6 +39,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_keyboard_visibility: ^6.0.0
+  flutter_svg: ^2.0.15
 
 dev_dependencies:
   flutter_test:
@@ -74,7 +75,21 @@ flutter:
      - assets/images/leading3.png
      - assets/images/leading4.png
      - assets/images/worker.png
-
+     - assets/images/one.svg
+     - assets/images/two.svg
+     - assets/images/three.svg
+     - assets/images/four.svg
+     - assets/images/five.svg
+     - assets/images/six.svg
+     - assets/images/seven.svg
+     - assets/images/eight.svg
+     - assets/images/nine.svg
+     - assets/images/eleven.svg
+     - assets/images/twelve.svg
+     - assets/images/thirteen.svg
+     - assets/images/fourteen.svg
+     - assets/images/fifteen.svg
+     - assets/images/sixteen.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

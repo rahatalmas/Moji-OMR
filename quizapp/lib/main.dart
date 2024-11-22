@@ -78,12 +78,12 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
 
     return Scaffold(
       key: _scaffoldKey, // Assign the scaffold key
-      //backgroundColor: Colors.orange,
+      backgroundColor: neutralWhite,
       appBar: AppBar(
         centerTitle: true,
         elevation: 3,
         shadowColor: Colors.black,
-        backgroundColor: kColorPrimary,
+        backgroundColor: neutralWhite,
         leading: IconButton(
           icon: Icon(Icons.menu, color: appTextPrimary, size: 28),
           onPressed: () {
@@ -116,21 +116,25 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
         ),
       ),
       bottomNavigationBar: Container(
-        color: kColorPrimary,
         margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 16),
+        decoration: BoxDecoration(
+          color: neutralBG,
+              borderRadius: BorderRadius.circular(12)
+        ),
         child: TabBar(
           controller: _tabController,
           dividerColor: Colors.transparent,
           indicator: BoxDecoration(
-            color: Colors.green, // Green color for the selected tab
-            borderRadius: BorderRadius.circular(5), // Optional rounded corners
+            color: brandMinus2, // Green color for the selected tab
+            borderRadius: BorderRadius.circular(12), // Optional rounded corners
           ),
           indicatorSize: TabBarIndicatorSize.tab, // Ensures the indicator spans the full tab width
           labelPadding: EdgeInsets.zero, // Removes padding around the label
-          labelColor: Colors.white, // Text and icon color for the selected tab
+          labelColor:brandPlus2,
+          // Text and icon color for the selected tab
           unselectedLabelColor: Colors.grey, // Text and icon color for unselected tabs
           tabs: const [
-            Tab(icon: Icon(Icons.home_outlined), text: "Home"),
+            Tab(icon: Icon(Icons.home), text: "Home"),
             Tab(icon: Icon(Icons.sailing), text: "Result"),
           ],
         ),
