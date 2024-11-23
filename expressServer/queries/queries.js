@@ -14,6 +14,7 @@ const adminsQ = {
 
 const examsQ = {
     getList: "SELECT * FROM exams",
+    getSpecificById:"SELECT * FROM exams WHERE exam_id=?",
     addExam: `INSERT INTO exams
                   (exam_name, exam_date, exam_location, exam_duration, question_count, candidate_count)
               VALUES 
@@ -21,6 +22,8 @@ const examsQ = {
     editExam: `UPDATE exams SET 
               exam_name=?, exam_date=?, exam_location=?, exam_duration=?, question_count=?, candidate_count=?
               WHERE exam_id=?`,
+    deleteExam: `DELETE FROM exams WHERE exam_id=?`
+
 }
 
 module.exports = {
