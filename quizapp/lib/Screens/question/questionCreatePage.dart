@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/question/QuestionTemplate.dart';
 import 'package:quizapp/Screens/question/questionEditor.dart';
 import 'package:quizapp/constant.dart';
@@ -11,54 +10,73 @@ class QuestionCreatePage extends StatefulWidget {
   State<QuestionCreatePage> createState() => _QuestionCreatePage();
 }
 
-class _QuestionCreatePage extends State<QuestionCreatePage> {
-  int _selectedIndex = 0; // To track the selected tab
+class _QuestionCreatePage extends State<QuestionCreatePage>
+    with SingleTickerProviderStateMixin {
 
-  // List of widgets for each section
+  late TabController _tabController; // Declare the TabController
   final List<Widget> _widgetOptions = <Widget>[
     QuestionEditor(),
     QuestionTemplate()
   ];
 
-  // Method to handle bottom navigation tap
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  @override
+  void initState() {
+    super.initState();
+    // Ensure the TabController length matches the number of tabs and views
+    _tabController = TabController(length: _widgetOptions.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 3,
+        shadowColor: Colors.black,
+        backgroundColor: neutralWhite,
         title: const Text(
           "Question Creation",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: kColorPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      backgroundColor: kColorSecondary,
+      backgroundColor: neutralWhite,
       body: Padding(
-        padding: EdgeInsets.all(10),
-        child: _widgetOptions[_selectedIndex],
+          padding: const EdgeInsets.all(10),
+          child: TabBarView(
+            controller: _tabController,
+            children: _widgetOptions,
+          )
       ), // Display the selected widget
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: kColorPrimary,
-        selectedItemColor: kColorSecondary,
-        unselectedItemColor: kColorSecondary2,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.edit),
-            label: 'Edit',
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: neutralBG,
+        ),
+        child: TabBar(
+          controller: _tabController,
+          dividerColor: Colors.transparent,
+          indicator: BoxDecoration(
+            color: brandMinus2, // Green color for the selected tab
+            borderRadius: BorderRadius.circular(10), // Optional rounded corners
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.preview),
-            label: 'Preview',
-          ),
-        ],
+          indicatorSize: TabBarIndicatorSize
+              .tab, // Ensures the indicator spans the full tab width
+          labelPadding: EdgeInsets.zero, // Removes padding around the label
+          labelColor: colorPrimary, // Text and icon color for the selected tab
+          unselectedLabelColor:
+              Colors.grey, // Text and icon color for unselected tabs
+          tabs: const [
+            Tab(icon: Icon(Icons.edit_note), text: "Editor"),
+            Tab(icon: Icon(Icons.preview), text: "Preview"),
+          ],
+        ),
       ),
     );
   }

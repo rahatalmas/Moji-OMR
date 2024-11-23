@@ -37,22 +37,22 @@ class Dashboard extends StatelessWidget {
     List _shortcutMenu = [
       {
         "title": "Exams",
-        "image": "assets/images/thirteen.svg",
-      },
-      {
-        "title": "Candidates",
-        "image": "assets/images/fourteen.svg",
+        "image": "assets/images/one.svg",
       },
       {
         "title": "Questions",
-        "image": "assets/images/sixteen.svg",
+        "image": "assets/images/nine.svg",
       },
       {
-        "title": "OMR",
-        "image": "assets/images/three.svg",
+        "title": "Results",
+        "image": "assets/images/eleven.svg",
       },
       {
-        "title": "Result",
+        "title": "Candidates",
+        "image": "assets/images/two.svg",
+      },
+      {
+        "title": "Schools",
         "image": "assets/images/four.svg",
       },
     ];
@@ -212,7 +212,7 @@ class Dashboard extends StatelessWidget {
                 children: [
                   ShortcutButton(
                     title: _shortcutMenu[index]['title'],
-                    image: "assets/images/nine.svg",
+                    image: _shortcutMenu[index]['image'],
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(

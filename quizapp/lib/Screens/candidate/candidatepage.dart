@@ -19,12 +19,6 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
     Center(child: Text("preview"),),
   ];
 
-  // Method to handle bottom navigation tap
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
   @override
   void initState() {
     super.initState();

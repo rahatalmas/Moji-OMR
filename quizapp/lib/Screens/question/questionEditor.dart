@@ -63,7 +63,6 @@ class _QuestionEditor extends State<QuestionEditor> {
         List.generate(optionsPerQuestion, (_) => TextEditingController());
   }
 
-  // Update _selectedExam and totalQuestions when an exam is selected
   void _onExamSelected(Exam exam) {
     setState(() {
       _selectedExam = exam;
@@ -135,112 +134,120 @@ class _QuestionEditor extends State<QuestionEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ExamFilterWidget(
-            examList: examList,
-            onExamSelected: (exam) {
-              _onExamSelected(exam);
-            },
-          ),
-          const SizedBox(height: 10),
-          if (_selectedExam != null) ...[
-            // Loop through totalQuestions and create a question container for each one
-            for (int i = 0; i < totalQuestions; i++) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                decoration: BoxDecoration(
-                  color: kColorSecondary2,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 1)],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Question - ${i + 1}",
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    return ListView(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ExamFilterWidget(
+              examList: examList,
+              onExamSelected: (exam) {
+                _onExamSelected(exam);
+              },
+            ),
+
+            const SizedBox(height: 10),
+            _selectedExam == null
+                ? Center(
+              child: Column(
+                children: [
+                  Image.asset("assets/images/leading1.png",height: 300,width: 300,),
+                  SizedBox(height: 25,),
+                  Text("Select an exam to add Question",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),)
+                ],
+              ),
+            )
+                :
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              decoration:const BoxDecoration(
+                color: neutralBG,
+                borderRadius:  BorderRadius.all(Radius.circular(10)),
+                boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 1)],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Question - ${1}",
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                  ),
+                  const SizedBox(height: 2),
+                  const Text(
+                    "Type Your Question",
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 5),
+                  TextField(
+                    controller: _questionController,
+                    decoration: _textFieldDecoration.copyWith(
+                      labelText: "Question",
+                      hintText: "Type Question",
+                      prefixIcon: const Icon(Icons.question_mark,
+                          size: 24, color: kColorPrimary),
                     ),
-                    const SizedBox(height: 2),
-                    const Text(
-                      "Type Your Question",
-                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 5),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Type Options",
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 5),
+                  for (int i = 0; i < optionsPerQuestion; i++) ...[
                     TextField(
-                      controller: _questionController,
+                      controller: _optionControllers[i],
                       decoration: _textFieldDecoration.copyWith(
-                        labelText: "Question",
-                        hintText: "Type Question",
-                        prefixIcon: const Icon(Icons.question_mark,
-                            size: 24, color: kColorPrimary),
+                        labelText: "Option ${String.fromCharCode(65 + i)}",
+                        hintText: "Enter text here",
+                        prefixIcon: Icon(Icons.circle,
+                            size: 16, color: Colors.brown[800]),
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      "Type Options",
-                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 5),
-                    for (int i = 0; i < optionsPerQuestion; i++) ...[
-                      TextField(
-                        controller: _optionControllers[i],
-                        decoration: _textFieldDecoration.copyWith(
-                          labelText: "Option ${String.fromCharCode(65 + i)}",
-                          hintText: "Enter text here",
-                          prefixIcon: Icon(Icons.circle,
-                              size: 16, color: Colors.brown[800]),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                    const Text(
-                      "Select correct answer",
-                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        for (int i = 0; i < optionsPerQuestion; i++)
-                          _answerCircle(context, String.fromCharCode(65 + i)),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    InkWell(
-                      onTap: _addQuestion,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: kColorPrimary,
-                          borderRadius: const BorderRadius.all(Radius.circular(15)),
-                          border: Border.all(color: Colors.black87, width: 2),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text(
-                              "Add",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            Icon(Icons.add, color: Colors.white),
-                          ],
-                        ),
-                      ),
-                    ),
                   ],
-                ),
+                  const Text(
+                    "Select correct answer",
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (int i = 0; i < optionsPerQuestion; i++)
+                        _answerCircle(context, String.fromCharCode(65 + i)),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  InkWell(
+                    onTap: _addQuestion,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: colorPrimary,
+                        borderRadius: const BorderRadius.all(Radius.circular(15)),
+                        border: Border.all(color: Colors.black87, width: 2),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Add",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Icon(Icons.add, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 10,)
-            ]
-          ]
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
