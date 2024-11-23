@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quizapp/constant.dart';  // Replace with your actual constants
 
 
-class MenuButton extends StatelessWidget {
-  const MenuButton({
+class ShortcutButton extends StatefulWidget {
+  const ShortcutButton({
     super.key,
     required this.title,
     required this.image,
@@ -16,12 +16,18 @@ class MenuButton extends StatelessWidget {
   final Function() onTap;
 
   @override
+  State<ShortcutButton> createState() => _MenuButtonState();
+}
+
+class _MenuButtonState extends State<ShortcutButton> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width / 2.31,
+      width: 116,
+      margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-            color: neutralWhite,
+        color: neutralWhite,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
@@ -35,7 +41,7 @@ class MenuButton extends StatelessWidget {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
-          onTap: onTap,
+          onTap: widget.onTap,
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -44,13 +50,13 @@ class MenuButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(
-                  image,
+                  widget.image,
                   height: 50,
                   width: 50,
                 ),
                 SizedBox(height: 3),
                 Text(
-                  title,
+                  widget.title,
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,

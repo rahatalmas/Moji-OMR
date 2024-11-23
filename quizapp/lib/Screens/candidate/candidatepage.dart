@@ -51,7 +51,7 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
         elevation: 3,
         shadowColor: Colors.grey,
       ),
-      backgroundColor: kColorPrimary,
+      backgroundColor: neutralWhite,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 12.0),
         child: TabBarView(
@@ -60,8 +60,11 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
         ),
       ), // Display the selected widget
       bottomNavigationBar: Container(
-        color: kColorPrimary,
         margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: neutralBG,
+        ),
         child: TabBar(
           controller: _tabController,
           dividerColor: Colors.transparent,

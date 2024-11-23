@@ -3,9 +3,11 @@ import 'package:quizapp/Screens/candidate/candidatepage.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/omr/omrCreatePage.dart';
+import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/Widgets/menuButton.dart';
-import 'package:quizapp/Widgets/omrCreatePage.dart';
+import 'package:quizapp/Screens/omrCreatePage.dart';
 import 'package:quizapp/Screens/question/questionCreatePage.dart';
+import 'package:quizapp/Widgets/shortcutButton.dart';
 import 'package:quizapp/constant.dart';
 import 'package:collection/collection.dart';
 
@@ -31,18 +33,42 @@ class Dashboard extends StatelessWidget {
         "title": "OMR Generate",
         "image": "assets/images/three.svg",
       },
+    ];
+    List _shortcutMenu = [
+      {
+        "title": "Exams",
+        "image": "assets/images/thirteen.svg",
+      },
+      {
+        "title": "Candidates",
+        "image": "assets/images/fourteen.svg",
+      },
+      {
+        "title": "Questions",
+        "image": "assets/images/sixteen.svg",
+      },
+      {
+        "title": "OMR",
+        "image": "assets/images/three.svg",
+      },
       {
         "title": "Result",
         "image": "assets/images/four.svg",
       },
     ];
-
     final List<Widget> _menuoptions = [
       const ExamCreatePage(),
       const CandidateCreatePage(),
       const QuestionCreatePage(),
       const omrCreatePage(),
+    ];
+
+    final List<Widget> _shortcutOptions = [
       ExamScreen(),
+      const ExamCreatePage(),
+      const CandidateCreatePage(),
+      const QuestionCreatePage(),
+      const omrCreatePage(),
     ];
 
     return ListView(
@@ -51,7 +77,7 @@ class Dashboard extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: kColorSecondary2,
+            color: neutralBG,
             borderRadius: const BorderRadius.all(
               Radius.circular(15),
             ),
@@ -64,8 +90,11 @@ class Dashboard extends StatelessWidget {
                 children: [
                   Image.asset("assets/images/leading2.png", width: 50),
                   const Text(
-                    "Enter the name of Examination",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    "Search Query",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -130,105 +159,23 @@ class Dashboard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 10.0,
-          runSpacing: 10.0,
-          children: _menuOptions.mapIndexed((index, e) {
-            return MenuButton(
-              title: e['title'],
-              image: e['image'],
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => _menuoptions[index]),
-              ),
-            );
-          }).toList(),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+          child: Wrap(
+            spacing: 10.0,
+            runSpacing: 10.0,
+            children: _menuOptions.mapIndexed((index, e) {
+              return MenuButton(
+                title: e['title'],
+                image: e['image'],
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => _menuoptions[index]),
+                ),
+              );
+            }).toList(),
+          ),
         ),
-        // Menu Section
-        //
-        // Row(
-        //   children: [
-        //     MenuButton(
-        //       title: "Create Exam",
-        //       image: "assets/images/leading4.png",
-        //       onTap: () => changeMenu(0),
-        //     ),
-        //     const SizedBox(width: 10),
-        //     MenuButton(
-        //       title: "Register Candidate",
-        //       image: "assets/images/leading3.png",
-        //       onTap: () => changeMenu(1),
-        //     ),
-        //   ],
-        // ),
-        // const SizedBox(height: 10),
-        // Row(
-        //   children: [
-        //     MenuButton(
-        //       title: "Create Question",
-        //       image: "assets/images/leading4.png",
-        //       onTap: () => changeMenu(2),
-        //     ),
-        //     const SizedBox(width: 10),
-        //     MenuButton(
-        //       title: "Generate OMR",
-        //       image: "assets/images/leading3.png",
-        //       onTap: () => changeMenu(3),
-        //     ),
-        //   ],
-        // ),
-        // const SizedBox(height: 10),
-        // Row(
-        //   children: [
-        //     MenuButton(
-        //       title: "Check paper",
-        //       image: "assets/images/leading4.png",
-        //       onTap: () => changeMenu(2),
-        //     ),
-        //     const SizedBox(width: 10),
-        //     MenuButton(
-        //       title: "Pending exams",
-        //       image: "assets/images/leading3.png",
-        //       onTap: () => changeMenu(3),
-        //     ),
-        //   ],
-        // ),
-        // const SizedBox(height: 10),
-
-        // History Section
-        // Row(
-        //   children: [
-        //     Row(
-        //       children: [
-        //         Icon(Icons.history, color: kColorPrimary),
-        //         const SizedBox(width: 2),
-        //         Text(
-        //           "History",
-        //           style: TextStyle(
-        //               color: kColorPrimary,
-        //               fontWeight: FontWeight.bold,
-        //               fontSize: 15),
-        //         ),
-        //       ],
-        //     ),
-        //   ],
-        // ),
-        // const SizedBox(height: 10),
-        // Row(
-        //   children: [
-        //     MenuButton(
-        //       title: "Past Exams",
-        //       image: "assets/images/leading4.png",
-        //       onTap: () => changeMenu(0),
-        //     ),
-        //     const SizedBox(width: 10),
-        //     MenuButton(
-        //       title: "Results List",
-        //       image: "assets/images/leading3.png",
-        //       onTap: () => changeMenu(1),
-        //     ),
-        //   ],
-        // ),
 
         const SizedBox(height: 12),
         Row(
@@ -236,14 +183,15 @@ class Dashboard extends StatelessWidget {
             Row(
               children: [
                 Icon(Icons.shortcut, color: colorPrimary),
-                SizedBox(width: 3,),
+                SizedBox(
+                  width: 3,
+                ),
                 Text(
                   "Shortcuts",
                   style: TextStyle(
                       color: appTextPrimary,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15
-                  ),
+                      fontSize: 15),
                 ),
               ],
             ),
@@ -251,28 +199,68 @@ class Dashboard extends StatelessWidget {
         ),
 
         //shortcuts ...
-        const SizedBox(height: 12),
+        const SizedBox(height: 7),
         SizedBox(
-          height: 120,
+          height: 116,
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: 10,
+            itemCount: _shortcutOptions.length,
             itemBuilder: (BuildContext context, int index) {
               //will replaced by shortcut buttons
-              return Container(
-                width: 120,
-                padding: EdgeInsets.all(25),
-                margin: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: neutralBG,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [BoxShadow(color: Colors.black26,blurRadius: 0.1)]
-                ),
+              return Row(
+                children: [
+                  ShortcutButton(
+                    title: _shortcutMenu[index]['title'],
+                    image: "assets/images/nine.svg",
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => _shortcutOptions[index]),
+                    ),
+                  ),
+                  //SizedBox(width: 10,)
+                ],
               );
             },
           ),
         ),
+
+        //most recent activities
+        const SizedBox(
+          height: 7,
+        ),
+        Row(
+          children: [
+            Row(
+              children: [
+                Icon(Icons.manage_history, color: colorPrimary),
+                SizedBox(
+                  width: 3,
+                ),
+                Text(
+                  "Recent Activity",
+                  style: TextStyle(
+                      color: appTextPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 7,
+        ),
+        ExamCard(
+          examId: 1,
+          examName: "Space X Journey To Mars",
+          examDate: DateTime.parse("2024-12-30T18:00:00.000Z"),
+          examLocation: "Planet Earth",
+          examDuration: 5,
+          questionCount: 100,
+          candidateCount: 100,
+        )
       ],
     );
   }

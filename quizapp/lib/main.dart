@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
-import 'package:quizapp/Widgets/adminPage.dart';
-import 'package:quizapp/Widgets/home.dart';
+import 'package:quizapp/Screens/adminPage.dart';
+import 'package:quizapp/Screens/home.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
@@ -142,12 +142,12 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
         ),
       ),
       drawer: Drawer(
-        backgroundColor: kColorSecondary,
+        backgroundColor: neutralWhite,
         child: Column(
           children: [
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
-                color: kColorPrimary,
+                color: colorPrimary,
               ),
               accountName: const Text("Admin"),
               accountEmail: const Text("Admin@gmail.com"),

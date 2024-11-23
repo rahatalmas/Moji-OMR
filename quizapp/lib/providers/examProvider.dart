@@ -21,7 +21,7 @@ class ExamProvider with ChangeNotifier {
     try {
       // Add the access token to the headers
       final headers = {
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsbWFzIiwia2V5IjoiYWRtaW5fa2V5IiwiaWF0IjoxNzMyMjk1MTMyLCJleHAiOjE3MzIyOTU3MzJ9.gdLymrn9SAgJopUbwg5k3gcS1dGRZ0HbS0LvLJgrlvky1ddAgEByBH45FArF7mDZ_YxQ8f1ti7Elvdk-eYKoqA',
+        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsbWFzIiwia2V5IjoiYWRtaW5fa2V5IiwiaWF0IjoxNzMyMzIzNTUzLCJleHAiOjE3MzIzMjQxNTN9.o3x_YjDPBoC4QzFm5X1-okywwehdvXKLPFr6Bl-ccBEUN9bGuZodDR1aaifMJeusYrMXn4GdAECC8jogUny2vA',
         'Content-Type': 'application/json',
       };
 
@@ -49,7 +49,7 @@ class ExamProvider with ChangeNotifier {
 
     try {
       final headers = {
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsbWFzIiwia2V5IjoiYWRtaW5fa2V5IiwiaWF0IjoxNzMyMjk1MzI5LCJleHAiOjE3MzIyOTU5Mjl9.u0Y0L6lkGvk-86XEyulv5YykTC5Ig1BD73W54G01cEKQKqpFlE3lWdKT7ALQ-tA-HQkJSMx9pcmWOOE4HkuSTg',
+        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsbWFzIiwia2V5IjoiYWRtaW5fa2V5IiwiaWF0IjoxNzMyMzIzNTUzLCJleHAiOjE3MzIzMjQxNTN9.o3x_YjDPBoC4QzFm5X1-okywwehdvXKLPFr6Bl-ccBEUN9bGuZodDR1aaifMJeusYrMXn4GdAECC8jogUny2vA',
         'Content-Type': 'application/json',
       };
 

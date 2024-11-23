@@ -13,8 +13,7 @@ class CandidateEditor extends StatefulWidget {
 
 class _CandidateEditor extends State<CandidateEditor> {
   final TextEditingController _serialNumberController = TextEditingController();
-  final TextEditingController _candidateNameController =
-      TextEditingController();
+  final TextEditingController _candidateNameController = TextEditingController();
   final TextEditingController _schoolNameController = TextEditingController();
   final TextEditingController _classLevelController = TextEditingController();
 
@@ -128,6 +127,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                         vertical: 15, horizontal: 10),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: neutralBG
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,9 +160,9 @@ class _CandidateEditor extends State<CandidateEditor> {
                               border:
                                   Border.all(color: Colors.black87, width: 2),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
                                   "Add",
                                   style: TextStyle(
