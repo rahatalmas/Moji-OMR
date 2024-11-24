@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/constant.dart';
 import 'package:quizapp/models/exammodel.dart';
 import 'package:quizapp/providers/examProvider.dart';
 
@@ -44,7 +45,7 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
               children: [
                 const Text(
                   "Exam List",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
@@ -87,7 +88,7 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
           onTap: () => _showExamFilterModal(context),
           child: Container(
             width: double.maxFinite,
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.black12),
@@ -101,9 +102,9 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
                       ? "Select Exam"
                       : _selectedExam!.name,
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 16, fontWeight: FontWeight.bold,color: colorPrimary),
                 ),
-                SvgPicture.asset("assets/images/filter.svg"),
+                SvgPicture.asset("assets/images/filter.svg",height: 20,color: colorPrimary,),
               ],
             ),
           ),

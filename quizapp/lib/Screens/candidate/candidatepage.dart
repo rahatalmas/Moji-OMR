@@ -40,10 +40,16 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
           "Candidate Registration",
           style: TextStyle(color: appTextPrimary),
         ),
+        centerTitle: true,
         backgroundColor: kColorPrimary,
         iconTheme: const IconThemeData(color: appTextPrimary),
         elevation: 3,
         shadowColor: Colors.grey,
+        actions: [
+          Icon(Icons.add),
+          SizedBox(width: 16,),
+
+        ],
       ),
       backgroundColor: neutralWhite,
       body: Padding(

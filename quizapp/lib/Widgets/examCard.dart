@@ -49,6 +49,46 @@ class ExamCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  padding: EdgeInsets.only(bottom: 4),
+                  decoration: BoxDecoration(
+                      border: BorderDirectional(bottom: BorderSide(color: Colors.black12))
+                  ),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                  color: Colors.deepPurple,
+                                  borderRadius: BorderRadius.circular(100)
+                              ),
+                            ),
+                            SizedBox(width: 5,),
+                            Text('Created at: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}')
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(Icons.edit_note),
+                            SizedBox(width: 5,),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(10),
+                                onTap: (){
+                                  print("hello");
+                                },
+                                child: Icon(Icons.delete_forever_outlined,)
+                            )
+                          ],
+                        )
+                      ]
+                  ),
+                ),
+                SizedBox(height: 10,),
                 Text(examName, style: const TextStyle(fontSize:17,fontWeight: FontWeight.bold,color: colorPrimary)),
                 const SizedBox(height: 8),
                 Row(

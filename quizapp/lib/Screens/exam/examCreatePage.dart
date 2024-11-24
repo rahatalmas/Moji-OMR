@@ -232,7 +232,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                 child: InkWell(
                   onTap: () async {
                     print(_examDateController.text);
-                    Exam exam = new Exam.forPost(
+                    Exam exam =  Exam.forPost(
                         name: _examNameController.value.text,
                         dateTime: _examDateController.value.text,
                         location: _examLocationController.value.text,

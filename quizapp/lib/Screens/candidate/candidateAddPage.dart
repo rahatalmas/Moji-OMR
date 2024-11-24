@@ -19,14 +19,69 @@ class _CandidateEditor extends State<CandidateEditor> {
 
   int totalCandidates = 0; // Number of candidates (from selected exam)
   Exam? _selectedExam; // Store the selected exam
+  String _selectedMode = "Default Editing"; // Selected mode (default value)
 
   // Initialize input fields and candidate data
   void _onExamSelected(Exam exam) {
     setState(() {
       _selectedExam = exam;
-      totalCandidates = exam
-          .numberOfCandidates; // Set number of candidates based on selected exam
+      totalCandidates = exam.numberOfCandidates; // Set number of candidates based on selected exam
     });
+  }
+
+  // Open bottom modal for mode selection
+  void _showModeSelectionModal() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Select Mode",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text("Default Editing"),
+                onTap: () {
+                  setState(() {
+                    _selectedMode = "Default Editing";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.storage),
+                title: const Text("Add from Database"),
+                onTap: () {
+                  setState(() {
+                    _selectedMode = "Add from Database";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.upload_file),
+                title: const Text("Upload File"),
+                onTap: () {
+                  setState(() {
+                    _selectedMode = "Upload File";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   // Method to add a candidate
@@ -86,13 +141,14 @@ class _CandidateEditor extends State<CandidateEditor> {
     filled: true,
   );
 
-  // Build text field with the provided label and controller
-  Widget _buildTextField(String label, TextEditingController controller) {
+  // Build text field with the provided label, controller, and icon
+  Widget _buildTextField(String label, TextEditingController controller, IconData icon) {
     return TextField(
       controller: controller,
       decoration: _textFieldDecoration.copyWith(
         labelText: label,
         hintText: "Enter $label",
+        prefixIcon: Icon(icon, size: 20, color: appTextPrimary),
       ),
     );
   }
@@ -114,70 +170,147 @@ class _CandidateEditor extends State<CandidateEditor> {
             const SizedBox(height: 10),
             _selectedExam == null
                 ? Center(
-                    child: Column(
-                      children: [
-                        Image.asset("assets/images/leading4.png",height: 300,width: 300,),
-                        SizedBox(height: 25,),
-                        Text("Select an exam to add Candidate",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),)
-                      ],
-                    ),
-                  )
+              child: Column(
+                children: [
+                  Image.asset(
+                    "assets/images/leading4.png",
+                    height: 300,
+                    width: 300,
+                  ),
+                  const SizedBox(height: 25),
+                  const Text(
+                    "Select an exam to add Candidate",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                ],
+              ),
+            )
                 : Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      color: neutralBG
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Candidate - ${1}",
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w400),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: neutralBG),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Mode and info
+                  InkWell(
+                    onTap: _showModeSelectionModal,
+                    child: Container(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      decoration: const BoxDecoration(
+                        border: BorderDirectional(
+                          bottom: BorderSide(color: Colors.green, width: 5),
                         ),
-                        const SizedBox(height: 5),
-                        // Input fields for each candidate
-                        _buildTextField(
-                            "Serial Number", _serialNumberController),
-                        const SizedBox(height: 10),
-                        _buildTextField(
-                            "Candidate Name", _candidateNameController),
-                        const SizedBox(height: 10),
-                        _buildTextField("School Name", _schoolNameController),
-                        const SizedBox(height: 10),
-                        _buildTextField("Class Level", _classLevelController),
-                        const SizedBox(height: 15),
-                        InkWell(
-                          onTap: _addCandidate,
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: colorPrimary,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(15)),
-                              border:
-                                  Border.all(color: Colors.black87, width: 2),
-                            ),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Add",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                Icon(Icons.add, color: Colors.white),
-                              ],
-                            ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  const CircleAvatar(
+                                    radius: 4,
+                                    backgroundColor: Colors.purple,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  const CircleAvatar(
+                                    radius: 4,
+                                    backgroundColor: Colors.indigo,
+                                  ),
+                                  const SizedBox(width: 4,),
+                                  const CircleAvatar(
+                                    radius: 4,
+                                    backgroundColor: Colors.cyan,
+                                  ),
+                                  const SizedBox(width: 4,),
+                                  Text(
+                                    _selectedMode,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              const Icon(Icons.edit_road)
+                            ],
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Candidate - ${146}",
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                              ),
+                              Row(
+                                children: const [
+                                  Text(
+                                    "Total: ${300}",
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "Remaining: ${155}",
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 16),
+
+                  //response from server
+                  Container(
+                    height: 150,
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                        color: neutralWhite,
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Center(child: Text("Fill Up the form"),),
+                  ),
+                  const SizedBox(height: 16,),
+                  // form fields
+                  _buildTextField(
+                      "Serial Number", _serialNumberController, Icons.confirmation_number),
+                  const SizedBox(height: 10),
+                  _buildTextField("Candidate Name", _candidateNameController, Icons.person),
+                  const SizedBox(height: 10),
+                  _buildTextField("School Name", _schoolNameController, Icons.school),
+                  const SizedBox(height: 10),
+                  _buildTextField("Class Level", _classLevelController, Icons.grade),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: _addCandidate,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: colorPrimary,
+                        borderRadius: const BorderRadius.all(Radius.circular(15)),
+                        border: Border.all(color: Colors.black87, width: 2),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Add",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Icon(Icons.add, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ],
@@ -193,62 +326,3 @@ class _CandidateEditor extends State<CandidateEditor> {
     super.dispose();
   }
 }
-
-/*ListView.builder(
-              itemCount: _selectedExam!.numberOfCandidates,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context,index){
-                return  Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: Colors.indigo,
-
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Candidate - ${index + 1}",
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(height: 5),
-                      // Input fields for each candidate
-                      _buildTextField("Serial Number", _serialNumberController),
-                      const SizedBox(height: 10),
-                      _buildTextField("Candidate Name", _candidateNameController),
-                      const SizedBox(height: 10),
-                      _buildTextField("School Name", _schoolNameController),
-                      const SizedBox(height: 10),
-                      _buildTextField("Class Level", _classLevelController),
-                      const SizedBox(height: 15),
-                      InkWell(
-                        onTap: _addCandidate,
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: const BorderRadius.all(Radius.circular(15)),
-                            border: Border.all(color: Colors.black87, width: 2),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                "Add",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                              Icon(Icons.add, color: Colors.white),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            )*/
