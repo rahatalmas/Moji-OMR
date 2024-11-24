@@ -119,18 +119,19 @@ class _ExamCreatePage extends State<ExamCreatePage> {
             child: ListView(
               padding: EdgeInsets.all(10),
               children: [
+                SizedBox(height: 16,),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "assets/images/leading3.png",
+                      "assets/images/exam.png",
                       height: 250,
                       width: 250,
                     )
                   ],
                 ),
-
+                SizedBox(height: 16,),
                 // Exam Name Field
                 TextField(
                   controller: _examNameController,

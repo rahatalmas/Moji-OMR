@@ -91,7 +91,8 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.black12),
+              //border: Border.all(color: Colors.black12),
+              color: neutralBG
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

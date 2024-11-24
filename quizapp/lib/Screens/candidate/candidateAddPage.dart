@@ -172,10 +172,11 @@ class _CandidateEditor extends State<CandidateEditor> {
                 ? Center(
               child: Column(
                 children: [
+                  SizedBox(height: 100,),
                   Image.asset(
-                    "assets/images/leading4.png",
-                    height: 300,
-                    width: 300,
+                    "assets/images/student.png",
+                    height: 250,
+                    width: 250,
                   ),
                   const SizedBox(height: 25),
                   const Text(
