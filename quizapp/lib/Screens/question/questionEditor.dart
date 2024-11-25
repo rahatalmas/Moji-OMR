@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/Widgets/answerCircle.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
@@ -15,6 +16,7 @@ class QuestionEditor extends StatefulWidget {
 
 class _QuestionEditor extends State<QuestionEditor> {
   String? _selectedAnswer;
+  String _selectedMode = "Default Editing";
   void _handleAnswerSelection(String label) {
     setState(() {
       _selectedAnswer = label;
@@ -79,7 +81,59 @@ class _QuestionEditor extends State<QuestionEditor> {
       totalQuestions = exam.totalQuestions;
     });
   }
-
+  void _showModeSelectionModal() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Select Mode",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text("Default Editing"),
+                onTap: () {
+                  setState(() {
+                    _selectedMode = "Default Editing";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.storage),
+                title: const Text("Add from Database"),
+                onTap: () {
+                  setState(() {
+                    _selectedMode = "Add from Database";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.upload_file),
+                title: const Text("Upload File"),
+                onTap: () {
+                  setState(() {
+                    _selectedMode = "Upload File";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   //answer circle widget
   /*idget _answerCircle(BuildContext context, String label) {
@@ -180,6 +234,98 @@ class _QuestionEditor extends State<QuestionEditor> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  // Mode and info
+                  InkWell(
+                    onTap: _showModeSelectionModal,
+                    child: Container(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      decoration: const BoxDecoration(
+                        border: BorderDirectional(
+                          bottom: BorderSide(color: Colors.green, width: 5),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  const CircleAvatar(
+                                    radius: 4,
+                                    backgroundColor: Colors.purple,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  const CircleAvatar(
+                                    radius: 4,
+                                    backgroundColor: Colors.indigo,
+                                  ),
+                                  const SizedBox(width: 4,),
+                                  const CircleAvatar(
+                                    radius: 4,
+                                    backgroundColor: Colors.cyan,
+                                  ),
+                                  const SizedBox(width: 4,),
+                                  Text(
+                                    _selectedMode,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              const Icon(Icons.edit_road)
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Question no: ${61}",
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                              ),
+                              Row(
+                                children: const [
+                                  Text(
+                                    "Total: ${80}",
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "Remaining: ${20}",
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  //response from server
+                  Container(
+                    height: 150,
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                        color: neutralWhite,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Lottie.asset("assets/images/fileAdding.json",height: 110),
+                          Text("Last Added: What is an apple?")
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16,),
+
+                  //form fields
                   const Text(
                     "Question - ${1}",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),

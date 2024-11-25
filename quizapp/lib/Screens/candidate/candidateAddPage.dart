@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
+import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
+import 'package:quizapp/Widgets/selectableScholarList.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/models/exammodel.dart';
 
@@ -20,7 +22,11 @@ class _CandidateEditor extends State<CandidateEditor> {
 
   int totalCandidates = 0; // Number of candidates (from selected exam)
   Exam? _selectedExam; // Store the selected exam
-  String _selectedMode = "Default Editing"; // Selected mode (default value)
+  int _selectedMode = 0; // Selected mode (default value)
+  final List<String> _modes = ["Default Editing","Add from database","Upload File"];
+  final List<Widget> _modeScreens = [
+
+  ];
 
   // Initialize input fields and candidate data
   void _onExamSelected(Exam exam) {
@@ -53,7 +59,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                 title: const Text("Default Editing"),
                 onTap: () {
                   setState(() {
-                    _selectedMode = "Default Editing";
+                    _selectedMode = 0;
                   });
                   Navigator.pop(context);
                 },
@@ -63,7 +69,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                 title: const Text("Add from Database"),
                 onTap: () {
                   setState(() {
-                    _selectedMode = "Add from Database";
+                    _selectedMode = 1;
                   });
                   Navigator.pop(context);
                 },
@@ -73,7 +79,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                 title: const Text("Upload File"),
                 onTap: () {
                   setState(() {
-                    _selectedMode = "Upload File";
+                    _selectedMode = 2;
                   });
                   Navigator.pop(context);
                 },
@@ -191,7 +197,8 @@ class _CandidateEditor extends State<CandidateEditor> {
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: neutralBG),
+                  color: neutralBG
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -228,7 +235,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                                   ),
                                   const SizedBox(width: 4,),
                                   Text(
-                                    _selectedMode,
+                                    _modes[_selectedMode],
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                 ],
@@ -284,40 +291,49 @@ class _CandidateEditor extends State<CandidateEditor> {
                     ),
                   ),
                   const SizedBox(height: 16,),
+
                   // form fields
-                  _buildTextField(
-                      "Serial Number", _serialNumberController, Icons.confirmation_number),
-                  const SizedBox(height: 10),
-                  _buildTextField("Candidate Name", _candidateNameController, Icons.person),
-                  const SizedBox(height: 10),
-                  _buildTextField("School Name", _schoolNameController, Icons.school),
-                  const SizedBox(height: 10),
-                  _buildTextField("Class Level", _classLevelController, Icons.grade),
-                  const SizedBox(height: 16),
-                  InkWell(
-                    onTap: _addCandidate,
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: colorPrimary,
-                        borderRadius: const BorderRadius.all(Radius.circular(15)),
-                        border: Border.all(color: Colors.black87, width: 2),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Add",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                  _selectedMode == 0
+                      ?
+                  Column(
+                    children: [
+                      _buildTextField(
+                          "Serial Number", _serialNumberController, Icons.confirmation_number),
+                      const SizedBox(height: 10),
+                      _buildTextField("Candidate Name", _candidateNameController, Icons.person),
+                      const SizedBox(height: 10),
+                      _buildTextField("School Name", _schoolNameController, Icons.school),
+                      const SizedBox(height: 10),
+                      _buildTextField("Class Level", _classLevelController, Icons.grade),
+                      const SizedBox(height: 16),
+                      InkWell(
+                        onTap: _addCandidate,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            border: Border.all(color: Colors.black87, width: 2),
                           ),
-                          Icon(Icons.add, color: Colors.white),
-                        ],
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Add",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              Icon(Icons.add, color: Colors.white),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    ],
+                  )
+                      :
+                  ScholarList2(scholars: scholars)
                 ],
               ),
             ),
@@ -336,3 +352,4 @@ class _CandidateEditor extends State<CandidateEditor> {
     super.dispose();
   }
 }
+

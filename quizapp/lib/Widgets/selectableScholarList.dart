@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
-import 'package:quizapp/Screens/scholar/scholarCard.dart';
-import 'package:quizapp/Widgets/scholarList.dart';
-import 'package:quizapp/Widgets/selectableScholarList.dart';
+import 'package:quizapp/Screens/scholar/selectableScholarCard.dart';
 import 'package:quizapp/constant.dart';
 
-class ScholarScreen extends StatefulWidget {
-  const ScholarScreen({Key? key}) : super(key: key);
+class ScholarList2 extends StatefulWidget {
+  final List<Scholar> scholars;
+
+  const ScholarList2({Key? key, required this.scholars}) : super(key: key);
 
   @override
-  _ScholarScreenState createState() => _ScholarScreenState();
+  _ScholarList2State createState() => _ScholarList2State();
 }
 
-class _ScholarScreenState extends State<ScholarScreen> {
-
-
+class _ScholarList2State extends State<ScholarList2> {
+  final Set<String> _markedScholars = {}; // To store selected scholar IDs
   List<String> selectedSchools = [];
   String? selectedSortOption;
   bool isAscending = true;
@@ -61,72 +60,107 @@ class _ScholarScreenState extends State<ScholarScreen> {
       return scholars.where((scholar) => selectedSchools.contains(scholar.schoolName)).toList();
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: neutralWhite,
-      appBar: AppBar(
-        title: Text('Scholars'),
-        centerTitle: true,
-        elevation: 3,
-        shadowColor: Colors.grey,
-        backgroundColor: neutralWhite,
-        actions: [
-          Icon(Icons.add),
-          SizedBox(width: 16),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            // Filters Row
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      children: [
+        // Filters Row
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.list),
-                      SizedBox(width: 3),
-                      Text("Scholar list")
-                    ],
+                  Icon(Icons.list),
+                  SizedBox(width: 3),
+                  Text("Scholar list")
+                ],
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => showSchoolFilterDialog(context),
+                    child: Row(
+                      children: [
+                        Text("School"),
+                        Icon(Icons.arrow_drop_down),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => showSchoolFilterDialog(context),
-                        child: Row(
-                          children: [
-                            Text("School"),
-                            Icon(Icons.arrow_drop_down),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () => showSortOptionsDialog(context),
-                        child: Row(
-                          children: [
-                            Text("Sort"),
-                            Icon(Icons.arrow_drop_down),
-                          ],
-                        ),
-                      ),
-                    ],
+                  SizedBox(width: 16),
+                  GestureDetector(
+                    onTap: () => showSortOptionsDialog(context),
+                    child: Row(
+                      children: [
+                        Text("Sort"),
+                        Icon(Icons.arrow_drop_down),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 8),
-
-            // Scholar List
-            ScholarList(scholars: filteredScholars),
-            //ScholarList2(scholars: filteredScholars)
-          ],
+            ],
+          ),
         ),
-      ),
+        SizedBox(height: 8),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: filteredScholars.length,
+          itemBuilder: (context, index) {
+            final scholar = filteredScholars[index];
+            final isMarked = _markedScholars.contains(scholar.scholarId);
+
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  if (isMarked) {
+                    _markedScholars.remove(scholar.scholarId);
+                  } else {
+                    _markedScholars.add(scholar.scholarId);
+                  }
+                });
+              },
+              child: SelectableScholarCard(
+                scholarId: scholar.scholarId,
+                scholarName: scholar.scholarName,
+                scholarPicture: scholar.scholarPicture,
+                schoolName: scholar.schoolName,
+                classLevel: scholar.classLevel,
+                isMarked: isMarked,
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 16),
+        InkWell(
+          onTap: (){
+            print(_markedScholars);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: colorPrimary,
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
+              border: Border.all(color: Colors.black87, width: 2),
+            ),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Save",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                SizedBox(width: 3,),
+                Icon(Icons.save_as, color: Colors.white),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -252,5 +286,7 @@ class _ScholarScreenState extends State<ScholarScreen> {
       },
     );
   }
+
 }
+
 
