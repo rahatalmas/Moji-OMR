@@ -17,6 +17,7 @@ class AnswerCircle extends StatelessWidget {
     return InkWell(
       onTap: () => onTap(label),
       child: Container(
+        margin: EdgeInsets.all(8),
         width: 40,
         height: 40,
         decoration: BoxDecoration(

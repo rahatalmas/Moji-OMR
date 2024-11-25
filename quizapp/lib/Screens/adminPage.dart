@@ -212,6 +212,9 @@ class _AdminPageState extends State<AdminPage> {
       backgroundColor: neutralWhite,
       appBar: AppBar(
         title: Text("admin"),
+        backgroundColor: neutralWhite,
+        elevation: 3,
+        shadowColor: Colors.grey,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -222,7 +225,7 @@ class _AdminPageState extends State<AdminPage> {
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
-                  color: kColorSecondary2,
+                  color: neutralBG,
                   borderRadius: BorderRadius.circular(15),
                   //border: Border.all(color:kColorPrimary, width: 3),
                 ),
@@ -232,7 +235,7 @@ class _AdminPageState extends State<AdminPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CircleAvatar(
-                          child: Image.asset("assets/images/leading1.png"),
+                          child: Image.asset("assets/images/man2.png"),
                           radius: 35,
                           backgroundColor: Colors.white,
                         ),
@@ -259,11 +262,11 @@ class _AdminPageState extends State<AdminPage> {
                                         Text(
                                           "edit",
                                           style: TextStyle(
-                                              color: kColorButton,
+                                              color: Colors.black87,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400),
                                         ),
-                                        Icon(Icons.edit_note,color: Colors.indigo[900],),
+                                        Icon(Icons.edit_note,color: Colors.black87,),
                                       ],
                                     ),
                                   ),
@@ -284,9 +287,8 @@ class _AdminPageState extends State<AdminPage> {
                                       vertical: 5, horizontal: 10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: kColorButton,
-                                    border: Border.all(
-                                        color: Colors.indigo, width: 1),
+                                    color: colorPrimary,
+                                    //border: Border.all(color: Colors.indigo, width: 1),
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -341,8 +343,8 @@ class _AdminPageState extends State<AdminPage> {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: kColorSecondary,
-                      borderRadius: BorderRadius.circular(15),
+                      color: neutralWhite,
+                      borderRadius: BorderRadius.circular(12),
                       //border: Border.all(color: Colors.deepPurple, width: 1),
                       boxShadow: [BoxShadow(color: Colors.black26,blurRadius: 1)]
                     ),
@@ -350,10 +352,7 @@ class _AdminPageState extends State<AdminPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CircleAvatar(
-                          child: Text(
-                            admin['name']![0],
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          backgroundImage: AssetImage("assets/images/man.png"),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
@@ -383,7 +382,7 @@ class _AdminPageState extends State<AdminPage> {
                             children: [
                               IconButton(
                                 onPressed: () => showEditUserDialog(index), // Edit
-                                icon: const Icon(Icons.edit, color: kColorPrimary),
+                                icon: const Icon(Icons.edit, color: colorPrimary),
                               ),
                               IconButton(
                                 onPressed: () {
@@ -391,7 +390,7 @@ class _AdminPageState extends State<AdminPage> {
                                     adminList.removeAt(index); // Delete
                                   });
                                 },
-                                icon:  Icon(Icons.delete, color: Colors.red[700]),
+                                icon:  Icon(Icons.delete, color: Colors.red[900]),
                               ),
                             ],
                           ),
