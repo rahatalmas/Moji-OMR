@@ -42,6 +42,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_keyboard_visibility: ^6.0.0
   flutter_svg: ^2.0.15
+  flutter_slidable: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -98,6 +99,11 @@ flutter:
      - assets/images/exam.png
      - assets/images/papers.png
      - assets/images/student.png
+     - assets/images/avatar1.svg
+     - assets/images/avatar2.svg
+     - assets/images/avatar3.svg
+     - assets/images/man.png
+     - assets/images/man2.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -3,9 +3,9 @@ import 'package:quizapp/Screens/candidate/candidatepage.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/omr/omrCreatePage.dart';
+import 'package:quizapp/Screens/scholar/scholarScreen.dart';
 import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/Widgets/menuButton.dart';
-import 'package:quizapp/Screens/omrCreatePage.dart';
 import 'package:quizapp/Screens/question/questionCreatePage.dart';
 import 'package:quizapp/Widgets/shortcutButton.dart';
 import 'package:quizapp/constant.dart';
@@ -40,6 +40,14 @@ class Dashboard extends StatelessWidget {
         "image": "assets/images/one.svg",
       },
       {
+        "title": "Scholars",
+        "image": "assets/images/two.svg",
+      },
+      {
+        "title": "Schools",
+        "image": "assets/images/four.svg",
+      },
+      {
         "title": "Questions",
         "image": "assets/images/nine.svg",
       },
@@ -47,28 +55,20 @@ class Dashboard extends StatelessWidget {
         "title": "Results",
         "image": "assets/images/eleven.svg",
       },
-      {
-        "title": "Candidates",
-        "image": "assets/images/two.svg",
-      },
-      {
-        "title": "Schools",
-        "image": "assets/images/four.svg",
-      },
     ];
     final List<Widget> _menuoptions = [
       const ExamCreatePage(),
       const CandidateCreatePage(),
       const QuestionCreatePage(),
-      const omrCreatePage(),
+      const Center(child: Text("hello"),),
     ];
 
     final List<Widget> _shortcutOptions = [
       ExamScreen(),
+      const ScholarScreen(),
       const ExamCreatePage(),
-      const CandidateCreatePage(),
       const QuestionCreatePage(),
-      const omrCreatePage(),
+      const Center(child: Text("hello"),),
     ];
 
     return ListView(

@@ -10,10 +10,8 @@ class CandidateCreatePage extends StatefulWidget {
 }
 
 class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerProviderStateMixin{
-  int _selectedIndex = 0; // To track the selected tab
   late TabController _tabController;
 
-  // List of widgets for each section
   final List<Widget> _widgetOptions = <Widget>[
     CandidateEditor(),
     Center(child: Text("preview"),),
@@ -22,7 +20,6 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
   @override
   void initState() {
     super.initState();
-    // Ensure the TabController length matches the number of tabs and views
     _tabController = TabController(length: _widgetOptions.length, vsync: this);
   }
 

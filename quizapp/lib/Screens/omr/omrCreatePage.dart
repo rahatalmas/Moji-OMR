@@ -1,36 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/constant.dart';
 
-class omrCreatePage extends StatefulWidget {
-  const omrCreatePage({super.key});
-
+class OmrCreatePage extends StatefulWidget{
+  const OmrCreatePage({super.key});
   @override
-  State<omrCreatePage> createState() => _CandidateCreatePage();
+  State<OmrCreatePage> createState ()=> _OmrCreatePage();
 }
 
-class _CandidateCreatePage extends State<omrCreatePage> {
-  
-
+class _OmrCreatePage extends State<OmrCreatePage>{
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: neutralWhite,
-      appBar: AppBar(
-        elevation: 3,
-        shadowColor: Colors.grey,
-        title: const Text(
-          "OMR creator",
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: neutralWhite,
-        iconTheme: const IconThemeData(color: Colors.black),
+  Widget build(BuildContext context){
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.green[300],
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.panorama_fish_eye,color: Colors.red,),SizedBox(width: 5),
+                    Text("OMR Sheet Creator")
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text("Edit"),
+                    Icon(Icons.settings)
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Center(
-          child: Text("Omr generator"),
-        ),
-      ), // Display the selected widget
     );
   }
 }

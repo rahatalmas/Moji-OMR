@@ -117,7 +117,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
         children: [
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(16),
               children: [
                 SizedBox(height: 16,),
                 Column(

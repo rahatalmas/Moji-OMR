@@ -48,7 +48,7 @@ class _ExamScreenState extends State<ExamScreen> {
               child: ListView(
                 children: [
                    Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 12),
                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 3),
                      decoration: BoxDecoration(
                        borderRadius: BorderRadius.circular(10),
