@@ -208,192 +208,201 @@ class _AdminPageState extends State<AdminPage> {
         ? adminList
         : adminList.where((admin) => admin["role"] == selectedFilter).toList();
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Profile Owner Section
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            decoration: BoxDecoration(
-              color: kColorSecondary2,
-              borderRadius: BorderRadius.circular(15),
-              //border: Border.all(color:kColorPrimary, width: 3),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Scaffold(
+      backgroundColor: neutralWhite,
+      appBar: AppBar(
+        title: Text("admin"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Profile Owner Section
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                decoration: BoxDecoration(
+                  color: kColorSecondary2,
+                  borderRadius: BorderRadius.circular(15),
+                  //border: Border.all(color:kColorPrimary, width: 3),
+                ),
+                child: Column(
                   children: [
-                    CircleAvatar(
-                      child: Image.asset("assets/images/leading1.png"),
-                      radius: 35,
-                      backgroundColor: Colors.white,
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CircleAvatar(
+                          child: Image.asset("assets/images/leading1.png"),
+                          radius: 35,
+                          backgroundColor: Colors.white,
+                        ),
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    profileOwnerName,
+                                    style: TextStyle(
+                                      color: Colors.brown[800],
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => showEditUserDialog(0), // Edit profile
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "edit",
+                                          style: TextStyle(
+                                              color: kColorButton,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        Icon(Icons.edit_note,color: Colors.indigo[900],),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Text(
-                                profileOwnerName,
-                                style: TextStyle(
-                                  color: Colors.brown[800],
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
+                                "Role: $profileOwnerRole",
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 15,
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () => showEditUserDialog(0), // Edit profile
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "edit",
-                                      style: TextStyle(
-                                          color: kColorButton,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    Icon(Icons.edit_note,color: Colors.indigo[900],),
-                                  ],
+                              const SizedBox(height: 10),
+                              InkWell(
+                                onTap: showAddNewUserDialog, // Add New User
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: kColorButton,
+                                    border: Border.all(
+                                        color: Colors.indigo, width: 1),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text("Add New",style: TextStyle(color: Colors.white),),
+                                      Icon(Icons.new_label_outlined,color: Colors.white,),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          Text(
-                            "Role: $profileOwnerRole",
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          InkWell(
-                            onTap: showAddNewUserDialog, // Add New User
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: kColorButton,
-                                border: Border.all(
-                                    color: Colors.indigo, width: 1),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text("Add New",style: TextStyle(color: Colors.white),),
-                                  Icon(Icons.new_label_outlined,color: Colors.white,),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Admin List Header
-          GestureDetector(
-            onTap: showFilterBottomSheet, // Open filter bottom sheet
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: const [
-                    Text("Admin List"),
-                    SizedBox(width: 5),
-                    Icon(Icons.list),
-                  ],
-                ),
-                Row(
-                  children: const [
-                    Text("Filter"),
-                    SizedBox(width: 2),
-                    Icon(Icons.filter_alt_outlined),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Admin List
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: filteredList.length,
-            itemBuilder: (context, index) {
-              final admin = filteredList[index];
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: kColorSecondary,
-                  borderRadius: BorderRadius.circular(15),
-                  //border: Border.all(color: Colors.deepPurple, width: 1),
-                  boxShadow: [BoxShadow(color: Colors.black26,blurRadius: 1)]
-                ),
+              ),
+              const SizedBox(height: 10),
+              // Admin List Header
+              GestureDetector(
+                onTap: showFilterBottomSheet, // Open filter bottom sheet
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CircleAvatar(
-                      child: Text(
-                        admin['name']![0],
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                    Row(
+                      children: const [
+                        Text("Admin List"),
+                        SizedBox(width: 5),
+                        Icon(Icons.list),
+                      ],
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            admin['name']!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.brown[800],
-                            ),
-                          ),
-                          Text(
-                            "Role: ${admin['role']}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
+                    Row(
+                      children: const [
+                        Text("Filter"),
+                        SizedBox(width: 2),
+                        Icon(Icons.filter_alt_outlined),
+                      ],
                     ),
-                    if (profileOwnerRole == "Admin")
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () => showEditUserDialog(index), // Edit
-                            icon: const Icon(Icons.edit, color: kColorPrimary),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                adminList.removeAt(index); // Delete
-                              });
-                            },
-                            icon:  Icon(Icons.delete, color: Colors.red[700]),
-                          ),
-                        ],
-                      ),
                   ],
                 ),
-              );
-            },
+              ),
+              const SizedBox(height: 10),
+              // Admin List
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: filteredList.length,
+                itemBuilder: (context, index) {
+                  final admin = filteredList[index];
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: kColorSecondary,
+                      borderRadius: BorderRadius.circular(15),
+                      //border: Border.all(color: Colors.deepPurple, width: 1),
+                      boxShadow: [BoxShadow(color: Colors.black26,blurRadius: 1)]
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CircleAvatar(
+                          child: Text(
+                            admin['name']![0],
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                admin['name']!,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.brown[800],
+                                ),
+                              ),
+                              Text(
+                                "Role: ${admin['role']}",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (profileOwnerRole == "Admin")
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () => showEditUserDialog(index), // Edit
+                                icon: const Icon(Icons.edit, color: kColorPrimary),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    adminList.removeAt(index); // Delete
+                                  });
+                                },
+                                icon:  Icon(Icons.delete, color: Colors.red[700]),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

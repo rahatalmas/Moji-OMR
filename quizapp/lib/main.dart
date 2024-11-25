@@ -155,9 +155,9 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
                 backgroundColor: kColorPrimary,
                 child: ClipOval(
                   child: Image.asset(
-                    'assets/images/leading3.png',
-                    width: 50,
-                    height: 50,
+                    'assets/images/man2.png',
+                    //width: 50,
+                    //height: 50,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -167,7 +167,11 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
               leading: Icon(Icons.person),
               title: Text("Admin"),
               onTap: () {
-                Navigator.pop(context);
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AdminPage()),
+                );
                 _tabController.animateTo(0); // Navigate to the Admin Page
               },
             ),

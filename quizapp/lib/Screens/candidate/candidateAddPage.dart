@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/constant.dart';
@@ -272,7 +273,15 @@ class _CandidateEditor extends State<CandidateEditor> {
                         color: neutralWhite,
                       borderRadius: BorderRadius.circular(10)
                     ),
-                    child: Center(child: Text("Fill Up the form"),),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Lottie.asset("assets/images/fileAdding.json",height: 110),
+                          Text("Last Added: Almas")
+                        ],
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 16,),
                   // form fields

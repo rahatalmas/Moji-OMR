@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
+import 'package:quizapp/Widgets/answerCircle.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/models/exammodel.dart';
@@ -14,7 +15,15 @@ class QuestionEditor extends StatefulWidget {
 
 class _QuestionEditor extends State<QuestionEditor> {
   String? _selectedAnswer;
+  void _handleAnswerSelection(String label) {
+    setState(() {
+      _selectedAnswer = label;
+    });
 
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('$label selected')),
+    );
+  }
   final TextEditingController _questionController = TextEditingController();
   List<TextEditingController> _optionControllers = [];
   int totalQuestions = 10; // Default total questions
@@ -58,11 +67,12 @@ class _QuestionEditor extends State<QuestionEditor> {
     _initializeOptionControllers();
   }
 
+  //option editor
   void _initializeOptionControllers() {
     _optionControllers =
         List.generate(optionsPerQuestion, (_) => TextEditingController());
   }
-
+  // for exam selection
   void _onExamSelected(Exam exam) {
     setState(() {
       _selectedExam = exam;
@@ -70,7 +80,9 @@ class _QuestionEditor extends State<QuestionEditor> {
     });
   }
 
-  Widget _answerCircle(BuildContext context, String label) {
+
+  //answer circle widget
+  /*idget _answerCircle(BuildContext context, String label) {
     final isSelected = _selectedAnswer == label;
 
     return InkWell(
@@ -96,7 +108,7 @@ class _QuestionEditor extends State<QuestionEditor> {
         ),
       ),
     );
-  }
+  }*/
 
   void _addQuestion() {
     final question = _questionController.text;
@@ -168,9 +180,9 @@ class _QuestionEditor extends State<QuestionEditor> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Question - ${1}",
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(height: 2),
                   const Text(
@@ -210,14 +222,22 @@ class _QuestionEditor extends State<QuestionEditor> {
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5),
+
+                  //circles for correct answer
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       for (int i = 0; i < optionsPerQuestion; i++)
-                        _answerCircle(context, String.fromCharCode(65 + i)),
+                       // An(context, String.fromCharCode(65 + i)),
+                       AnswerCircle(
+                           label: String.fromCharCode(65 + i),
+                           isSelected: _selectedAnswer ==  String.fromCharCode(65 + i),
+                           onTap: _handleAnswerSelection)
                     ],
                   ),
                   const SizedBox(height: 15),
+
+                  //adding button
                   InkWell(
                     onTap: _addQuestion,
                     child: Container(

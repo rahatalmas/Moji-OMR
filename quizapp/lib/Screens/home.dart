@@ -60,7 +60,7 @@ class Dashboard extends StatelessWidget {
       const ExamCreatePage(),
       const CandidateCreatePage(),
       const QuestionCreatePage(),
-      const Center(child: Text("hello"),),
+      const OmrCreatePage(),
     ];
 
     final List<Widget> _shortcutOptions = [
@@ -68,7 +68,7 @@ class Dashboard extends StatelessWidget {
       const ScholarScreen(),
       const ExamCreatePage(),
       const QuestionCreatePage(),
-      const Center(child: Text("hello"),),
+      const QuestionCreatePage()
     ];
 
     return ListView(
