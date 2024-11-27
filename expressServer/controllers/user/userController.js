@@ -147,7 +147,7 @@ const updateUserRole = async (req,res)=>{
 
 const deleteUser = async (req,res)=>{
     try{
-        const id = req.params.id;
+        const {id} = req.body;
         console.log(id);
         const result = await db.execute(adminsQ.deleteAdmin,[id]);
         console.log(result);

@@ -31,6 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.1.2
+  json_annotation: ^4.9.0
+  http: ^1.0.0
   pdf: ^3.11.1
   printing: ^5.13.4
   path_provider: ^2.1.5
@@ -38,6 +40,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  flutter_keyboard_visibility: ^6.0.0
+  flutter_svg: ^2.0.15
+  flutter_slidable: ^3.1.1
+  lottie: ^3.1.3
+
   flutter_keyboard_visibility: 6.0.0
   http: 1.2.2
   json_annotation: 4.9.0
@@ -54,6 +61,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  build_runner: ^2.4.6
+  json_serializable: ^6.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -78,6 +87,32 @@ flutter:
      - assets/images/leading3.png
      - assets/images/leading4.png
      - assets/images/worker.png
+     - assets/images/one.svg
+     - assets/images/two.svg
+     - assets/images/three.svg
+     - assets/images/four.svg
+     - assets/images/five.svg
+     - assets/images/six.svg
+     - assets/images/seven.svg
+     - assets/images/eight.svg
+     - assets/images/nine.svg
+     - assets/images/eleven.svg
+     - assets/images/twelve.svg
+     - assets/images/thirteen.svg
+     - assets/images/fourteen.svg
+     - assets/images/fifteen.svg
+     - assets/images/sixteen.svg
+     - assets/images/filter.svg
+     - assets/images/exam.png
+     - assets/images/papers.png
+     - assets/images/student.png
+     - assets/images/avatar1.svg
+     - assets/images/avatar2.svg
+     - assets/images/avatar3.svg
+     - assets/images/man.png
+     - assets/images/man2.png
+     - assets/images/fileAdding.json
+     - assets/images/fileEmpty.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
-import 'package:quizapp/Widgets/QuestionTemplate.dart';
-import 'package:quizapp/Widgets/createPage.dart';
-import 'package:quizapp/Widgets/questionCreatePage.dart';
-import 'package:quizapp/Widgets/omrCreatePage.dart';
+import 'package:quizapp/Screens/adminPage.dart';
+import 'package:quizapp/Screens/home.dart';
 import 'package:quizapp/providers/actionProvider.dart';
+import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
 import 'package:quizapp/routes.dart';
+
+import 'constant.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => ExamProvider()),
         ChangeNotifierProvider(create: (context) => QuestionProvider()),
         ChangeNotifierProvider(create: (context) => ActionStatusProvider())
       ],
@@ -26,16 +28,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Moji OMR',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        useMaterial3: true,
+    return KeyboardVisibilityProvider(
+      child: KeyboardDismissOnTap(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Moji OMR',
+          theme: ThemeData(
+            useMaterial3: true,
+          ),
+          onGenerateRoute: (RouteSettings routeSettings) {
+            return routes(routeSettings);
+          },
+        ),
       ),
-      onGenerateRoute: (RouteSettings routeSettings) {
-        return routes(routeSettings);
-      },
     );
   }
 }
@@ -49,119 +54,162 @@ class Root extends StatefulWidget {
   State<Root> createState() => _Root();
 }
 
-class _Root extends State<Root> {
-  int _currentIndex = 0;
-  int _previousIndex = 0;
-  late List<Widget> _components;
-  late final List<Widget> _children;
-  late bool editMode;
+class _Root extends State<Root> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  final List<Widget> _children = [
+    const Dashboard(),
+    const Center(child: Text("Result Generator")),
+  ];
+
+  // Global key to access the scaffold state
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _components = [
-      CreatePage(updateComponent: updateComponent),
-      const QuestionCreatePage(),
-      const OmrCreatePage(),
-    ];
-    _children = [
-      _components[0],
-      const QuestionTemplate(),
-      const Center(
-        child: Text("Result Generator"),
-      ),
-    ];
+    // Ensure the TabController length matches the number of tabs and views
+    _tabController = TabController(length: _children.length, vsync: this);
   }
 
-  void updateComponent(int index) {
-    setState(() {
-      _children[0] = _components[index];
-    });
-  }
-
-  void onTabTapped(int index) {
-    setState(() {
-      _previousIndex = _currentIndex;
-      _currentIndex = index;
-      editMode =
-          Provider.of<ActionStatusProvider>(context, listen: false).actionInfo;
-      if (editMode == false) {
-        updateComponent(0);
-      }
-    });
-  }
-
-  Future<bool> _onWillPop() async {
-    if (_currentIndex != 0) {
-      onTabTapped(_previousIndex);
-      return Future.value(false);
-    } else {
-      SystemNavigator.pop();
-      return Future.value(false);
-    }
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool editModeOn =
-        Provider.of<ActionStatusProvider>(context, listen: true).actionInfo;
-    return WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 5,
-            shadowColor: Colors.black,
-            //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            backgroundColor: Colors.yellow[200],
-            title: Image.asset(
-              "assets/images/logotemp2.png",
-              width: 150,
+    bool editModeOn = Provider.of<ActionStatusProvider>(context, listen: true).actionInfo;
+
+    return Scaffold(
+      key: _scaffoldKey, // Assign the scaffold key
+      backgroundColor: neutralWhite,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 3,
+        shadowColor: Colors.black,
+        backgroundColor: neutralWhite,
+        leading: IconButton(
+          icon: Icon(Icons.menu, color: appTextPrimary, size: 28),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+        title: Text(
+          "Home",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: appTextPrimary),
+        ),
+        actions: [
+          Icon(Icons.content_paste_search, color: appTextPrimary),
+          const SizedBox(width: 10),
+          editModeOn
+              ? InkWell(
+            child: Icon(Icons.sunny, color: appTextPrimary),
+            onTap: () {
+              Provider.of<ActionStatusProvider>(context, listen: false).turnActionStatusOff();
+            },
+          )
+              : Icon(Icons.mode_night, color: appTextPrimary),
+          const SizedBox(width: 15),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 12.0),
+        child: TabBarView(
+          controller: _tabController,
+          children: _children,
+        ),
+      ),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 16),
+        decoration: BoxDecoration(
+          color: neutralBG,
+              borderRadius: BorderRadius.circular(12)
+        ),
+        child: TabBar(
+          controller: _tabController,
+          dividerColor: Colors.transparent,
+          indicator: BoxDecoration(
+            color: brandMinus2, // Green color for the selected tab
+            borderRadius: BorderRadius.circular(12), // Optional rounded corners
+          ),
+          indicatorSize: TabBarIndicatorSize.tab, // Ensures the indicator spans the full tab width
+          labelPadding: EdgeInsets.zero, // Removes padding around the label
+          labelColor:brandPlus2,
+          // Text and icon color for the selected tab
+          unselectedLabelColor: Colors.grey, // Text and icon color for unselected tabs
+          tabs: const [
+            Tab(icon: Icon(Icons.home), text: "Home"),
+            Tab(icon: Icon(Icons.sailing), text: "Result"),
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        backgroundColor: neutralWhite,
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: colorPrimary,
+              ),
+              accountName: const Text("Admin"),
+              accountEmail: const Text("Admin@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: kColorPrimary,
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/man2.png',
+                    //width: 50,
+                    //height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
-            //title: Text("MOJI OMR"),
-            //leading:Image.asset("assets/images/leading2.png"),
-            actions: [
-              Icon(Icons.content_paste_search),
-              SizedBox(
-                width: 10,
-              ),
-              editModeOn
-                  ? InkWell(
-                      child: Icon(Icons.sunny),
-                      onTap: () {
-                        Provider.of<ActionStatusProvider>(context,
-                                listen: false)
-                            .turnActionStatusOff();
-                      })
-                  : Icon(Icons.mode_night),
-              SizedBox(
-                width: 15,
-              )
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: _children[_currentIndex],
-          ), // Display the selected screen
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            backgroundColor: Colors.yellow[200],
-            onTap: onTabTapped,
-            items: const [
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.create),
-                label: 'Create',
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.camera),
-                label: 'Preview',
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.sailing),
-                label: 'Result',
-              ),
-            ],
-          ),
-        ));
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text("Admin"),
+              onTap: () {
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AdminPage()),
+                );
+                _tabController.animateTo(0); // Navigate to the Admin Page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.article),
+              title: Text("All Exams"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.list),
+              title: Text("All Results"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.question_answer),
+              title: Text("All Questions"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text("Logout"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
