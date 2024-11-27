@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/handler/apis/login.dart';
+import 'package:quizapp/routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -106,14 +107,12 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             InkWell(
               onTap: () async {
-                // todo: make login functionality
                 await Auth()
                     .login(_userCtrl.text, _passCtrl.text)
                     .then((value) {
                   if (value != null) {
                     if (value.accesstoken.isNotEmpty) {
-                      // navigate to main screen.
-                      return;
+                      Navigator.pushNamed(context, RouteNames.landing);
                     }
                   }
                 });
