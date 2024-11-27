@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/handler/api_handler.dart';
+import 'package:quizapp/handler/apis/login.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.black54,
       body: Container(
         decoration: const BoxDecoration(
-          color: Color(0XFFE2B139),
+          color: Color(0XFFFFFFFF),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
@@ -38,8 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
               flex: 2,
               child: ListView(
                 shrinkWrap: true,
-                children: const [
+                children: [
                   TextField(
+                    controller: _userCtrl,
                     decoration: InputDecoration(
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -71,6 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: 16),
                   TextField(
+                    controller: _passCtrl,
                     obscureText: true,
                     decoration: InputDecoration(
                       contentPadding:
@@ -105,10 +107,16 @@ class _LoginScreenState extends State<LoginScreen> {
             InkWell(
               onTap: () async {
                 // todo: make login functionality
-                String? isLoggedIn = await ApiHandler().loginApi();
-                if(isLoggedIn != null){
-                  print("logged in $isLoggedIn");
-                }
+                await Auth()
+                    .login(_userCtrl.text, _passCtrl.text)
+                    .then((value) {
+                  if (value != null) {
+                    if (value.accesstoken.isNotEmpty) {
+                      // navigate to main screen.
+                      return;
+                    }
+                  }
+                });
               },
               child: Container(
                 height: 56,
