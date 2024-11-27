@@ -14,12 +14,6 @@ class Auth implements BaseAuthHandler {
   Login _login = Login.fromJson({});
 
   @override
-  String? getUserToken() {
-    var tokenAccessToken = getAccessToken();
-    // return tokenAccessToken;
-  }
-
-  @override
   bool isLoggedIn() {
     // TODO: implement isLoggedIn
     throw UnimplementedError();
@@ -27,8 +21,6 @@ class Auth implements BaseAuthHandler {
 
   @override
   Future<Login?> login(String user, String password) async {
-    print("$user $password");
-
     String apiLink = "http://192.168.31.184:8080/api/user/login/";
     try {
       var url = Uri.parse(apiLink);
@@ -41,6 +33,7 @@ class Auth implements BaseAuthHandler {
       );
       Login? res = Login.fromJson(jsonDecode(response.body));
       _login = res;
+      await setAccessToken();
       return res;
     } catch (e) {
       debugPrint(e.toString());
@@ -62,13 +55,14 @@ class Auth implements BaseAuthHandler {
       final expireTime = currentTime + const Duration(days: 30).inMilliseconds;
       await prefs.setString('access_token', _login.accesstoken);
       await prefs.setInt('token_expire', expireTime);
+      _hasAccessToken = _login.accesstoken;
     }
   }
 
   @override
   Future<void> getAccessToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('accessToken');
+    final token = prefs.getString('access_token');
     final expireTime = prefs.getInt("token_expire");
     final currentTime = DateTime.now().millisecondsSinceEpoch;
     if (token != null && expireTime != null && currentTime < expireTime) {
