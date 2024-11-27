@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/handler/apis/login.dart';
-import 'package:quizapp/screens/auth/login.dart';
+import 'package:quizapp/screens/auth/login_screen.dart';
 
 import 'main.dart';
 
