@@ -1,4 +1,6 @@
-import 'package:quizapp/models/exammodel.dart';
+
+
+import '../../database/models/exammodel.dart';
 
 final List<Exam> examList = [
   Exam(

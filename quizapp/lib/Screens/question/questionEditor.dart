@@ -4,8 +4,9 @@ import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/Widgets/answerCircle.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/models/exammodel.dart';
-import 'package:quizapp/models/question.dart';
+
+import '../../database/models/exammodel.dart';
+import '../../database/models/question.dart';
 
 class QuestionEditor extends StatefulWidget {
   const QuestionEditor({super.key});
@@ -207,7 +208,7 @@ class _QuestionEditor extends State<QuestionEditor> {
           children: [
             ExamFilterWidget(
               examList: examList,
-              onExamSelected: (exam) {
+              onExamSelected: (Exam exam) {
                 _onExamSelected(exam);
               },
             ),

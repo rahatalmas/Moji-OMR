@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/models/exammodel.dart';
 import 'package:quizapp/providers/examProvider.dart';
+
+import '../database/models/exammodel.dart';
 
 class ExamFilterWidget extends StatefulWidget {
   final Function(Exam) onExamSelected;

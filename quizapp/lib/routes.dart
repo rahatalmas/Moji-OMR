@@ -23,6 +23,7 @@ Route? routes(RouteSettings settings) {
                 return const Text('Error fetching token');
               }
               var hasAccessToken = Auth().hasAccessToken;
+              print(hasAccessToken);
               if (hasAccessToken != null) {
                 return const Root(title: 'Root');
               }

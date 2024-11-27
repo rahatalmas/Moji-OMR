@@ -112,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     .then((value) {
                   if (value != null) {
                     if (value.accesstoken.isNotEmpty) {
+                      print(value.message);
                       Navigator.pushNamed(context, RouteNames.landing);
                     }
                   }

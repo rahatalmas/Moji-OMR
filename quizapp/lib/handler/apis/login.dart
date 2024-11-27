@@ -65,7 +65,9 @@ class Auth implements BaseAuthHandler {
     final token = prefs.getString('access_token');
     final expireTime = prefs.getInt("token_expire");
     final currentTime = DateTime.now().millisecondsSinceEpoch;
+
     if (token != null && expireTime != null && currentTime < expireTime) {
+      print("token $token");
       _hasAccessToken = token;
     }
     // todo: In else block we have to add refresh token in future.
