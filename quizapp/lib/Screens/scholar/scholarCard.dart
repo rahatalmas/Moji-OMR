@@ -20,21 +20,10 @@ class ScholarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 1,
-            spreadRadius: 1,
-            offset: Offset.zero,
-          ),
-        ],
-      ),
+    return Card(
+      color: neutralWhite,
+      shadowColor: Colors.black87,
+      elevation: 4,
       child: Slidable(
         key: Key(scholarId), // Provide a Key to prevent errors in lists
         endActionPane: ActionPane(
@@ -109,12 +98,12 @@ class ScholarCard extends StatelessWidget {
                         color: colorPrimary,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 2),
                     Text(
                       'School: $schoolName',
                       style: const TextStyle(fontSize: 14, color: Colors.grey),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 1),
                     Text(
                       'Class Level: $classLevel',
                       style: const TextStyle(fontSize: 14, color: Colors.grey),
@@ -122,7 +111,7 @@ class ScholarCard extends StatelessWidget {
                   ],
                 ),
               ),
-
+      
               //swipe icon
               Icon(Icons.arrow_back_ios_new_rounded,color: colorPrimary,size: 20,)
             ],

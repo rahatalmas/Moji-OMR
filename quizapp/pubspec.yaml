@@ -36,7 +36,7 @@ dependencies:
   pdf: ^3.11.1
   printing: ^5.13.4
   path_provider: ^2.1.5
-  flutter_local_notifications: ^18.0.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -106,7 +106,14 @@ flutter:
      - assets/images/man.png
      - assets/images/man2.png
      - assets/images/fileAdding.json
-     - assets/images/fileEmpty.json
+     - assets/images/animation1.json
+     - assets/images/animation2.json
+     - assets/images/animation3.json
+     - assets/images/animation4.json
+     - assets/images/animation5.json
+     - assets/images/animation6.json
+     - assets/images/animation7.json
+     - assets/images/animation8.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

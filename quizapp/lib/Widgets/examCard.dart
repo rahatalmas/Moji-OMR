@@ -23,20 +23,9 @@ class ExamCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5.0),
-      decoration: BoxDecoration(
-        color: neutralWhite,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 1,
-            spreadRadius: 1, // Spread of shadow
-            offset: Offset.zero, // Shadow is even on all sides
-          ),
-        ],
-      ),
+    return Card(
+      color: neutralWhite,
+      elevation: 4,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -52,7 +41,8 @@ class ExamCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(bottom: 4),
                   decoration: BoxDecoration(
-                      border: BorderDirectional(bottom: BorderSide(color: Colors.black12))
+                      border: BorderDirectional(bottom: BorderSide(color: Colors.black12)),
+
                   ),
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,10 +51,28 @@ class ExamCard extends StatelessWidget {
                         Row(
                           children: [
                             Container(
+                              height: 8,
+                              width: 8,
+                              decoration: BoxDecoration(
+                                  color: Colors.purple,
+                                  borderRadius: BorderRadius.circular(100)
+                              ),
+                            ),
+                            SizedBox(width: 2,),
+                            Container(
+                              height: 9,
+                              width: 9,
+                              decoration: BoxDecoration(
+                                  color: Colors.deepPurple,
+                                  borderRadius: BorderRadius.circular(100)
+                              ),
+                            ),
+                            SizedBox(width: 2,),
+                            Container(
                               height: 10,
                               width: 10,
                               decoration: BoxDecoration(
-                                  color: Colors.deepPurple,
+                                  color: Colors.deepPurpleAccent,
                                   borderRadius: BorderRadius.circular(100)
                               ),
                             ),
@@ -74,14 +82,14 @@ class ExamCard extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Icon(Icons.edit_note),
+                            Icon(Icons.edit_note,color: colorPrimary,),
                             SizedBox(width: 5,),
                             InkWell(
                               borderRadius: BorderRadius.circular(10),
                                 onTap: (){
                                   print("hello");
                                 },
-                                child: Icon(Icons.delete_forever_outlined,)
+                                child: Icon(Icons.delete,color: Colors.red[900],size: 21,)
                             )
                           ],
                         )
