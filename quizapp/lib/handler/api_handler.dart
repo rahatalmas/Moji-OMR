@@ -8,8 +8,6 @@ abstract class BaseAuthHandler {
 
   bool isLoggedIn();
 
-  String? getUserToken();
-
   Future<void> refreshUserToken();
 
   Future<void> setAccessToken();
