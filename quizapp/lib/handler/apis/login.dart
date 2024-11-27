@@ -7,11 +7,22 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth implements BaseAuthHandler {
+  // singleton instance.
+  static final Auth _instance = Auth._internal();
+
+  Auth._internal();
+
+  factory Auth() {
+    return _instance;
+  }
+
   String? _hasAccessToken;
 
   String? get hasAccessToken => _hasAccessToken;
 
   Login _login = Login.fromJson({});
+
+  Login? get loginData => _login;
 
   @override
   bool isLoggedIn() {
@@ -63,11 +74,11 @@ class Auth implements BaseAuthHandler {
   Future<void> getAccessToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('access_token');
+
     final expireTime = prefs.getInt("token_expire");
     final currentTime = DateTime.now().millisecondsSinceEpoch;
 
     if (token != null && expireTime != null && currentTime < expireTime) {
-      print("token $token");
       _hasAccessToken = token;
     }
     // todo: In else block we have to add refresh token in future.
