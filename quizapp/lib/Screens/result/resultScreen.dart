@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:quizapp/Screens/exam/dummyExamList.dart';
+import 'package:quizapp/Widgets/examFilter.dart';
 import 'dart:io';
 
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/models/exammodel.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
@@ -22,7 +25,7 @@ class _ResultScreen extends State<ResultScreen> {
       selectedImages!.addAll(pickedFiles);
     });
   }
-
+  Exam? _selectedExam;
   void _viewAllImages() {
     Navigator.push(
       context,
@@ -38,162 +41,172 @@ class _ResultScreen extends State<ResultScreen> {
       ),
     );
   }
-
+  // for exam selection
+  void _onExamSelected(Exam exam) {
+    setState(() {
+      _selectedExam = exam;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     int imageCount = selectedImages?.length ?? 0;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: brandMinus3,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: imageCount > 0
-                        ? Image.file(
-                      File(selectedImages![0].path),
-                      fit: BoxFit.cover,
-                    )
-                        : const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.filter),
-                          Text("No Image Selected")
-                        ],
-                      ),
-                    ),
-                  ),
+    return ListView(
+      children: [
+        ExamFilterWidget(
+          examList: examList,
+          onExamSelected: (exam) {
+            _onExamSelected(exam);
+          },
+        ),
+        SizedBox(height: 16,),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: brandMinus3,
                 ),
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(10),
-                      onTap: _pickImage,
-                      child: const Center(
-                        child: Icon(
-                          Icons.add_a_photo,
-                          size: 30,
-                          color: colorPrimary,
-                        ),
-                      ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: imageCount > 0
+                      ? Image.file(
+                    File(selectedImages![0].path),
+                    fit: BoxFit.cover,
+                  )
+                      : const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.filter),
+                        Text("No Image Selected")
+                      ],
                     ),
                   ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 2),
-          Row(
-            children: [
-              if (imageCount > 1)
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.green[100],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.file(
-                        File(selectedImages![1].path),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              const SizedBox(width: 2),
-              if (imageCount > 2)
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.green[100],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.file(
-                        File(selectedImages![2].path),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              const SizedBox(width: 2),
-              if (imageCount > 3)
-                Expanded(
-                  flex: 1,
-                  child: GestureDetector(
-                    onTap: _viewAllImages,
-                    child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.green[100],
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '+${imageCount - 3}',
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          InkWell(
-            child: Container(
-              padding: EdgeInsets.all(8),
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                  color: colorPrimary,
-                borderRadius: BorderRadius.circular(8)
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                "Check Papers",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
                 ),
               ),
             ),
-            onTap: () {
-              print('hello');
-            },
-          )
-        ],
-      ),
+            const SizedBox(width: 5),
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: _pickImage,
+                    child: const Center(
+                      child: Icon(
+                        Icons.add_a_photo,
+                        size: 30,
+                        color: colorPrimary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Row(
+          children: [
+            if (imageCount > 1)
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.file(
+                      File(selectedImages![1].path),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            const SizedBox(width: 2),
+            if (imageCount > 2)
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.file(
+                      File(selectedImages![2].path),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            const SizedBox(width: 2),
+            if (imageCount > 3)
+              Expanded(
+                flex: 1,
+                child: GestureDetector(
+                  onTap: _viewAllImages,
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.green[100],
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '+${imageCount - 3}',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        InkWell(
+          child: Container(
+            padding: EdgeInsets.all(8),
+            width: double.maxFinite,
+            decoration: BoxDecoration(
+                color: colorPrimary,
+              borderRadius: BorderRadius.circular(8)
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              "Check Papers",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          onTap: () {
+            print('hello');
+          },
+        )
+      ],
     );
   }
 }
