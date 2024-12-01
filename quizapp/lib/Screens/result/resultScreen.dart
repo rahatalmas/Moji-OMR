@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'dart:io';
@@ -184,13 +185,14 @@ class _ResultScreen extends State<ResultScreen> {
           ],
         ),
         const SizedBox(height: 10),
+        selectedImages!.length > 0 ?
         InkWell(
           child: Container(
             padding: EdgeInsets.all(8),
             width: double.maxFinite,
             decoration: BoxDecoration(
                 color: colorPrimary,
-              borderRadius: BorderRadius.circular(8)
+                borderRadius: BorderRadius.circular(8)
             ),
             alignment: Alignment.center,
             child: Text(
@@ -206,6 +208,15 @@ class _ResultScreen extends State<ResultScreen> {
             print('hello');
           },
         )
+            :
+            Center(
+              child: Column(
+                children: [
+                  Lottie.asset("assets/images/animation3.json"),
+                  Text("Select Answer papers")
+                ],
+              ),
+            )
       ],
     );
   }
