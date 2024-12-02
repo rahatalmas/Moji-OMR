@@ -22,7 +22,7 @@ class _CandidateEditor extends State<CandidateEditor> {
   final TextEditingController _schoolNameController = TextEditingController();
   final TextEditingController _classLevelController = TextEditingController();
 
-  int totalCandidates = 0; // Number of candidates (from selected exam)
+  int totalCandidates = 0; // Number of candidates (from selected exam) // Number of candidates (from selected exam)
   Exam? _selectedExam; // Store the selected exam
   int _selectedMode = 0; // Selected mode (default value)
   final List<String> _modes = ["Default Editing", "Add from database", "Upload File"];
