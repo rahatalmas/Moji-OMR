@@ -7,7 +7,8 @@ import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/Widgets/selectableScholarList.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/models/exammodel.dart';
+
+import '../../database/models/exammodel.dart';
 
 class CandidateEditor extends StatefulWidget {
   const CandidateEditor({super.key});

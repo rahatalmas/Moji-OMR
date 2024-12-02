@@ -7,6 +7,7 @@ import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
+import 'package:quizapp/routes.dart';
 
 import 'constant.dart';
 
@@ -36,7 +37,9 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
           ),
-          home: const Root(title: 'MOJI OMR'),
+          onGenerateRoute: (RouteSettings routeSettings) {
+            return routes(routeSettings);
+          },
         ),
       ),
     );
@@ -45,6 +48,7 @@ class MyApp extends StatelessWidget {
 
 class Root extends StatefulWidget {
   const Root({super.key, required this.title});
+
   final String title;
 
   @override

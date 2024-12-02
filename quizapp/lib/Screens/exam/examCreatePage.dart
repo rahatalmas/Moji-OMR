@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/models/exammodel.dart';
 import 'package:quizapp/providers/examProvider.dart';
+
+import '../../database/models/exammodel.dart';
 
 class ExamCreatePage extends StatefulWidget {
   const ExamCreatePage({super.key});

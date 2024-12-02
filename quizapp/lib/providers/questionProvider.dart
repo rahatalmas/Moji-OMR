@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/models/question.dart';
+
+import '../database/models/question.dart';
 
 class QuestionProvider with ChangeNotifier {
   List<Question> _questions = [];
