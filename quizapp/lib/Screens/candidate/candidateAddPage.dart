@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
@@ -23,10 +25,10 @@ class _CandidateEditor extends State<CandidateEditor> {
   int totalCandidates = 0; // Number of candidates (from selected exam)
   Exam? _selectedExam; // Store the selected exam
   int _selectedMode = 0; // Selected mode (default value)
-  final List<String> _modes = ["Default Editing","Add from database","Upload File"];
-  final List<Widget> _modeScreens = [
+  final List<String> _modes = ["Default Editing", "Add from database", "Upload File"];
+  final List<Widget> _modeScreens = [];
 
-  ];
+  File? _selectedFile; // Store selected file
 
   // Initialize input fields and candidate data
   void _onExamSelected(Exam exam) {
@@ -89,6 +91,20 @@ class _CandidateEditor extends State<CandidateEditor> {
         );
       },
     );
+  }
+
+  // Open file picker for selecting file (CSV or Excel)
+  void _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['csv', 'xls', 'xlsx'],
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedFile = File(result.files.single.path!);
+      });
+    }
   }
 
   // Method to add a candidate
@@ -179,7 +195,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                 ? Center(
               child: Column(
                 children: [
-                  SizedBox(height: 100,),
+                  SizedBox(height: 100),
                   Image.asset(
                     "assets/images/student.png",
                     height: 250,
@@ -197,8 +213,7 @@ class _CandidateEditor extends State<CandidateEditor> {
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: neutralBG
-              ),
+                  color: neutralBG),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -228,12 +243,12 @@ class _CandidateEditor extends State<CandidateEditor> {
                                     radius: 4,
                                     backgroundColor: Colors.indigo,
                                   ),
-                                  const SizedBox(width: 4,),
+                                  const SizedBox(width: 4),
                                   const CircleAvatar(
                                     radius: 4,
                                     backgroundColor: Colors.cyan,
                                   ),
-                                  const SizedBox(width: 4,),
+                                  const SizedBox(width: 4),
                                   Text(
                                     _modes[_selectedMode],
                                     style: const TextStyle(fontSize: 16),
@@ -272,33 +287,30 @@ class _CandidateEditor extends State<CandidateEditor> {
                   ),
                   const SizedBox(height: 16),
 
-                  //response from server
+                  // Response from server
                   Container(
                     height: 150,
                     width: double.maxFinite,
                     decoration: BoxDecoration(
                         color: neutralWhite,
-                      borderRadius: BorderRadius.circular(10)
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          Lottie.asset("assets/images/fileAdding.json",height: 110),
+                          Lottie.asset("assets/images/fileAdding.json", height: 110),
                           Text("Last Added: Almas")
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16,),
+                  const SizedBox(height: 16),
 
-                  // form fields
+                  // Mode selection
                   _selectedMode == 0
-                      ?
-                  Column(
+                      ? Column(
                     children: [
-                      _buildTextField(
-                          "Serial Number", _serialNumberController, Icons.confirmation_number),
+                      _buildTextField("Serial Number", _serialNumberController, Icons.confirmation_number),
                       const SizedBox(height: 10),
                       _buildTextField("Candidate Name", _candidateNameController, Icons.person),
                       const SizedBox(height: 10),
@@ -332,8 +344,63 @@ class _CandidateEditor extends State<CandidateEditor> {
                       ),
                     ],
                   )
-                      :
-                  ScholarList2(scholars: scholars)
+                      : _selectedMode == 2
+                      ?Column(
+                      children: [
+                        InkWell(
+                          onTap: _pickFile,
+                          child: Container(
+                          width: double.maxFinite,
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          decoration: BoxDecoration(
+                            color: brandMinus3,
+                            borderRadius: BorderRadius.circular(8)
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.file_copy_rounded),
+                              const SizedBox(height: 8),
+                              const Text(
+                                "Pick a file (CSV/Excel)",
+                                style: TextStyle(fontSize: 16, color: colorPrimary),
+                              ),
+                            ],
+                          ),
+                        )
+                        ),
+                        SizedBox(height: 16,),
+                        InkWell(
+                          onTap: (){
+                            print("file upload");
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: colorPrimary,
+                              borderRadius: const BorderRadius.all(Radius.circular(15)),
+                              border: Border.all(color: Colors.black87, width: 2),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Save",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                SizedBox(width: 3,),
+                                Icon(Icons.save_as, color: Colors.white),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                      : ScholarList2(scholars: scholars),
                 ],
               ),
             ),
@@ -352,4 +419,3 @@ class _CandidateEditor extends State<CandidateEditor> {
     super.dispose();
   }
 }
-

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizapp/Screens/admin/adminAddScreen.dart';
 import 'package:quizapp/constant.dart';
 
 class AdminPage extends StatefulWidget {
@@ -281,7 +282,11 @@ class _AdminPageState extends State<AdminPage> {
                               ),
                               const SizedBox(height: 10),
                               InkWell(
-                                onTap: showAddNewUserDialog, // Add New User
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AdminAddScreen()),
+                                ), // Add New User
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 10),

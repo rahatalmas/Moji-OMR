@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/Screens/candidate/candidateAddPage.dart';
+import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
 import 'package:quizapp/constant.dart';
 
 class CandidateCreatePage extends StatefulWidget {
@@ -43,9 +44,15 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
         elevation: 3,
         shadowColor: Colors.grey,
         actions: [
-          Icon(Icons.add),
-          SizedBox(width: 16,),
-
+          InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ScholarAddScreen()),
+              ),
+              child: Icon(Icons.add)
+          ),
+          SizedBox(width: 16),
         ],
       ),
       backgroundColor: neutralWhite,

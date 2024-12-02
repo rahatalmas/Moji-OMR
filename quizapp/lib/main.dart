@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
-import 'package:quizapp/Screens/adminPage.dart';
+import 'package:quizapp/Screens/admin/adminPage.dart';
 import 'package:quizapp/Screens/home.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/providers/actionProvider.dart';

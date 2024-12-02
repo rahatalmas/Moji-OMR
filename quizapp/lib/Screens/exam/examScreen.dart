@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/examProvider.dart';
@@ -33,7 +34,14 @@ class _ExamScreenState extends State<ExamScreen> {
         shadowColor: Colors.grey,
         backgroundColor: neutralWhite,
         actions: [
-          Icon(Icons.add),
+          InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ExamCreatePage()),
+              ),
+              child: Icon(Icons.add)
+          ),
           SizedBox(
             width: 16,
           ),
