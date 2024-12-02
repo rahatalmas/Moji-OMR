@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
+import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
 import 'package:quizapp/Screens/scholar/scholarCard.dart';
 import 'package:quizapp/Widgets/scholarList.dart';
 import 'package:quizapp/Widgets/selectableScholarList.dart';
@@ -73,7 +75,14 @@ class _ScholarScreenState extends State<ScholarScreen> {
         shadowColor: Colors.grey,
         backgroundColor: neutralWhite,
         actions: [
-          Icon(Icons.add),
+          InkWell(
+          onTap: () => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ScholarAddScreen()),
+    ),
+              child: Icon(Icons.add)
+          ),
           SizedBox(width: 16),
         ],
       ),
