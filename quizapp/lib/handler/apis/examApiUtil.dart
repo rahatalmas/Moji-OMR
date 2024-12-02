@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:quizapp/models/exammodel.dart';
+
+import '../../database/models/exammodel.dart';
 
 class ExamApiUtil {
   final String accessToken;

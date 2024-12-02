@@ -6,7 +6,8 @@ import 'package:quizapp/Widgets/examFilter.dart';
 import 'dart:io';
 
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/models/exammodel.dart';
+
+import '../../database/models/exammodel.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
