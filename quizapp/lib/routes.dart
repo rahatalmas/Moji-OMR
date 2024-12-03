@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/handler/apis/login.dart';
+import 'package:quizapp/handler/models/login.dart';
 import 'package:quizapp/screens/auth/login_screen.dart';
 
 import 'main.dart';
@@ -13,8 +14,8 @@ Route? routes(RouteSettings settings) {
   switch (settings.name) {
     case RouteNames.landing:
       return MaterialPageRoute(builder: (context) {
-        return FutureBuilder<void>(
-            future: Auth().getAccessToken(),
+        return FutureBuilder<Login?>(
+            future: Auth().checkLoginStatus(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -22,9 +23,9 @@ Route? routes(RouteSettings settings) {
               if (snapshot.hasError) {
                 return const Text('Error fetching token');
               }
-              var hasAccessToken = Auth().hasAccessToken;
-              print(hasAccessToken);
-              if (hasAccessToken != null) {
+              var hasLoginData = snapshot.data;
+
+              if (hasLoginData != null) {
                 return const Root(title: 'Root');
               }
               return const LoginScreen();
