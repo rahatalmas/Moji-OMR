@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/admin/adminPage.dart';
 import 'package:quizapp/Screens/home.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
+import 'package:quizapp/handler/apis/login.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
@@ -208,7 +209,22 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text("Logout"),
-              onTap: (){},
+              onTap: () async {
+                Auth().logout().then((value) {
+                  if (!context.mounted) return;
+                  if (value) {
+                    Navigator.pushNamedAndRemoveUntil(context,
+                        RouteNames.landing, (Route<dynamic> route) => false);
+                  } else {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Logout failed. Please try again.'),
+                      ),
+                    );
+                  }
+                });
+              },
             ),
           ],
         ),

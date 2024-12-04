@@ -20,14 +20,35 @@ class Auth implements BaseAuthHandler {
 
   String? get hasAccessToken => _hasAccessToken;
 
-  Login _login = Login.fromJson({});
+  Login? _login;
 
   Login? get loginData => _login;
 
   @override
-  bool isLoggedIn() {
-    // TODO: implement isLoggedIn
-    throw UnimplementedError();
+  Future<Login?> checkLoginStatus() async {
+    if (_login != null) {
+      return _login;
+    } else {
+      await getAccess();
+      return _login;
+    }
+  }
+
+  @override
+  Future<bool> logout() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool removePrefs = await prefs.clear();
+      _login = null;
+      if (removePrefs) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      debugPrint("error logout ${e.toString()}");
+      return false;
+    }
   }
 
   @override
@@ -42,6 +63,7 @@ class Auth implements BaseAuthHandler {
         url,
         body: jsonEncode({"username": user, "password": password}),
       );
+
       Login? res = Login.fromJson(jsonDecode(response.body));
       _login = res;
       await setAccessToken();
@@ -61,25 +83,44 @@ class Auth implements BaseAuthHandler {
   @override
   Future<void> setAccessToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (_login.accesstoken.isNotEmpty) {
-      final currentTime = DateTime.now().microsecondsSinceEpoch;
-      final expireTime = currentTime + const Duration(days: 30).inMilliseconds;
-      await prefs.setString('access_token', _login.accesstoken);
-      await prefs.setInt('token_expire', expireTime);
-      _hasAccessToken = _login.accesstoken;
+    if (_login != null) {
+      if (_login!.accesstoken.isNotEmpty) {
+        final currentTime = DateTime.now().microsecondsSinceEpoch;
+        final expireTime =
+            currentTime + const Duration(days: 30).inMilliseconds;
+        await prefs.setString('access_token', _login!.accesstoken);
+        await prefs.setString('message', _login!.message);
+        await prefs.setString('username', _login!.username);
+        await prefs.setInt('permission', _login!.permission);
+        await prefs.setInt('token_expire', expireTime);
+        _hasAccessToken = _login!.accesstoken;
+      }
     }
   }
 
   @override
-  Future<void> getAccessToken() async {
+  Future<void> getAccess() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('access_token');
-
+    final message = prefs.getString('message');
+    final userName = prefs.getString('username');
+    final permission = prefs.getInt('permission');
     final expireTime = prefs.getInt("token_expire");
     final currentTime = DateTime.now().millisecondsSinceEpoch;
 
-    if (token != null && expireTime != null && currentTime < expireTime) {
+    if (token != null &&
+        expireTime != null &&
+        currentTime < expireTime &&
+        message != null &&
+        userName != null &&
+        permission != null) {
       _hasAccessToken = token;
+      _login = Login(
+        accesstoken: token,
+        message: message,
+        permission: permission,
+        username: userName,
+      );
     }
     // todo: In else block we have to add refresh token in future.
   }
