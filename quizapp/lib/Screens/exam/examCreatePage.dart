@@ -14,12 +14,15 @@ class ExamCreatePage extends StatefulWidget {
 }
 
 class _ExamCreatePage extends State<ExamCreatePage> {
+  late ExamProvider _examProvider;
   final TextEditingController _examNameController = TextEditingController();
   final TextEditingController _examDateController = TextEditingController();
   final TextEditingController _examLocationController = TextEditingController();
   final TextEditingController _examDurationController = TextEditingController();
-  final TextEditingController _questionCountController = TextEditingController();
-  final TextEditingController _candidateCountController = TextEditingController();
+  final TextEditingController _questionCountController =
+      TextEditingController();
+  final TextEditingController _candidateCountController =
+      TextEditingController();
 
   final InputDecoration _textFieldDecoration = InputDecoration(
     labelText: "Type here...",
@@ -78,12 +81,18 @@ class _ExamCreatePage extends State<ExamCreatePage> {
         );
 
         setState(() {
-          _examDateController.text = fullDateTime.toIso8601String(); // Use ISO 8601 format
+          _examDateController.text =
+              fullDateTime.toIso8601String(); // Use ISO 8601 format
         });
       }
     }
   }
 
+  @override
+  void initState() {
+    _examProvider = Provider.of<ExamProvider>(context, listen: false);
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -120,7 +129,9 @@ class _ExamCreatePage extends State<ExamCreatePage> {
             child: ListView(
               padding: EdgeInsets.all(16),
               children: [
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,7 +143,9 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                     )
                   ],
                 ),
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 // Exam Name Field
                 TextField(
                   controller: _examNameController,
@@ -234,16 +247,18 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                 child: InkWell(
                   onTap: () async {
                     print(_examDateController.text);
-                    Exam exam =  Exam.forPost(
+                    Exam exam = Exam.forPost(
                         name: _examNameController.value.text,
                         dateTime: _examDateController.value.text,
                         location: _examLocationController.value.text,
                         duration: int.parse(_examDurationController.value.text),
-                        totalQuestions: int.parse(_questionCountController.value.text),
-                        numberOfCandidates: int.parse(_candidateCountController.value.text)
-                    );
+                        totalQuestions:
+                            int.parse(_questionCountController.value.text),
+                        numberOfCandidates:
+                            int.parse(_candidateCountController.value.text));
                     print(exam);
-                    bool isSuccess = await provider.addExam('http://192.168.31.184:8080/api/exam/add', exam);
+                    bool isSuccess = await _examProvider.addExam(
+                        'http://192.168.31.184:8080/api/exam/add', exam);
                     if (isSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -260,7 +275,8 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Failed to add exam: ${provider.message}'),
+                          content:
+                              Text('Failed to add exam: ${provider.message}'),
                           backgroundColor: Colors.red,
                         ),
                       );
