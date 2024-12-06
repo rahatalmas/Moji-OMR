@@ -13,19 +13,21 @@ class ExamScreen extends StatefulWidget {
 }
 
 class _ExamScreenState extends State<ExamScreen> {
+  late ExamProvider _examProvider;
+
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ExamProvider>(context, listen: false)
-          .fetchExams('http://192.168.31.184:8080/api/exam/list');
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _examProvider = context.watch<ExamProvider>();
+    if (_examProvider.dataUpdated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _examProvider.getAllExams('http://192.168.31.184:8080/api/exam/list');
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final examProvider = Provider.of<ExamProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Exams'),
@@ -36,12 +38,10 @@ class _ExamScreenState extends State<ExamScreen> {
         actions: [
           InkWell(
               onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ExamCreatePage()),
-              ),
-              child: Icon(Icons.add)
-          ),
+                    context,
+                    MaterialPageRoute(builder: (context) => ExamCreatePage()),
+                  ),
+              child: Icon(Icons.add)),
           SizedBox(
             width: 16,
           ),
@@ -49,7 +49,7 @@ class _ExamScreenState extends State<ExamScreen> {
       ),
       backgroundColor: neutralWhite,
       body: Center(
-        child: examProvider.isLoading
+        child: _examProvider.isLoading
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -58,8 +58,8 @@ class _ExamScreenState extends State<ExamScreen> {
                   Text("Fetching Data...")
                 ],
               )
-            : examProvider.message.isNotEmpty
-                ? Text(examProvider.message)
+            : _examProvider.message.isNotEmpty
+                ? Text(_examProvider.message)
                 : Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ListView(
@@ -114,17 +114,18 @@ class _ExamScreenState extends State<ExamScreen> {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: examProvider.exams.length,
+                          itemCount: _examProvider.exams.length,
                           itemBuilder: (context, index) {
-                            final exam = examProvider.exams[index];
+                            final exam = _examProvider.exams[index];
                             return ExamCard(
-                                examId: exam.id,
-                                examName: exam.name,
-                                examDate: DateTime.parse(exam.dateTime),
-                                examLocation: exam.location,
-                                examDuration: exam.duration,
-                                questionCount: exam.totalQuestions,
-                                candidateCount: exam.numberOfCandidates);
+                              examId: exam.id,
+                              examName: exam.name,
+                              examDate: DateTime.parse(exam.dateTime),
+                              examLocation: exam.location,
+                              examDuration: exam.duration,
+                              questionCount: exam.totalQuestions,
+                              candidateCount: exam.numberOfCandidates,
+                            );
                           },
                         ),
                       ],
