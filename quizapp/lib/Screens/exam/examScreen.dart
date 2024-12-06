@@ -21,7 +21,7 @@ class _ExamScreenState extends State<ExamScreen> {
     _examProvider = context.watch<ExamProvider>();
     if (_examProvider.dataUpdated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _examProvider.getAllExams('http://192.168.31.184:8080/api/exam/list');
+        _examProvider.getAllExams();
       });
     }
   }

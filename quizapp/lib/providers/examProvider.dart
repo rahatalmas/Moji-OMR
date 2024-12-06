@@ -28,13 +28,13 @@ class ExamProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getAllExams(String url) async {
+  Future<void> getAllExams() async {
     _isLoading = true;
     _message = '';
     notifyListeners();
 
     try {
-      _exams = await ExamApiUtil(Auth().loginData!.accesstoken).fetchExams(url);
+      _exams = await ExamApiUtil().fetchExams();
       _isLoading = false;
       _dataUpdated = false;
       notifyListeners();
@@ -43,14 +43,13 @@ class ExamProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> addExam(String url, Exam newExam) async {
+  Future<bool> addExam(Exam newExam) async {
     _isLoading = true;
     _message = '';
     notifyListeners();
 
     try {
-      bool result = await ExamApiUtil(Auth().loginData!.accesstoken)
-          .addExam(url, newExam);
+      bool result = await ExamApiUtil().addExam(newExam);
       _dataUpdated = result;
       _isLoading = false;
       notifyListeners();

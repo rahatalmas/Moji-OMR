@@ -26,7 +26,7 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
   void _showExamFilterModal(BuildContext context) async {
     final examProvider = Provider.of<ExamProvider>(context, listen: false);
 
-    await examProvider.getAllExams('$BASE_URL/api/exam/list');
+    await examProvider.getAllExams();
 
     //final examList = examProvider.exams;
 

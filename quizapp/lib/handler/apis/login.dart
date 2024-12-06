@@ -22,7 +22,6 @@ class Auth implements BaseAuthHandler {
   Login? _login;
 
   Login? get loginData => _login;
-  
 
   @override
   Future<Login?> checkLoginStatus() async {
@@ -40,11 +39,7 @@ class Auth implements BaseAuthHandler {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool removePrefs = await prefs.clear();
       _login = null;
-      if (removePrefs) {
-        return true;
-      } else {
-        return false;
-      }
+      return removePrefs;
     } catch (e) {
       debugPrint("error logout ${e.toString()}");
       return false;
@@ -67,14 +62,13 @@ class Auth implements BaseAuthHandler {
         url,
         body: jsonEncode({"username": user, "password": password}),
       );
-      print(response.body);
+
       Login? res = Login.fromJson(jsonDecode(response.body));
       if (res.accesstoken.isNotEmpty) {
-        _login = null;
+        _login = res;
+        await setAccessToken();
+        return res;
       }
-      _login = res;
-      await setAccessToken();
-      return res;
     } catch (e) {
       debugPrint(e.toString());
     }

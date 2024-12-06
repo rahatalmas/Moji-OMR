@@ -257,8 +257,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                         numberOfCandidates:
                             int.parse(_candidateCountController.value.text));
                     print(exam);
-                    bool isSuccess = await _examProvider.addExam(
-                        'http://192.168.31.184:8080/api/exam/add', exam);
+                    bool isSuccess = await _examProvider.addExam(exam);
                     if (isSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
