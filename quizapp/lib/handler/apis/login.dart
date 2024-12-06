@@ -22,7 +22,6 @@ class Auth implements BaseAuthHandler {
   Login? _login;
 
   Login? get loginData => _login;
-  
 
   @override
   Future<Login?> checkLoginStatus() async {
@@ -40,11 +39,7 @@ class Auth implements BaseAuthHandler {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool removePrefs = await prefs.clear();
       _login = null;
-      if (removePrefs) {
-        return true;
-      } else {
-        return false;
-      }
+      return removePrefs;
     } catch (e) {
       debugPrint("error logout ${e.toString()}");
       return false;
@@ -52,7 +47,11 @@ class Auth implements BaseAuthHandler {
   }
 
   @override
-  Future<Login?> login(String user, String password) async {
+  Future<Login?> login(
+    BuildContext context, {
+    required String user,
+    required String password,
+  }) async {
     String apiLink = "http://192.168.31.184:8080/api/user/login/";
     try {
       var url = Uri.parse(apiLink);
@@ -65,9 +64,11 @@ class Auth implements BaseAuthHandler {
       );
 
       Login? res = Login.fromJson(jsonDecode(response.body));
-      _login = res;
-      await setAccessToken();
-      return res;
+      if (res.accesstoken.isNotEmpty) {
+        _login = res;
+        await setAccessToken();
+        return res;
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -85,14 +86,10 @@ class Auth implements BaseAuthHandler {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_login != null) {
       if (_login!.accesstoken.isNotEmpty) {
-        final currentTime = DateTime.now().microsecondsSinceEpoch;
-        final expireTime =
-            currentTime + const Duration(days: 30).inMilliseconds;
         await prefs.setString('access_token', _login!.accesstoken);
         await prefs.setString('message', _login!.message);
         await prefs.setString('username', _login!.username);
         await prefs.setInt('permission', _login!.permission);
-        await prefs.setInt('token_expire', expireTime);
         _hasAccessToken = _login!.accesstoken;
       }
     }
@@ -105,12 +102,8 @@ class Auth implements BaseAuthHandler {
     final message = prefs.getString('message');
     final userName = prefs.getString('username');
     final permission = prefs.getInt('permission');
-    final expireTime = prefs.getInt("token_expire");
-    final currentTime = DateTime.now().millisecondsSinceEpoch;
 
     if (token != null &&
-        expireTime != null &&
-        currentTime < expireTime &&
         message != null &&
         userName != null &&
         permission != null) {
@@ -122,6 +115,5 @@ class Auth implements BaseAuthHandler {
         username: userName,
       );
     }
-    // todo: In else block we have to add refresh token in future.
   }
 }

@@ -12,7 +12,8 @@ class ExamFilterWidget extends StatefulWidget {
 
   const ExamFilterWidget({
     super.key,
-    required this.onExamSelected, required List<Exam> examList,
+    required this.onExamSelected,
+    required List<Exam> examList,
   });
 
   @override
@@ -25,7 +26,7 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
   void _showExamFilterModal(BuildContext context) async {
     final examProvider = Provider.of<ExamProvider>(context, listen: false);
 
-    await examProvider.fetchExams('$BASE_URL/api/exam/list');
+    await examProvider.getAllExams();
 
     //final examList = examProvider.exams;
 
@@ -37,7 +38,8 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      isScrollControlled: true, // Ensures that the bottom sheet takes up all available space
+      isScrollControlled: true,
+      // Ensures that the bottom sheet takes up all available space
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
@@ -94,22 +96,25 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
             width: double.maxFinite,
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              //border: Border.all(color: Colors.black12),
-              color: neutralBG
-            ),
+                borderRadius: BorderRadius.circular(10),
+                //border: Border.all(color: Colors.black12),
+                color: neutralBG),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  _selectedExam == null
-                      ? "Select Exam"
-                      : _selectedExam!.name,
+                  _selectedExam == null ? "Select Exam" : _selectedExam!.name,
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold,color: colorPrimary),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: colorPrimary),
                 ),
-                SvgPicture.asset("assets/images/filter.svg",height: 20,color: colorPrimary,),
+                SvgPicture.asset(
+                  "assets/images/filter.svg",
+                  height: 20,
+                  color: colorPrimary,
+                ),
               ],
             ),
           ),

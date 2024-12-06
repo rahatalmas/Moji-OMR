@@ -21,7 +21,8 @@ class _AdminPageState extends State<AdminPage> {
 
   // Profile owner data
   String profileOwnerName = Auth().loginData!.username;
-  String profileOwnerRole = Auth().loginData!.permission == 1 ? "Admin" : "Editor";
+  String profileOwnerRole =
+      Auth().loginData!.permission == 1 ? "Admin" : "Editor";
 
   // Selected filter
   String selectedFilter = "All";
@@ -85,14 +86,14 @@ class _AdminPageState extends State<AdminPage> {
               ElevatedButton(
                 onPressed: isValid
                     ? () {
-                  setState(() {
-                    adminList.add({
-                      "name": usernameController.text,
-                      "role": roleController.text,
-                    });
-                  });
-                  Navigator.pop(context); // Close the dialog
-                }
+                        setState(() {
+                          adminList.add({
+                            "name": usernameController.text,
+                            "role": roleController.text,
+                          });
+                        });
+                        Navigator.pop(context); // Close the dialog
+                      }
                     : null, // Disable the button if inputs are invalid
                 child: const Text("Add"),
               ),
@@ -158,9 +159,9 @@ class _AdminPageState extends State<AdminPage> {
   // Method to show the edit user dialog
   void showEditUserDialog(int index) {
     final TextEditingController usernameController =
-    TextEditingController(text: adminList[index]['name']);
+        TextEditingController(text: adminList[index]['name']);
     final TextEditingController roleController =
-    TextEditingController(text: adminList[index]['role']);
+        TextEditingController(text: adminList[index]['role']);
 
     showDialog(
       context: context,
@@ -225,7 +226,8 @@ class _AdminPageState extends State<AdminPage> {
             children: [
               // Profile Owner Section
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 decoration: BoxDecoration(
                   color: neutralBG,
                   borderRadius: BorderRadius.circular(15),
@@ -247,7 +249,8 @@ class _AdminPageState extends State<AdminPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     profileOwnerName,
@@ -258,7 +261,8 @@ class _AdminPageState extends State<AdminPage> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () => showEditUserDialog(0), // Edit profile
+                                    onTap: () => showEditUserDialog(0),
+                                    // Edit profile
                                     child: Row(
                                       children: [
                                         Text(
@@ -268,7 +272,10 @@ class _AdminPageState extends State<AdminPage> {
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400),
                                         ),
-                                        Icon(Icons.edit_note,color: Colors.black87,),
+                                        Icon(
+                                          Icons.edit_note,
+                                          color: Colors.black87,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -299,8 +306,14 @@ class _AdminPageState extends State<AdminPage> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
-                                      Text("Add New",style: TextStyle(color: Colors.white),),
-                                      Icon(Icons.new_label_outlined,color: Colors.white,),
+                                      Text(
+                                        "Add New",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      Icon(
+                                        Icons.new_label_outlined,
+                                        color: Colors.white,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -349,11 +362,12 @@ class _AdminPageState extends State<AdminPage> {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: neutralWhite,
-                      borderRadius: BorderRadius.circular(12),
-                      //border: Border.all(color: Colors.deepPurple, width: 1),
-                      boxShadow: [BoxShadow(color: Colors.black26,blurRadius: 1)]
-                    ),
+                        color: neutralWhite,
+                        borderRadius: BorderRadius.circular(12),
+                        //border: Border.all(color: Colors.deepPurple, width: 1),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 1)
+                        ]),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -387,8 +401,10 @@ class _AdminPageState extends State<AdminPage> {
                           Row(
                             children: [
                               IconButton(
-                                onPressed: () => showEditUserDialog(index), // Edit
-                                icon: const Icon(Icons.edit, color: colorPrimary),
+                                onPressed: () => showEditUserDialog(index),
+                                // Edit
+                                icon:
+                                    const Icon(Icons.edit, color: colorPrimary),
                               ),
                               IconButton(
                                 onPressed: () {
@@ -396,7 +412,8 @@ class _AdminPageState extends State<AdminPage> {
                                     adminList.removeAt(index); // Delete
                                   });
                                 },
-                                icon:  Icon(Icons.delete, color: Colors.red[900]),
+                                icon:
+                                    Icon(Icons.delete, color: Colors.red[900]),
                               ),
                             ],
                           ),
