@@ -1,83 +1,61 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:quizapp/handler/apis/login.dart';
 
 import '../constant.dart';
 import '../database/models/exammodel.dart';
-import '../handler/apis/login.dart';
+import '../handler/apis/examApiUtil.dart';
 
 class ExamProvider with ChangeNotifier {
   List<Exam> _exams = [];
   bool _isLoading = false;
+  bool _dataUpdated = false;
   String _message = '';
 
   // Getters
   List<Exam> get exams => _exams;
+
   bool get isLoading => _isLoading;
+
+  bool get dataUpdated => _dataUpdated;
+
   String get message => _message;
 
-  Future<void> fetchExams(String url) async {
+  void reset() {
+    _dataUpdated = false;
+    notifyListeners();
+  }
+
+  Future<void> getAllExams() async {
     _isLoading = true;
     _message = '';
     notifyListeners();
 
     try {
-      // Add the access token to the headers
-      final headers = {
-        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
-        'Content-Type': 'application/json',
-      };
-
-      final response = await http.get(Uri.parse(url), headers: headers);
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonData = json.decode(response.body);
-        _exams = jsonData.map((data) => Exam.fromJson(data)).toList();
-      } else {
-        _message = 'Error: ${response.statusCode}';
-      }
-    } catch (e) {
-      print('Failed to parse Exam: $e');
-      _message = 'Failed to fetch exams: $e';
-    } finally {
+      _exams = await ExamApiUtil().fetchExams();
       _isLoading = false;
+      _dataUpdated = false;
       notifyListeners();
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 
-  Future<bool> addExam(String url, Exam newExam) async {
+  Future<bool> addExam(Exam newExam) async {
     _isLoading = true;
     _message = '';
     notifyListeners();
 
     try {
-      final headers = {
-        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
-        'Content-Type': 'application/json',
-      };
-
-      // Use `toJson()` from the model (excludes `id` for POST requests)
-      final body = jsonEncode(newExam.toJson());
-
-      final response = await http.post(
-        Uri.parse(url),
-        headers: headers,
-        body: body,
-      );
-
-      if (response.statusCode == 201) {
-        print('Exam added successfully');
-        return true;
-      } else {
-        _message = 'Error: ${response.statusCode}, ${response.body}';
-        return false;
-      }
+      bool result = await ExamApiUtil().addExam(newExam);
+      _dataUpdated = result;
+      _isLoading = false;
+      notifyListeners();
+      return result;
     } catch (e) {
       _message = 'Failed to add exam: $e';
       return false;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
     }
   }
 

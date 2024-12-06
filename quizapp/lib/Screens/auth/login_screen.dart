@@ -108,7 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
             InkWell(
               onTap: () async {
                 await Auth()
-                    .login(_userCtrl.text, _passCtrl.text)
+                    .login(context,
+                        user: _userCtrl.text, password: _passCtrl.text)
                     .then((value) {
                   if (value != null) {
                     if (value.accesstoken.isNotEmpty) {
