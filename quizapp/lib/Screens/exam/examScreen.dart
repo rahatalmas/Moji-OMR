@@ -22,10 +22,13 @@ class _ExamScreenState extends State<ExamScreen> {
     });
   }
 
+  void _deleteExam(int examId) {
+    Provider.of<ExamProvider>(context, listen: false).deleteExam(examId);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final examProvider = Provider.of<ExamProvider>(context);
-
+    final examProvider = Provider.of<ExamProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         title: Text('Exams'),
@@ -40,8 +43,7 @@ class _ExamScreenState extends State<ExamScreen> {
                 MaterialPageRoute(
                     builder: (context) => ExamCreatePage()),
               ),
-              child: Icon(Icons.add)
-          ),
+              child: Icon(Icons.add)),
           SizedBox(
             width: 16,
           ),
@@ -51,85 +53,87 @@ class _ExamScreenState extends State<ExamScreen> {
       body: Center(
         child: examProvider.isLoading
             ? Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Lottie.asset("assets/images/animation5.json", height: 200),
-                  Text("Fetching Data...")
-                ],
-              )
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/images/animation5.json", height: 200),
+            Text("Fetching Data...")
+          ],
+        )
             : examProvider.message.isNotEmpty
-                ? Text(examProvider.message)
-                : Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: ListView(
+            ? Text(examProvider.message)
+            : Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 8.0, horizontal: 12),
+                margin:
+                EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: neutralBG,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      blurRadius: 1,
+                      spreadRadius: 1, // Spread of shadow
+                      offset:
+                      Offset.zero, // Shadow is even on all sides
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 12),
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: neutralBG,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                blurRadius: 1,
-                                spreadRadius: 1, // Spread of shadow
-                                offset:
-                                    Offset.zero, // Shadow is even on all sides
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.newspaper,
-                                    color: colorPrimary,
-                                  ),
-                                  SizedBox(
-                                    width: 3,
-                                  ),
-                                  Text(
-                                    "All Time",
-                                    style: TextStyle(color: colorPrimary),
-                                  )
-                                ],
-                              ),
-                              SvgPicture.asset(
-                                "assets/images/filter.svg",
-                                height: 20,
-                                color: colorPrimary,
-                              )
-                            ],
-                          ),
+                        Icon(
+                          Icons.newspaper,
+                          color: colorPrimary,
                         ),
                         SizedBox(
-                          height: 7,
+                          width: 3,
                         ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: examProvider.exams.length,
-                          itemBuilder: (context, index) {
-                            final exam = examProvider.exams[index];
-                            return ExamCard(
-                                examId: exam.id,
-                                examName: exam.name,
-                                examDate: DateTime.parse(exam.dateTime),
-                                examLocation: exam.location,
-                                examDuration: exam.duration,
-                                questionCount: exam.totalQuestions,
-                                candidateCount: exam.numberOfCandidates);
-                          },
-                        ),
+                        Text(
+                          "All Time",
+                          style: TextStyle(color: colorPrimary),
+                        )
                       ],
                     ),
-                  ),
+                    SvgPicture.asset(
+                      "assets/images/filter.svg",
+                      height: 20,
+                      color: colorPrimary,
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: examProvider.exams.length,
+                itemBuilder: (context, index) {
+                  final exam = examProvider.exams[index];
+                  return ExamCard(
+                    examId: exam.id,
+                    examName: exam.name,
+                    examDate: DateTime.parse(exam.dateTime),
+                    examLocation: exam.location,
+                    examDuration: exam.duration,
+                    questionCount: exam.totalQuestions,
+                    candidateCount: exam.numberOfCandidates,
+                    onDelete: () => _deleteExam(exam.id),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

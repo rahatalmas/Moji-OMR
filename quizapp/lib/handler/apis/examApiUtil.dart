@@ -1,107 +1,117 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import '../../constant.dart';
 import '../../database/models/exammodel.dart';
+import 'login.dart';
 
-class ExamApiUtil {
-  final String accessToken;
+class ExamApiUtil with ChangeNotifier {
+  // Private constructor for singleton pattern
+  ExamApiUtil._privateConstructor();
 
-  ExamApiUtil(this.accessToken);
+  // Static instance of ExamApiUtil
+  static final ExamApiUtil _instance = ExamApiUtil._privateConstructor();
 
-  Map<String, String> get _headers => {
-    'Authorization': 'Bearer $accessToken',
-    'Content-Type': 'application/json',
-  };
+  // Factory constructor to return the same instance
+  factory ExamApiUtil() {
+    return _instance;
+  }
 
-  // Fetch all exams
-  Future<List<Exam>> fetchExams(String url) async {
+  bool _isLoading = false;
+  String _message = '';
+
+  // Getters
+  bool get isLoading => _isLoading;
+  String get message => _message;
+
+  Future<List<Exam>> fetchExams() async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    List<Exam> exams = [];
+
     try {
-      final response = await http.get(Uri.parse(url), headers: _headers);
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await http.get(Uri.parse('$BASE_URL/api/exam/list'), headers: headers);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
-        return jsonData.map((data) => Exam.fromJson(data)).toList();
+        exams = jsonData.map((data) => Exam.fromJson(data)).toList();
       } else {
-        throw Exception('Error: ${response.statusCode}');
+        _message = 'Error: ${response.statusCode}';
       }
     } catch (e) {
-      throw Exception('Failed to fetch exams: $e');
+      print('Failed to fetch exams: $e');
+      _message = 'Failed to fetch exams: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
+    return exams;
   }
 
-  // Add a new exam
-  Future<bool> addExam(String url, Exam newExam) async {
+  Future<bool> addExam(Exam newExam) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
     try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+
       final body = jsonEncode(newExam.toJson());
+
       final response = await http.post(
-        Uri.parse(url),
-        headers: _headers,
+        Uri.parse('$BASE_URL/api/exam/add'),
+        headers: headers,
         body: body,
       );
 
       if (response.statusCode == 201) {
+        print('Exam added successfully');
         return true;
       } else {
-        throw Exception('Error: ${response.statusCode}, ${response.body}');
+        _message = 'Error: ${response.statusCode}, ${response.body}';
+        return false;
       }
     } catch (e) {
-      throw Exception('Failed to add exam: $e');
+      _message = 'Failed to add exam: $e';
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
-  // Fetch exam by ID
-  Future<Exam> fetchById(String url, String id) async {
+  Future<bool> deleteExam(int id) async {
     try {
-      final response = await http.get(
-        Uri.parse('$url/$id'),
-        headers: _headers,
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await http.delete(
+        Uri.parse('$BASE_URL/api/exam/delete/$id'),
+        headers: headers,
       );
 
       if (response.statusCode == 200) {
-        return Exam.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Failed to fetch exam by ID: $e');
-    }
-  }
-
-  // Delete an exam
-  Future<bool> deleteExam(String url, String id) async {
-    try {
-      final response = await http.delete(
-        Uri.parse('$url/$id'),
-        headers: _headers,
-      );
-
-      if (response.statusCode == 204) {
         return true;
       } else {
         throw Exception('Error: ${response.statusCode}, ${response.body}');
       }
     } catch (e) {
       throw Exception('Failed to delete exam: $e');
-    }
-  }
-
-  // Update an exam
-  Future<bool> updateExam(String url, String id, Exam updatedExam) async {
-    try {
-      final body = jsonEncode(updatedExam.toJson());
-      final response = await http.put(
-        Uri.parse('$url/$id'),
-        headers: _headers,
-        body: body,
-      );
-
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        throw Exception('Error: ${response.statusCode}, ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to update exam: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }

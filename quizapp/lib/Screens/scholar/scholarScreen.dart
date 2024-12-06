@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
 import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
-import 'package:quizapp/Screens/scholar/scholarCard.dart';
 import 'package:quizapp/Widgets/scholarList.dart';
-import 'package:quizapp/Widgets/selectableScholarList.dart';
 import 'package:quizapp/constant.dart';
 
 class ScholarScreen extends StatefulWidget {

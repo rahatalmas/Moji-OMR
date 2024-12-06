@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../constant.dart';
 import '../database/models/exammodel.dart';
+import '../handler/apis/login.dart';
 
 class ExamProvider with ChangeNotifier {
   List<Exam> _exams = [];
@@ -22,7 +24,7 @@ class ExamProvider with ChangeNotifier {
     try {
       // Add the access token to the headers
       final headers = {
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsbWFzIiwia2V5IjoiYWRtaW5fa2V5IiwiaWF0IjoxNzMyMzIzNTUzLCJleHAiOjE3MzIzMjQxNTN9.o3x_YjDPBoC4QzFm5X1-okywwehdvXKLPFr6Bl-ccBEUN9bGuZodDR1aaifMJeusYrMXn4GdAECC8jogUny2vA',
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
         'Content-Type': 'application/json',
       };
 
@@ -50,7 +52,7 @@ class ExamProvider with ChangeNotifier {
 
     try {
       final headers = {
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsbWFzIiwia2V5IjoiYWRtaW5fa2V5IiwiaWF0IjoxNzMyMzIzNTUzLCJleHAiOjE3MzIzMjQxNTN9.o3x_YjDPBoC4QzFm5X1-okywwehdvXKLPFr6Bl-ccBEUN9bGuZodDR1aaifMJeusYrMXn4GdAECC8jogUny2vA',
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
         'Content-Type': 'application/json',
       };
 
@@ -79,4 +81,32 @@ class ExamProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> deleteExam(int id) async {
+    print(exams.length);
+    try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+      final response = await http.delete(
+        Uri.parse('$BASE_URL/api/exam/delete/$id'),
+        headers: headers,
+      );
+
+      if (response.statusCode == 201) {
+        print(_exams.length);
+        _exams.removeWhere((exam) => exam.id == id);
+        notifyListeners();
+        print('Exam deleted successfully');
+        return true;
+      } else {
+        throw Exception('Error: ${response.statusCode}, ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete exam: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

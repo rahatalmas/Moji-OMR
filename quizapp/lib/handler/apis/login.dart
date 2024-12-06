@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:quizapp/handler/api_handler.dart';
 import 'package:quizapp/handler/models/login.dart';
@@ -23,6 +22,7 @@ class Auth implements BaseAuthHandler {
   Login? _login;
 
   Login? get loginData => _login;
+  
 
   @override
   Future<Login?> checkLoginStatus() async {

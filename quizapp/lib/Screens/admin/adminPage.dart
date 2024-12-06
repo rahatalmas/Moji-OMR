@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/Screens/admin/adminAddScreen.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/handler/apis/login.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -19,8 +20,8 @@ class _AdminPageState extends State<AdminPage> {
   ];
 
   // Profile owner data
-  String profileOwnerName = "Uzumaki Naruto";
-  String profileOwnerRole = "Admin";
+  String profileOwnerName = Auth().loginData!.username;
+  String profileOwnerRole = Auth().loginData!.permission == 1 ? "Admin" : "Editor";
 
   // Selected filter
   String selectedFilter = "All";
