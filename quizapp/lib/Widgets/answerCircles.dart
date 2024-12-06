@@ -33,11 +33,11 @@ class _AnswerCirclesState extends State<AnswerCircles> {
       decoration: BoxDecoration(
         color: neutralWhite,
         border: BorderDirectional(
-          bottom: BorderSide(color: neutralBG,width: 1)
+          bottom: BorderSide(color: neutralBG,width: 2)
         )
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           for (int i = 0; i < 4; i++)
             AnswerCircle(

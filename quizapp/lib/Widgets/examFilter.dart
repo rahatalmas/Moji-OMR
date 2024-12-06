@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/handler/apis/examApiUtil.dart';
 import 'package:quizapp/providers/examProvider.dart';
 
 import '../database/models/exammodel.dart';
@@ -27,7 +28,9 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
 
     await examProvider.getAllExams('$BASE_URL/api/exam/list');
 
-    final examList = examProvider.exams;
+    //final examList = examProvider.exams;
+
+    List<Exam> examList = await ExamApiUtil().fetchExams();
 
     //the bottom sheet modal
     showModalBottomSheet(

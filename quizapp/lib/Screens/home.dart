@@ -264,6 +264,7 @@ class Dashboard extends StatelessWidget {
           examDuration: 5,
           questionCount: 100,
           candidateCount: 100,
+          onDelete: (){},
         )
       ],
     );

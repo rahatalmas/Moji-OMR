@@ -36,7 +36,6 @@ class Exam {
     required this.numberOfCandidates,
   });
 
-  // Named constructor for creating a new exam (no `id`)
   Exam.forPost({
     required this.name,
     required this.dateTime,
@@ -44,7 +43,7 @@ class Exam {
     required this.duration,
     required this.totalQuestions,
     required this.numberOfCandidates,
-  }) : id = 0; // Use a placeholder value, won't be sent in `toJson`.
+  }) : id = 0;
 
   /// Factory for parsing fetched data from JSON
   factory Exam.fromJson(Map<String, dynamic> json) => _$ExamFromJson(json);

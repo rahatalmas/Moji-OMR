@@ -8,7 +8,8 @@ class ExamCard extends StatelessWidget {
   final String examLocation;
   final int examDuration;
   final int questionCount;
-  final int candidateCount;// Callback function for InkWell tap
+  final int candidateCount;
+  final VoidCallback onDelete; // Callback for delete action
 
   const ExamCard({
     Key? key,
@@ -18,7 +19,8 @@ class ExamCard extends StatelessWidget {
     required this.examLocation,
     required this.examDuration,
     required this.questionCount,
-    required this.candidateCount, // Optional onTap callback
+    required this.candidateCount,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -29,10 +31,7 @@ class ExamCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: (){
-            print("hello");
-          },// Trigger action on tap
-          borderRadius: BorderRadius.circular(12.0), // Match container's border radius
+          borderRadius: BorderRadius.circular(12.0),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -41,67 +40,41 @@ class ExamCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(bottom: 4),
                   decoration: BoxDecoration(
-                      border: BorderDirectional(bottom: BorderSide(color: Colors.black12)),
-
+                    border: BorderDirectional(bottom: BorderSide(color: Colors.black12)),
                   ),
                   child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 8,
-                              width: 8,
-                              decoration: BoxDecoration(
-                                  color: Colors.purple,
-                                  borderRadius: BorderRadius.circular(100)
-                              ),
-                            ),
-                            SizedBox(width: 2,),
-                            Container(
-                              height: 9,
-                              width: 9,
-                              decoration: BoxDecoration(
-                                  color: Colors.deepPurple,
-                                  borderRadius: BorderRadius.circular(100)
-                              ),
-                            ),
-                            SizedBox(width: 2,),
-                            Container(
-                              height: 10,
-                              width: 10,
-                              decoration: BoxDecoration(
-                                  color: Colors.deepPurpleAccent,
-                                  borderRadius: BorderRadius.circular(100)
-                              ),
-                            ),
-                            SizedBox(width: 5,),
-                            Text('Created at: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}')
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Icon(Icons.edit_note,color: colorPrimary,),
-                            SizedBox(width: 5,),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(10),
-                                onTap: (){
-                                  print("hello");
-                                },
-                                child: Icon(Icons.delete,color: Colors.red[900],size: 21,)
-                            )
-                          ],
-                        )
-                      ]
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Created on: ${_formatDate(examDate)}',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.edit_note,color: colorPrimary,),
+                          SizedBox(width: 5,),
+                          InkWell(
+                            onTap: onDelete,
+                            child: Icon(Icons.delete, color: Colors.red[900]),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 10,),
-                Text(examName, style: const TextStyle(fontSize:17,fontWeight: FontWeight.bold,color: colorPrimary)),
+                SizedBox(height: 10),
+                Text(
+                  examName,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: colorPrimary,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, size: 16,color: colorPrimary,),
+                    const Icon(Icons.calendar_today, size: 16, color: colorPrimary),
                     const SizedBox(width: 8),
                     Text("Date: ${_formatDate(examDate)}"),
                   ],
@@ -109,7 +82,7 @@ class ExamCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.location_on, size: 16,color: colorPrimary,),
+                    const Icon(Icons.location_on, size: 16, color: colorPrimary),
                     const SizedBox(width: 8),
                     Text("Location: $examLocation"),
                   ],
@@ -117,7 +90,7 @@ class ExamCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.timer, size: 16,color: colorPrimary,),
+                    const Icon(Icons.timer, size: 16, color: colorPrimary),
                     const SizedBox(width: 8),
                     Text("Duration: $examDuration hours"),
                   ],
@@ -125,7 +98,7 @@ class ExamCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.help_outline, size: 16,color: colorPrimary,),
+                    const Icon(Icons.help_outline, size: 16, color: colorPrimary),
                     const SizedBox(width: 8),
                     Text("Questions: $questionCount"),
                   ],
@@ -133,7 +106,7 @@ class ExamCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.people, size: 16,color: colorPrimary,),
+                    const Icon(Icons.people, size: 16, color: colorPrimary),
                     const SizedBox(width: 8),
                     Text("Candidates: $candidateCount"),
                   ],
@@ -146,7 +119,6 @@ class ExamCard extends StatelessWidget {
     );
   }
 
-  // Helper function to format the date
   static String _formatDate(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
   }

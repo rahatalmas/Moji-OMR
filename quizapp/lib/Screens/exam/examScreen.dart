@@ -26,6 +26,10 @@ class _ExamScreenState extends State<ExamScreen> {
     }
   }
 
+  void _deleteExam(int examId) {
+    Provider.of<ExamProvider>(context, listen: false).deleteExam(examId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,6 +129,7 @@ class _ExamScreenState extends State<ExamScreen> {
                               examDuration: exam.duration,
                               questionCount: exam.totalQuestions,
                               candidateCount: exam.numberOfCandidates,
+                              onDelete: () => _deleteExam(exam.id),
                             );
                           },
                         ),

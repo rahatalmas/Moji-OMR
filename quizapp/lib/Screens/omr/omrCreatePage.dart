@@ -108,10 +108,11 @@ class _OmrCreatePage extends State<OmrCreatePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text('Question: ${index+1}'),
-                            Text('correct option: ${"A"}')
+                            SizedBox(width: 20,),
+                            Text('Answer: ${"A"}')
                           ],
                         ),
                         AnswerCircles(),

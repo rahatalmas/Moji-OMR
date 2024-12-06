@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quizapp/handler/apis/login.dart';
 
+import '../constant.dart';
 import '../database/models/exammodel.dart';
 import '../handler/apis/examApiUtil.dart';
+import '../handler/apis/login.dart';
 
 class ExamProvider with ChangeNotifier {
   List<Exam> _exams = [];
@@ -56,6 +58,35 @@ class ExamProvider with ChangeNotifier {
     } catch (e) {
       _message = 'Failed to add exam: $e';
       return false;
+    }
+  }
+
+  Future<bool> deleteExam(int id) async {
+    print(exams.length);
+    try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+      final response = await http.delete(
+        Uri.parse('$BASE_URL/api/exam/delete/$id'),
+        headers: headers,
+      );
+
+      if (response.statusCode == 201) {
+        print(_exams.length);
+        _exams.removeWhere((exam) => exam.id == id);
+        notifyListeners();
+        print('Exam deleted successfully');
+        return true;
+      } else {
+        throw Exception('Error: ${response.statusCode}, ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete exam: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }
