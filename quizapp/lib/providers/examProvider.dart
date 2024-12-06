@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quizapp/handler/apis/login.dart';
@@ -6,7 +6,6 @@ import 'package:quizapp/handler/apis/login.dart';
 import '../constant.dart';
 import '../database/models/exammodel.dart';
 import '../handler/apis/examApiUtil.dart';
-import '../handler/apis/login.dart';
 
 class ExamProvider with ChangeNotifier {
   List<Exam> _exams = [];
