@@ -4,13 +4,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
-import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/Widgets/selectableScholarList.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/database/models/candidate.dart';
+import 'package:quizapp/providers/candidateProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
-
-import '../../database/models/exammodel.dart';
 
 class CandidateEditor extends StatefulWidget {
   const CandidateEditor({super.key});
@@ -20,6 +19,7 @@ class CandidateEditor extends StatefulWidget {
 }
 
 class _CandidateEditor extends State<CandidateEditor> {
+
   final TextEditingController _serialNumberController = TextEditingController();
   final TextEditingController _candidateNameController = TextEditingController();
   final TextEditingController _schoolNameController = TextEditingController();
@@ -27,7 +27,7 @@ class _CandidateEditor extends State<CandidateEditor> {
 
   int _selectedMode = 0; // Selected mode (default value)
   final List<String> _modes = ["Default Editing", "Add from database", "Upload File"];
-  final List<Widget> _modeScreens = [];
+  final List<Widget> _modeScreens = []; // for later adjustments ...
 
   File? _selectedFile; // Store selected file
 
@@ -101,7 +101,7 @@ class _CandidateEditor extends State<CandidateEditor> {
   }
 
   // Method to add a candidate
-  void _addCandidate() {
+  void _addCandidate() async{
     final serialNumber = _serialNumberController.text;
     final candidateName = _candidateNameController.text;
     final schoolName = _schoolNameController.text;
@@ -116,7 +116,24 @@ class _CandidateEditor extends State<CandidateEditor> {
       );
       return;
     }
+    final candidateProvider = Provider.of<CandidateProvider>(context,listen: false);
+    final examProvider = Provider.of<ExamProvider>(context, listen: false);
+    Candidate newCandidate = Candidate(
+        serialNumber: int.parse(serialNumber),
+        name: candidateName,
+        schoolName: schoolName,
+        classLevel: classLevel,
+        examId: examProvider.selectedExam!.id
+    );
+    bool res = await candidateProvider.addCandidate(newCandidate);
+    if(res){
+      await candidateProvider.getAllCandidates(examProvider.selectedExam!.id);
 
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('failed to add candidate')),
+      );
+    }
     // Clear the input fields after adding the candidate
     setState(() {
       _serialNumberController.clear();
@@ -172,6 +189,7 @@ class _CandidateEditor extends State<CandidateEditor> {
   @override
   Widget build(BuildContext context) {
     final examProvider = Provider.of<ExamProvider>(context, listen: true);
+    final candidateProvider = Provider.of<CandidateProvider>(context,listen: true);
     return ListView(
       children: [
         Column(
@@ -254,18 +272,18 @@ class _CandidateEditor extends State<CandidateEditor> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Candidate - ${examProvider.selectedExam!.numberOfCandidates}',
+                                'Candidate - ${candidateProvider.candidates.length+1}',
                                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                               ),
                               Row(
-                                children: const [
+                                children: [
                                   Text(
-                                    "Total: ${300}",
+                                    'Total: ${examProvider.selectedExam!.numberOfCandidates}',
                                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    "Remaining: ${155}",
+                                    'Remaining: ${(examProvider.selectedExam!.numberOfCandidates)-(candidateProvider.candidates.length+1)}',
                                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                                   ),
                                 ],
@@ -290,7 +308,9 @@ class _CandidateEditor extends State<CandidateEditor> {
                       child: Column(
                         children: [
                           Lottie.asset("assets/images/fileAdding.json", height: 110),
-                          Text("Last Added: Almas")
+                          candidateProvider.candidates.length > 1?
+                          Text('last Added: ${candidateProvider.candidates[candidateProvider.candidates.length-1].name}')
+                              :Text("no candidates added yet")
                         ],
                       ),
                     ),

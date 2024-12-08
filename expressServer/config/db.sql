@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS exams (
     exam_duration INT NOT NULL,
     question_count INT NOT NULL,
     candidate_count INT NOT NULL,
-    UNIQUE (exam_name, exam_date),
+    UNIQUE (exam_name),
     PRIMARY KEY (exam_id)
 );
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS candidates (
     class_level VARCHAR(25) NOT NULL,
     candidate_picture VARCHAR(255),
     exam_id INT NOT NULL,
-    PRIMARY KEY(serial_number),
+    PRIMARY KEY(serial_number,exam_id),
     CONSTRAINT fk_exam_candidates FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
 );
 

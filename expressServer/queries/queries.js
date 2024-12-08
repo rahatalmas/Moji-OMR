@@ -40,8 +40,17 @@ const scholarQ = {
 
 }
 
+const candidateQ = {
+    getList: "SELECT * FROM candidates WHERE exam_id=?",
+    addCandidate: `INSERT INTO candidates
+                  (serial_number, candidate_name, school_name, class_level, exam_id)
+              VALUES 
+                  (?, ?, ?, ?, ?);`,
+}
+
 module.exports = {
     adminsQ,
     examsQ,
-    scholarQ
+    scholarQ,
+    candidateQ
 }

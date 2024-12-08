@@ -6,6 +6,7 @@ import 'package:quizapp/Screens/home.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/handler/apis/login.dart';
 import 'package:quizapp/providers/actionProvider.dart';
+import 'package:quizapp/providers/candidateProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
 import 'package:quizapp/providers/scholarProvider.dart';
@@ -18,6 +19,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ExamProvider()),
+        ChangeNotifierProvider(create: (context) => CandidateProvider()),
         ChangeNotifierProvider(create: (context) => ScholarProvider()),
         ChangeNotifierProvider(create: (context) => QuestionProvider()),
         ChangeNotifierProvider(create: (context) => ActionStatusProvider())

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/handler/apis/examApiUtil.dart';
+import 'package:quizapp/providers/candidateProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 
 import '../database/models/exammodel.dart';
@@ -19,14 +19,14 @@ class ExamFilterWidget extends StatefulWidget {
 }
 
 class _ExamFilterWidgetState extends State<ExamFilterWidget> {
-  //Exam? _selectedExam;
 
   void _showExamFilterModal(BuildContext context) async {
     final examProvider = Provider.of<ExamProvider>(context, listen: false);
-
+    final candidateProvider = Provider.of<CandidateProvider>(context,listen: false);
     if(examProvider.exams.isEmpty){
       await examProvider.getAllExams();
     }
+
     List<Exam> examList = examProvider.exams;
 
     //the bottom sheet modal
@@ -64,9 +64,8 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
                             "Date: ${exam.dateTime}, Location: ${exam.location}"),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                         onTap: () {
-                          setState(() {
-                            examProvider.setSelectedExam(exam);
-                          });
+                          examProvider.setSelectedExam(exam);
+                          candidateProvider.getAllCandidates(exam.id);
                           Navigator.pop(context); // Close the modal
                         },
                       );
