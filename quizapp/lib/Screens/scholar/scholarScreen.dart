@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
 import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
-import 'package:quizapp/Widgets/scholarList.dart';
+import 'package:quizapp/Screens/scholar/scholarCard.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/providers/scholarProvider.dart';
 
 class ScholarScreen extends StatefulWidget {
   const ScholarScreen({Key? key}) : super(key: key);
@@ -12,8 +14,18 @@ class ScholarScreen extends StatefulWidget {
 }
 
 class _ScholarScreenState extends State<ScholarScreen> {
+  late ScholarProvider _scholarProvider;
 
-
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scholarProvider = context.watch<ScholarProvider>();
+    if (!_scholarProvider.dataUpdated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scholarProvider.getAllScholars();
+      });
+    }
+  }
   List<String> selectedSchools = [];
   String? selectedSortOption;
   bool isAscending = true;
@@ -53,7 +65,7 @@ class _ScholarScreenState extends State<ScholarScreen> {
   }
 
   // Filtered scholars based on selected schools
-  List<Scholar> get filteredScholars {
+  List<DummyScholar> get filteredScholars {
     if (selectedSchools.isEmpty) {
       return scholars;
     } else {
@@ -128,7 +140,21 @@ class _ScholarScreenState extends State<ScholarScreen> {
             SizedBox(height: 8),
 
             // Scholar List
-            ScholarList(scholars: filteredScholars),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _scholarProvider.scholars.length,
+              itemBuilder: (context, index) {
+                final scholar = _scholarProvider.scholars[index];
+                return ScholarCard(
+                  scholarId: scholar.scholarId,
+                  scholarName: scholar.scholarName,
+                  schoolName: scholar.scholarSchool,
+                  classLevel: scholar.classLevel,
+                  scholarPicture: null,
+                );
+              },
+            )
             //ScholarList2(scholars: filteredScholars)
           ],
         ),

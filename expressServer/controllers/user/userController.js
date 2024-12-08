@@ -3,6 +3,7 @@ const { adminsQ } = require("../../queries/queries");
 const { generateHash, hashCompare } = require("../utility/hash");
 const { roles } = require("../utility/keys");
 
+//user list provider
 const userList = async (req,res)=>{
     try{
         const [adminList] = await db.query(adminsQ.getList);
@@ -13,10 +14,13 @@ const userList = async (req,res)=>{
     }
 }
 
+
+//individual user provider
 const indiVidualUser = async (req,res) =>{
     try{
         const userId = req.params.id;
         console.log("user ID: ",userId);
+        //check string or not{}
         const [result] = await db.query(adminsQ.getSpecificById,[userId]);
         console.log(result);
         res.status(200).json(result[0]);
@@ -26,6 +30,8 @@ const indiVidualUser = async (req,res) =>{
     }
 }
 
+
+//user adding : ner user registration
 const addUser = async (req,res) =>{
     try{
         const {username,password,role} = req.body;
@@ -62,13 +68,14 @@ const addUser = async (req,res) =>{
     }
 }
 
+
+//update admin name
 const updateUserName = async (req,res)=>{
     try{
         const {admin_id,username} = req.body;
         if(!admin_id || !username){
             res.status(406).json({"message":"Invalid Request"});
             return;
-
         }
         console.log("update request: ",{admin_id,username});
         const [user] = await db.query(adminsQ.getSpecificById,[admin_id]);
@@ -89,6 +96,7 @@ const updateUserName = async (req,res)=>{
     }
 }
 
+//password update
 const updateUserPassword = async (req,res)=>{
     try{
         const {admin_id,currentpassword,newpassword} = req.body;
@@ -115,6 +123,7 @@ const updateUserPassword = async (req,res)=>{
     }
 }
 
+//role update
 const updateUserRole = async (req,res)=>{
     try{
         const {admin_id,role} = req.body;
@@ -145,6 +154,7 @@ const updateUserRole = async (req,res)=>{
     }
 }
 
+//delete user
 const deleteUser = async (req,res)=>{
     try{
         const {id} = req.body;

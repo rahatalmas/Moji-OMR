@@ -58,9 +58,6 @@ class _ResultScreen extends State<ResultScreen> {
       children: [
         ExamFilterWidget(
           examList: examList,
-          onExamSelected: (exam) {
-            _onExamSelected(exam);
-          },
         ),
         SizedBox(height: 16,),
         Row(

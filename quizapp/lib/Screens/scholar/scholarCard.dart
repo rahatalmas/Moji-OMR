@@ -3,32 +3,37 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:quizapp/constant.dart';
 
 class ScholarCard extends StatelessWidget {
-  final String scholarId;
+  final int scholarId;
   final String scholarName;
-  final String? scholarPicture; // Nullable
   final String schoolName;
   final String classLevel;
+  final String? scholarPicture; // Nullable
 
   const ScholarCard({
     Key? key,
     required this.scholarId,
     required this.scholarName,
-    this.scholarPicture,
     required this.schoolName,
     required this.classLevel,
+    this.scholarPicture,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: neutralWhite,
-      shadowColor: Colors.black87,
-      elevation: 4,
+    return Container(
+
+      //shadowColor: Colors.black87,
+      //elevation: 4,
+      decoration: BoxDecoration(
+        border: BorderDirectional(bottom: BorderSide(width:3,color: neutralBG)),
+        color: neutralWhite,
+      ),
+      margin: EdgeInsets.symmetric(vertical: 4),
       child: Slidable(
-        key: Key(scholarId), // Provide a Key to prevent errors in lists
+        key: Key(scholarId.toString()),
         endActionPane: ActionPane(
-          motion: const ScrollMotion(), // For a right swipe motion (reverse direction)
-          dismissible: null, // Disable dismiss action
+          motion: const ScrollMotion(),
+          dismissible: null,
           children: [
             // Edit Button
             SlidableAction(
@@ -43,10 +48,10 @@ class ScholarCard extends StatelessWidget {
             ),
             // Delete Button
             SlidableAction(
-              borderRadius: BorderRadius.only(
-                  topRight:Radius.circular(12),
-                  bottomRight:Radius.circular(12)
-              ),
+              // borderRadius: BorderRadius.only(
+              //     topRight:Radius.circular(12),
+              //     bottomRight:Radius.circular(12)
+              // ),
               onPressed: (context) {
                 // Handle delete action
                 print("Delete button clicked for $scholarId");
@@ -111,7 +116,6 @@ class ScholarCard extends StatelessWidget {
                   ],
                 ),
               ),
-      
               //swipe icon
               Icon(Icons.arrow_back_ios_new_rounded,color: colorPrimary,size: 20,)
             ],

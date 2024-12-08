@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/scholar/selectableScholarCard.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/database/models/scholar.dart';
+import 'package:quizapp/providers/scholarProvider.dart';
 
 class ScholarList2 extends StatefulWidget {
-  final List<Scholar> scholars;
-
-  const ScholarList2({Key? key, required this.scholars}) : super(key: key);
+  const ScholarList2({Key? key}) : super(key: key);
 
   @override
   _ScholarList2State createState() => _ScholarList2State();
 }
 
 class _ScholarList2State extends State<ScholarList2> {
-  final Set<String> _markedScholars = {}; // To store selected scholar IDs
+  late ScholarProvider _scholarProvider;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scholarProvider = context.watch<ScholarProvider>();
+    if (!_scholarProvider.dataUpdated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scholarProvider.getAllScholars();
+      });
+    }
+  }
+
+  final Set<int> _markedScholars = {}; // To store selected scholar IDs
   List<String> selectedSchools = [];
   String? selectedSortOption;
   bool isAscending = true;
@@ -30,14 +42,14 @@ class _ScholarList2State extends State<ScholarList2> {
 
   void sortScholars() {
     setState(() {
-      scholars.sort((a, b) {
+      _scholarProvider.scholars.sort((a, b) {
         int comparison = 0;
 
         // Sorting based on selected option
         if (selectedSortOption == 'Name') {
           comparison = a.scholarName.compareTo(b.scholarName);
         } else if (selectedSortOption == 'School') {
-          comparison = a.schoolName.compareTo(b.schoolName);
+          comparison = a.scholarSchool.compareTo(b.scholarSchool);
         } else if (selectedSortOption == 'Class Level') {
           comparison = a.classLevel.compareTo(b.classLevel);
         }
@@ -55,11 +67,14 @@ class _ScholarList2State extends State<ScholarList2> {
   // Filtered scholars based on selected schools
   List<Scholar> get filteredScholars {
     if (selectedSchools.isEmpty) {
-      return scholars;
+      return _scholarProvider.scholars;
     } else {
-      return scholars.where((scholar) => selectedSchools.contains(scholar.schoolName)).toList();
+      return _scholarProvider.scholars
+          .where((scholar) => selectedSchools.contains(scholar.scholarSchool))
+          .toList();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -106,9 +121,9 @@ class _ScholarList2State extends State<ScholarList2> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: filteredScholars.length,
+          itemCount: _scholarProvider.scholars.length,
           itemBuilder: (context, index) {
-            final scholar = filteredScholars[index];
+            final scholar = _scholarProvider.scholars[index];
             final isMarked = _markedScholars.contains(scholar.scholarId);
 
             return GestureDetector(
@@ -122,10 +137,10 @@ class _ScholarList2State extends State<ScholarList2> {
                 });
               },
               child: SelectableScholarCard(
-                scholarId: scholar.scholarId,
+                scholarId: scholar.scholarId, // Integer ID here
                 scholarName: scholar.scholarName,
                 scholarPicture: scholar.scholarPicture,
-                schoolName: scholar.schoolName,
+                schoolName: scholar.scholarSchool, // Corrected to scholarSchool
                 classLevel: scholar.classLevel,
                 isMarked: isMarked,
               ),
@@ -134,7 +149,7 @@ class _ScholarList2State extends State<ScholarList2> {
         ),
         const SizedBox(height: 16),
         InkWell(
-          onTap: (){
+          onTap: () {
             print(_markedScholars);
           },
           child: Container(
@@ -154,7 +169,7 @@ class _ScholarList2State extends State<ScholarList2> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
-                SizedBox(width: 3,),
+                SizedBox(width: 3),
                 Icon(Icons.save_as, color: Colors.white),
               ],
             ),
@@ -173,28 +188,28 @@ class _ScholarList2State extends State<ScholarList2> {
           builder: (context, setState) {
             return Column(
               children: [
-                ...scholars.map((scholar) {
+                ..._scholarProvider.scholars.map((scholar) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          toggleSchoolSelection(scholar.schoolName);
+                          toggleSchoolSelection(scholar.scholarSchool);
                         });
                       },
                       child: Row(
                         children: [
                           Checkbox(
-                            value: selectedSchools.contains(scholar.schoolName),
+                            value: selectedSchools.contains(scholar.scholarSchool),
                             onChanged: (bool? value) {
                               setState(() {
-                                toggleSchoolSelection(scholar.schoolName);
+                                toggleSchoolSelection(scholar.scholarSchool);
                               });
                             },
                           ),
                           SizedBox(width: 10),
                           Expanded(
-                            child: Text(scholar.schoolName),
+                            child: Text(scholar.scholarSchool), // Corrected to scholarSchool
                           ),
                         ],
                       ),
@@ -218,7 +233,6 @@ class _ScholarList2State extends State<ScholarList2> {
       },
     );
   }
-
 
   // Sort options dialog
   void showSortOptionsDialog(BuildContext context) {
@@ -286,7 +300,4 @@ class _ScholarList2State extends State<ScholarList2> {
       },
     );
   }
-
 }
-
-

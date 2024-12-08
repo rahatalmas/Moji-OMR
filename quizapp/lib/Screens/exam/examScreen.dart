@@ -19,15 +19,11 @@ class _ExamScreenState extends State<ExamScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _examProvider = context.watch<ExamProvider>();
-    if (_examProvider.dataUpdated) {
+    if (!_examProvider.dataUpdated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _examProvider.getAllExams();
       });
     }
-  }
-
-  void _deleteExam(int examId) {
-    Provider.of<ExamProvider>(context, listen: false).deleteExam(examId);
   }
 
   @override
@@ -129,7 +125,9 @@ class _ExamScreenState extends State<ExamScreen> {
                               examDuration: exam.duration,
                               questionCount: exam.totalQuestions,
                               candidateCount: exam.numberOfCandidates,
-                              onDelete: () => _deleteExam(exam.id),
+                              onDelete: () {
+                                _examProvider.deleteExam(exam.id);
+                              },
                             );
                           },
                         ),

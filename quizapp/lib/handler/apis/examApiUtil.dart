@@ -90,6 +90,41 @@ class ExamApiUtil with ChangeNotifier {
     }
   }
 
+  Future<bool> updateExam(Exam updatedData) async{
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+
+      final body = jsonEncode(updatedData.toJson());
+
+      final response = await http.put(
+        Uri.parse('$BASE_URL/api/exam/update'),
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 204) {
+        print('Exam updated successfully: ${response.statusCode}');
+        return true;
+      } else {
+        _message = 'Error: ${response.statusCode}, ${response.body}';
+        return false;
+      }
+    } catch (e) {
+      _message = 'Failed to add exam: $e';
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<bool> deleteExam(int id) async {
     try {
       final headers = {
@@ -102,7 +137,7 @@ class ExamApiUtil with ChangeNotifier {
         headers: headers,
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         return true;
       } else {
         throw Exception('Error: ${response.statusCode}, ${response.body}');

@@ -4,7 +4,6 @@ import 'package:quizapp/Widgets/answerCircles.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/constant.dart';
 
-
 import '../../database/models/exammodel.dart';
 
 class OmrCreatePage extends StatefulWidget {
@@ -15,12 +14,6 @@ class OmrCreatePage extends StatefulWidget {
 
 class _OmrCreatePage extends State<OmrCreatePage> {
   Exam? _selectedExam;
-
-  void _onExamSelected(Exam exam) {
-    setState(() {
-      _selectedExam = exam;
-    });
-  }
 
   String? _selectedAnswer;
   List<String> _answerList = [];
@@ -63,9 +56,6 @@ class _OmrCreatePage extends State<OmrCreatePage> {
           children: [
             ExamFilterWidget(
               examList: examList,
-              onExamSelected: (exam) {
-                _onExamSelected(exam);
-              },
             ),
             SizedBox(height: 12,),
             Row(

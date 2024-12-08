@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/constant.dart';
 
 class SelectableScholarCard extends StatelessWidget {
-  final String scholarId;
+  final int scholarId;
   final String scholarName;
   final String? scholarPicture;
   final String schoolName;

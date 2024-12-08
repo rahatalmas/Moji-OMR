@@ -26,7 +26,22 @@ const examsQ = {
 
 }
 
+const scholarQ = {
+    getList: "SELECT * FROM scholars",
+    getSpecificById:"SELECT * FROM scholars WHERE scholar_id=?",
+    addScholar: `INSERT INTO scholars
+                  (scholar_name, scholar_school, class_level)
+              VALUES 
+                  (?, ?, ?);`,
+    editScholar: `UPDATE scholars SET 
+              scholar_name=?, scholar_school=?, class_level=?
+              WHERE scholar_id=?`,
+    deleteScholar: `DELETE FROM scholars WHERE scholar_id=?`
+
+}
+
 module.exports = {
     adminsQ,
-    examsQ
+    examsQ,
+    scholarQ
 }

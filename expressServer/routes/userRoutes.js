@@ -14,8 +14,10 @@ const { userList,
 const userRouter = express.Router()
 
 userRouter.post("/login",login);
+
 //checkpost alert
 userRouter.use(authCheck);
+
 userRouter.get("/list",userList);
 userRouter.get("/list/:id",indiVidualUser);
 userRouter.post("/register",addUser);

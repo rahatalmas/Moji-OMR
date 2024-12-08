@@ -4,17 +4,18 @@ const { roles } = require("../utility/keys");
 
 const getExamList = async (req,res)=>{
     try{
-        /*const rolekey = req.user.key;
+        const rolekey = req.user.key;
         const role = roles[rolekey];
         console.log(role);
         if(role != "admin" && role != "editor"){
             res.status(401).json({"message":"Access Denied"});
             return;
-        }*/
+        }
         const [exams] = await db.query(examsQ.getList);
+        exams.reverse();
         res.status(200).json(exams);
     }catch(err){
-        res.status(401).json({"message":"Sorry! Internal Server error"});
+        res.status(500).json({"message":"Sorry! Internal Server error"});
     }
 }
 
@@ -72,7 +73,7 @@ const updateExam = async (req,res)=>{
             [exam_name,exam_date,exam_location,exam_duration,question_count,candidate_count,exam_id]
         );
         console.log(result);
-        res.status(201).json({"message":"Exam data Updated"});
+        res.status(204).json({"message":"Exam data Updated"});
     }catch(err){
         console.log(err);
         res.status(500).json({"message":"Internal Server Error"});
@@ -81,11 +82,11 @@ const updateExam = async (req,res)=>{
 
 const deleteExam = async (req,res)=>{
     try{
-        const {id} = req.body;
+        const id = req.params.id;
         console.log(id);
         const result = await db.execute(examsQ.deleteExam,[id]);
         console.log(result);
-        res.status(201).json({"message":"Exam Deleted"});
+        res.status(204).json({"message":"Exam Deleted"});
     }catch(err){
         console.log(err.message)
         res.status(500).json({"message":"Internal Server Error"});

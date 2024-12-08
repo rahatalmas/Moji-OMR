@@ -208,9 +208,6 @@ class _QuestionEditor extends State<QuestionEditor> {
           children: [
             ExamFilterWidget(
               examList: examList,
-              onExamSelected: (Exam exam) {
-                _onExamSelected(exam);
-              },
             ),
 
             const SizedBox(height: 10),

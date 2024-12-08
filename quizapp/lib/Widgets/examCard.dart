@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizapp/Screens/exam/examUpdateScreen.dart';
 import 'package:quizapp/constant.dart';
 
 class ExamCard extends StatelessWidget {
@@ -32,6 +33,9 @@ class ExamCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12.0),
+          onTap: (){
+            print('hello');
+          },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -51,7 +55,22 @@ class ExamCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Icon(Icons.edit_note,color: colorPrimary,),
+                          InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context)=>UpdateExamScreen(
+                                        examId: examId,
+                                        examName: examName,
+                                        examDateTime: examDate,
+                                        examLocation: examLocation,
+                                        examDuration: examDuration,
+                                        questionCount: questionCount,
+                                        candidateCount: candidateCount
+                                    )
+                                ));
+                              },
+                              child: Icon(Icons.edit_note,color: colorPrimary,)
+                          ),
                           SizedBox(width: 5,),
                           InkWell(
                             onTap: onDelete,

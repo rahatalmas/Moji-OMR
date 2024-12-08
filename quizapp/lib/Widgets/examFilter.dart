@@ -8,11 +8,9 @@ import 'package:quizapp/providers/examProvider.dart';
 import '../database/models/exammodel.dart';
 
 class ExamFilterWidget extends StatefulWidget {
-  final Function(Exam) onExamSelected;
 
   const ExamFilterWidget({
     super.key,
-    required this.onExamSelected,
     required List<Exam> examList,
   });
 
@@ -21,16 +19,15 @@ class ExamFilterWidget extends StatefulWidget {
 }
 
 class _ExamFilterWidgetState extends State<ExamFilterWidget> {
-  Exam? _selectedExam;
+  //Exam? _selectedExam;
 
   void _showExamFilterModal(BuildContext context) async {
     final examProvider = Provider.of<ExamProvider>(context, listen: false);
 
-    await examProvider.getAllExams();
-
-    //final examList = examProvider.exams;
-
-    List<Exam> examList = await ExamApiUtil().fetchExams();
+    if(examProvider.exams.isEmpty){
+      await examProvider.getAllExams();
+    }
+    List<Exam> examList = examProvider.exams;
 
     //the bottom sheet modal
     showModalBottomSheet(
@@ -68,9 +65,8 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
                         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                         onTap: () {
                           setState(() {
-                            _selectedExam = exam;
+                            examProvider.setSelectedExam(exam);
                           });
-                          widget.onExamSelected(exam);
                           Navigator.pop(context); // Close the modal
                         },
                       );
@@ -87,6 +83,7 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final examProvider = Provider.of<ExamProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -104,7 +101,7 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  _selectedExam == null ? "Select Exam" : _selectedExam!.name,
+                  examProvider.selectedExam == null ? "Select Exam" : examProvider.selectedExam!.name,
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

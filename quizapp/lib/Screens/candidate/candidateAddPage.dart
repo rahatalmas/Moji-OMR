@@ -2,11 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/Widgets/selectableScholarList.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/providers/examProvider.dart';
 
 import '../../database/models/exammodel.dart';
 
@@ -23,21 +25,11 @@ class _CandidateEditor extends State<CandidateEditor> {
   final TextEditingController _schoolNameController = TextEditingController();
   final TextEditingController _classLevelController = TextEditingController();
 
-  int totalCandidates = 0; // Number of candidates (from selected exam) // Number of candidates (from selected exam)
-  Exam? _selectedExam; // Store the selected exam
   int _selectedMode = 0; // Selected mode (default value)
   final List<String> _modes = ["Default Editing", "Add from database", "Upload File"];
   final List<Widget> _modeScreens = [];
 
   File? _selectedFile; // Store selected file
-
-  // Initialize input fields and candidate data
-  void _onExamSelected(Exam exam) {
-    setState(() {
-      _selectedExam = exam;
-      totalCandidates = exam.numberOfCandidates; // Set number of candidates based on selected exam
-    });
-  }
 
   // Open bottom modal for mode selection
   void _showModeSelectionModal() {
@@ -179,6 +171,7 @@ class _CandidateEditor extends State<CandidateEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final examProvider = Provider.of<ExamProvider>(context, listen: true);
     return ListView(
       children: [
         Column(
@@ -187,12 +180,9 @@ class _CandidateEditor extends State<CandidateEditor> {
             // Exam filter widget (to select exam)
             ExamFilterWidget(
               examList: examList,
-              onExamSelected: (exam) {
-                _onExamSelected(exam);
-              },
             ),
             const SizedBox(height: 10),
-            _selectedExam == null
+            examProvider.selectedExam == null
                 ? Center(
               child: Column(
                 children: [
@@ -263,8 +253,8 @@ class _CandidateEditor extends State<CandidateEditor> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                "Candidate - ${146}",
+                              Text(
+                                'Candidate - ${examProvider.selectedExam!.numberOfCandidates}',
                                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                               ),
                               Row(
@@ -401,7 +391,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                         ),
                       ],
                     )
-                      : ScholarList2(scholars: scholars),
+                      : ScholarList2(),
                 ],
               ),
             ),

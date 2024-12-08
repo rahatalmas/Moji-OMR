@@ -3,6 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/userRoutes');
 const examRouter = require('./routes/examRoutes');
+const ScholarRouter = require('./routes/scholarRoutes');
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,7 @@ app.get("/",(req,res)=>{
 
 app.use("/api/user",userRouter);
 app.use("/api/exam",examRouter);
+app.use("/api/scholar",ScholarRouter);
 
 app.listen(PORT, (err)=>{
     if(err){

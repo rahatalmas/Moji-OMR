@@ -24,9 +24,19 @@ CREATE TABLE IF NOT EXISTS candidates (
     candidate_name VARCHAR(100) NOT NULL,
     school_name VARCHAR(255) NOT NULL,
     class_level VARCHAR(25) NOT NULL,
+    candidate_picture VARCHAR(255),
     exam_id INT NOT NULL,
     PRIMARY KEY(serial_number),
     CONSTRAINT fk_exam_candidates FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
+);
+
+CREATE TABLE IF NOT EXISTS scholars(
+    scholar_id INT NOT NULL AUTO_INCREMENT,
+    scholar_name VARCHAR(100) NOT NULL,
+    scholar_school VARCHAR(255) NOT NULL,
+    class_level VARCHAR(25) NOT NULL,
+    scholar_picture VARCHAR(255),
+    PRIMARY KEY(scholar_id)
 );
 
 CREATE TABLE IF NOT EXISTS questions (

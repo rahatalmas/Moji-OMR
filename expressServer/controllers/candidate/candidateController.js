@@ -2,4 +2,3 @@
 // add candidate 
 // delete candidate
 // update candidate data
-

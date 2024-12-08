@@ -2,26 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/database/models/exammodel.dart';
 import 'package:quizapp/providers/examProvider.dart';
 
-import '../../database/models/exammodel.dart';
+class UpdateExamScreen extends StatefulWidget {
+  final int examId;
+  final String examName;
+  final DateTime examDateTime;
+  final String examLocation;
+  final int examDuration;
+  final int questionCount;
+  final int candidateCount;
 
-class ExamCreatePage extends StatefulWidget {
-  const ExamCreatePage({super.key});
+  const UpdateExamScreen({
+    super.key,
+    required this.examId,
+    required this.examName,
+    required this.examDateTime,
+    required this.examLocation,
+    required this.examDuration,
+    required this.questionCount,
+    required this.candidateCount,
+  });
 
   @override
-  State<ExamCreatePage> createState() => _ExamCreatePage();
+  State<UpdateExamScreen> createState() => _UpdateExamScreenState();
 }
 
-class _ExamCreatePage extends State<ExamCreatePage> {
-
+class _UpdateExamScreenState extends State<UpdateExamScreen> {
   late ExamProvider _examProvider;
-  final TextEditingController _examNameController = TextEditingController();
-  final TextEditingController _examDateController = TextEditingController();
-  final TextEditingController _examLocationController = TextEditingController();
-  final TextEditingController _examDurationController = TextEditingController();
-  final TextEditingController _questionCountController = TextEditingController();
-  final TextEditingController _candidateCountController = TextEditingController();
+  late TextEditingController _examNameController;
+  late TextEditingController _examDateController;
+  late TextEditingController _examLocationController;
+  late TextEditingController _examDurationController;
+  late TextEditingController _questionCountController;
+  late TextEditingController _candidateCountController;
 
   final InputDecoration _textFieldDecoration = InputDecoration(
     labelText: "Type here...",
@@ -56,6 +71,31 @@ class _ExamCreatePage extends State<ExamCreatePage> {
     filled: true,
   );
 
+  @override
+  void initState() {
+    super.initState();
+    _examProvider = Provider.of<ExamProvider>(context, listen: false);
+
+    // Initialize controllers with the passed-in values
+    _examNameController = TextEditingController(text: widget.examName);
+    _examDateController = TextEditingController(text: widget.examDateTime.toString());
+    _examLocationController = TextEditingController(text: widget.examLocation);
+    _examDurationController = TextEditingController(text: widget.examDuration.toString());
+    _questionCountController = TextEditingController(text: widget.questionCount.toString());
+    _candidateCountController = TextEditingController(text: widget.candidateCount.toString());
+  }
+
+  @override
+  void dispose() {
+    _examNameController.dispose();
+    _examDateController.dispose();
+    _examLocationController.dispose();
+    _examDurationController.dispose();
+    _questionCountController.dispose();
+    _candidateCountController.dispose();
+    super.dispose();
+  }
+
   Future<void> _selectDateTime() async {
     DateTime? selectedDate = await showDatePicker(
       context: context,
@@ -80,39 +120,21 @@ class _ExamCreatePage extends State<ExamCreatePage> {
         );
 
         setState(() {
-          _examDateController.text =
-              fullDateTime.toIso8601String(); // Use ISO 8601 format
+          _examDateController.text = fullDateTime.toIso8601String();
         });
       }
     }
   }
 
   @override
-  void initState() {
-    _examProvider = Provider.of<ExamProvider>(context, listen: false);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _examNameController.dispose();
-    _examDateController.dispose();
-    _examLocationController.dispose();
-    _examDurationController.dispose();
-    _questionCountController.dispose();
-    _candidateCountController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ExamProvider>(context);
     final bool isKeyboardVisible =
-        KeyboardVisibilityProvider.isKeyboardVisible(context);
+    KeyboardVisibilityProvider.isKeyboardVisible(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Exam Creation",
+          "Update Exam",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: neutralWhite,
@@ -121,16 +143,13 @@ class _ExamCreatePage extends State<ExamCreatePage> {
         shadowColor: Colors.grey,
       ),
       backgroundColor: neutralWhite,
-      //resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Expanded(
             child: ListView(
               padding: EdgeInsets.all(16),
               children: [
-                SizedBox(
-                  height: 16,
-                ),
+                SizedBox(height: 16),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,9 +161,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                     )
                   ],
                 ),
-                SizedBox(
-                  height: 16,
-                ),
+                SizedBox(height: 16),
                 // Exam Name Field
                 TextField(
                   controller: _examNameController,
@@ -174,7 +191,6 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-
                 // Exam Location Field
                 TextField(
                   controller: _examLocationController,
@@ -184,7 +200,6 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                       prefixIcon: const Icon(Icons.location_on_outlined)),
                 ),
                 const SizedBox(height: 10),
-
                 // Last Three Fields in a Row
                 Row(
                   children: [
@@ -231,38 +246,38 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                 padding: const EdgeInsets.all(10),
                 child: InkWell(
                   onTap: () async {
-                    print(_examDateController.text);
-                    Exam exam = Exam.forPost(
-                        name: _examNameController.value.text,
-                        dateTime: _examDateController.value.text,
-                        location: _examLocationController.value.text,
-                        duration: int.parse(_examDurationController.value.text),
-                        totalQuestions:
-                            int.parse(_questionCountController.value.text),
-                        numberOfCandidates:
-                            int.parse(_candidateCountController.value.text));
-                    print(exam);
-                    bool isSuccess = await _examProvider.addExam(exam);
+                    print("Updated Exam Details:");
+                    print("Name: ${_examNameController.text}");
+                    print("DateTime: ${_examDateController.text}");
+                    print("Location: ${_examLocationController.text}");
+                    print("Duration: ${_examDurationController.text}");
+                    print("Questions: ${_questionCountController.text}");
+                    print("Candidates: ${_candidateCountController.text}");
+
+                    Exam updatedExam = Exam(
+                      id: widget.examId,
+                      name: _examNameController.text,
+                      dateTime: _examDateController.text,
+                      location: _examLocationController.text,
+                      duration: int.parse(_examDurationController.text),
+                      totalQuestions: int.parse(_questionCountController.text),
+                      numberOfCandidates: int.parse(_candidateCountController.text),
+                    );
+                     bool isSuccess = await _examProvider.updateExam(updatedExam);
+
                     if (isSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           duration: Duration.zero,
-                          content: Text('Exam added successfully!'),
+                          content: Text('Exam updated successfully!'),
                           backgroundColor: Colors.green,
                         ),
                       );
-                      _examNameController.clear();
-                      _examDateController.clear();
-                      _examLocationController.clear();
-                      _examDurationController.clear();
-                      _questionCountController.clear();
-                      _candidateCountController.clear();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           duration: Duration.zero,
-                          content:
-                              Text('Failed to add exam: ${provider.message}'),
+                          content: Text('Failed to update exam'),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -275,7 +290,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                         color: colorPrimary,
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "Save",
+                      "Update",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
