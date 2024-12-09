@@ -10,13 +10,16 @@ const login = async (req,res)=>{
     try{
         console.log("user agent ",req.headers['user-agent']);
         const {username,password} = req.body
-        const [user] = await db.query(adminsQ.getSpecificByName,[username]);
+        console.log(username,password);
+        const [user] = await db.query(adminsQ.getCredentialsByName,[username]);
+        console.log(user[0]);
         if(user.length<1){
             console.log("username: ",username)
             res.status(404).json({"message":"No User Found"});
             return;
         }
         const result = await hashCompare(password,user[0].admin_password);
+        console.log("pass: ",result);
         if(!result){
             res.status(401).json({"message":"Incorrect Password"})
             return;
@@ -33,6 +36,7 @@ const login = async (req,res)=>{
             sameSite: 'Strict'
         });
         const role = roles[user[0].admin_role_key];
+        console.log("role: ",role);
         let permissions;
         if(role == "admin"){
             permissions = 1;
@@ -48,8 +52,9 @@ const login = async (req,res)=>{
             "permission":permissions,
         })
     }catch(err){
-        console.log(err)
-        return res.status(500).json({ message: 'Server error. Please try again later.' });
+        console.log("loging err ", err)
+        res.status(500).json({ message: 'Server error. Please try again later.' });
+        return;
     }
 }
 

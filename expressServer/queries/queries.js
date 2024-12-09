@@ -1,7 +1,8 @@
 const adminsQ = {
-    getList: "SELECT * FROM admins",
-    getSpecificById:"SELECT * FROM admins WHERE admin_id=?",
-    getSpecificByName:"SELECT * FROM admins WHERE admin_username=?",
+    getList: "SELECT admin_id,admin_username,admin_role_key FROM admins",
+    getSpecificById:"SELECT admin_id,admin_username,admin_role_key FROM admins WHERE admin_id=?",
+    getSpecificByName:"SELECT admin_id,admin_username,admin_role_key FROM admins WHERE admin_username=?",
+    getCredentialsByName:"SELECT admin_password,admin_role_key FROM admins WHERE admin_username=?",
     addAdmin: `INSERT INTO admins 
                    (admin_username, admin_password, admin_role_key)
                 VALUES
