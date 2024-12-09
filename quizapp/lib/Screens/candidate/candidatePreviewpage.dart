@@ -10,6 +10,19 @@ class CandidatePreviewScreen extends StatelessWidget {
     final candidateProvider = Provider.of<CandidateProvider>(context,listen: false);
     return  ListView(
       children: [
+        candidateProvider.candidates.isEmpty
+            ?
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 100,),
+                Image.asset("assets/images/man.png",height: 200,width: 200,),
+                SizedBox(height: 20,),
+                Text("No Candidate Registered yet")
+              ],
+            )
+            :
         ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
@@ -283,7 +284,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    'Remaining: ${(examProvider.selectedExam!.numberOfCandidates)-(candidateProvider.candidates.length+1)}',
+                                    'Remaining: ${(examProvider.selectedExam!.numberOfCandidates)-(candidateProvider.candidates.length)}',
                                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                                   ),
                                 ],
@@ -305,14 +306,23 @@ class _CandidateEditor extends State<CandidateEditor> {
                         borderRadius: BorderRadius.circular(10)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
+                      child: candidateProvider.isLoading ? Column(
                         children: [
                           Lottie.asset("assets/images/fileAdding.json", height: 110),
-                          candidateProvider.candidates.length > 1?
-                          Text('last Added: ${candidateProvider.candidates[candidateProvider.candidates.length-1].name}')
-                              :Text("no candidates added yet")
                         ],
-                      ),
+                      ):
+                      candidateProvider.candidates.length > 1 ?
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/man.png",height: 100,width: 100,),
+                          SizedBox(height: 8,),
+                          Text('last Added: ${candidateProvider.candidates[candidateProvider.candidates.length-1].name}'),
+                        ],
+                      )
+                          :
+                      Center(child: Text("no candidates added yet"))
                     ),
                   ),
                   const SizedBox(height: 16),

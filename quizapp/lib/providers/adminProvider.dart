@@ -1,15 +1,17 @@
-import 'package:flutter/cupertino.dart';
-import '../database/models/scholar.dart';
-import '../handler/apis/scholarApi.dart';
+import 'dart:convert';
 
-class ScholarProvider with ChangeNotifier {
-  List<Scholar> _scholars = [];
+import 'package:flutter/cupertino.dart';
+import '../database/models/admin.dart';
+import '../handler/apis/adminApi.dart';
+
+
+class AdminProvider with ChangeNotifier {
+  List<Admin> _admins = [];
   bool _isLoading = false;
   bool _dataUpdated = false;
   String _message = '';
 
-  // Getters
-  List<Scholar> get scholars => _scholars;
+  List<Admin> get admins => _admins;
 
   bool get isLoading => _isLoading;
 
@@ -22,13 +24,12 @@ class ScholarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getAllScholars() async {
+  Future<void> getAllAdmins() async {
     _isLoading = true;
     _message = '';
     notifyListeners();
-
     try {
-      _scholars = await ScholarApi().fetchScholars();
+      _admins = await AdminApi().fetchAdmins();
       _isLoading = false;
       _dataUpdated = true;
       notifyListeners();
@@ -37,13 +38,13 @@ class ScholarProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> addScholar(Scholar newScholar) async {
+  Future<bool> addAdmin(Admin newAdmin) async {
     _isLoading = true;
     _message = '';
     notifyListeners();
 
     try {
-      bool result = await ScholarApi().addScholar(newScholar);
+      bool result = await AdminApi().addAdmin(newAdmin);
       _dataUpdated = false;
       _isLoading = false;
       notifyListeners();
@@ -53,5 +54,4 @@ class ScholarProvider with ChangeNotifier {
       return false;
     }
   }
-
 }

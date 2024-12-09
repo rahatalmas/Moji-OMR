@@ -6,6 +6,7 @@ import 'package:quizapp/Screens/home.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/handler/apis/login.dart';
 import 'package:quizapp/providers/actionProvider.dart';
+import 'package:quizapp/providers/adminProvider.dart';
 import 'package:quizapp/providers/candidateProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
@@ -18,6 +19,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => AdminProvider()),
         ChangeNotifierProvider(create: (context) => ExamProvider()),
         ChangeNotifierProvider(create: (context) => CandidateProvider()),
         ChangeNotifierProvider(create: (context) => ScholarProvider()),
@@ -164,8 +166,8 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
               decoration: BoxDecoration(
                 color: colorPrimary,
               ),
-              accountName: const Text("Admin"),
-              accountEmail: const Text("Admin@gmail.com"),
+              accountName: Text('${Auth().loginData!.username}'),
+              accountEmail: Text('Role: ${Auth().loginData!.permission==1?"Admin":"Editor"}'),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: kColorPrimary,
                 child: ClipOval(
@@ -180,7 +182,7 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: Text("Admin"),
+              title: Text("Profile"),
               onTap: () {
                 Navigator.push(
                   context,

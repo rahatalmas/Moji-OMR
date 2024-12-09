@@ -27,8 +27,22 @@ class Scholar {
     this.scholarPicture,
   });
 
-  factory Scholar.fromJson(Map<String, dynamic> json) => _$ScholarFromJson(json);
+  Scholar.forPost({
+    required this.scholarName,
+    required this.scholarSchool,
+    required this.classLevel,
+    this.scholarPicture
+  }) : scholarId = 0;
 
-  Map<String, dynamic> toJson() => _$ScholarToJson(this);
+  factory Scholar.fromJson(Map<String, dynamic> json) => _$ScholarFromJson(json);
+  //Map<String, dynamic> toJson() => _$ScholarToJson(this);
+
+  Map<String, dynamic> toJson() {
+    final data = _$ScholarToJson(this);
+    if (scholarId == 0) {
+      data.remove('scholar_id'); // Remove `id` if it's a placeholder
+    }
+    return data;
+  }
 }
 

@@ -2,7 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/database/models/scholar.dart';
+import 'package:quizapp/providers/scholarProvider.dart';
 
 class ScholarAddScreen extends StatefulWidget {
   const ScholarAddScreen({super.key});
@@ -73,6 +76,7 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scholarProvider = Provider.of<ScholarProvider>(context,listen: false);
     final bool isKeyboardVisible =
     KeyboardVisibilityProvider.isKeyboardVisible(context);
     return Scaffold(
@@ -161,12 +165,19 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: InkWell(
-                onTap: () {
-                  print("Scholar Details:");
-                  print("Full Name: ${_fullNameController.text}");
-                  print("School Name: ${_schoolNameController.text}");
-                  print("Class Level: ${_classLevelController.text}");
-                  print("Image Selected: ${_selectedImage != null}");
+                onTap: () async {
+                  Scholar newScholar = Scholar.forPost(
+                      scholarName: _fullNameController.text,
+                      scholarSchool: _schoolNameController.text,
+                      classLevel: _classLevelController.text
+                  );
+                  bool res = await scholarProvider.addScholar(newScholar);
+                  if(res){
+                    await scholarProvider.getAllScholars();
+                    print("new scholar added from screen add scholar ");
+                  }else{
+                    print("something went wrong");
+                  }
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,

@@ -2,16 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/database/models/scholar.dart';
+import 'package:quizapp/database/models/candidate.dart';
 import 'package:quizapp/handler/apis/login.dart';
 
+import '../../database/models/admin.dart';
 
-class ScholarApi with ChangeNotifier {
-  ScholarApi._privateConstructor();
 
-  static final ScholarApi _instance = ScholarApi._privateConstructor();
+class AdminApi with ChangeNotifier {
+  AdminApi._privateConstructor();
 
-  factory ScholarApi(){
+  static final AdminApi _instance = AdminApi._privateConstructor();
+
+  factory AdminApi(){
     return _instance;
   }
 
@@ -19,40 +21,41 @@ class ScholarApi with ChangeNotifier {
   String _message = '';
 
   bool get isLoading => _isLoading;
-
   String get message => _message;
 
-  Future<List<Scholar>> fetchScholars() async {
+  Future<List<Admin>> fetchAdmins() async {
     _isLoading = true;
     _message = '';
     notifyListeners();
-    List<Scholar> scholars = [];
-
+    List<Admin> admins = [];
+    print("fetching candidates:");
     try {
       final headers = {
         'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
         'Content-Type': 'application/json',
       };
       final response = await http.get(
-          Uri.parse('$BASE_URL/api/scholar/list'), headers: headers);
+          Uri.parse('$BASE_URL/api/user/list'), headers: headers);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
-        scholars = jsonData.map((data) => Scholar.fromJson(data)).toList();
-        print(scholars.length);
+        admins = jsonData.map((data) => Admin.fromJson(data)).toList();
+        print("Admin list fetched, length: "+admins.length.toString());
       } else {
         _message = 'Error ${response.statusCode}';
       }
     } catch (err) {
-      print('Failed to fetch scholars: $err');
-      _message = 'Failed to fetch exams: $err';
+      print('Failed to fetch candidates: $err');
+      _message = 'Failed to fetch candidates: $err';
     } finally {
       _isLoading = false;
       notifyListeners();
     }
-    return scholars;
+    return admins;
   }
 
-  Future<bool> addScholar(Scholar newScholar) async {
+
+
+  Future<bool> addAdmin(Admin newAdmin) async {
     _isLoading = true;
     _message = '';
     notifyListeners();
@@ -63,23 +66,23 @@ class ScholarApi with ChangeNotifier {
         'Content-Type': 'application/json',
       };
 
-      final body = jsonEncode(newScholar.toJson());
+      final body = jsonEncode(newAdmin.toJson());
 
       final response = await http.post(
-        Uri.parse('$BASE_URL/api/scholar/add'),
+        Uri.parse('$BASE_URL/api/user/register'),
         headers: headers,
         body: body,
       );
 
       if (response.statusCode == 201) {
-        print('scholar added successfully');
+        print('Admin added successfully');
         return true;
       } else {
         _message = 'Error: ${response.statusCode}, ${response.body}';
         return false;
       }
     } catch (e) {
-      _message = 'Failed to add scholar: $e';
+      _message = 'Failed to add Admin: $e';
       return false;
     } finally {
       _isLoading = false;
@@ -88,4 +91,3 @@ class ScholarApi with ChangeNotifier {
   }
 
 }
-
