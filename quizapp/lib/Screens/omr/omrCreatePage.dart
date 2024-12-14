@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/examProvider.dart';
+import 'package:quizapp/routes.dart';
 
 import '../../Widgets/examFilter.dart';
 
@@ -16,7 +17,9 @@ class OmrCreatePage extends StatefulWidget {
 class _OmrCreatePage extends State<OmrCreatePage> {
   Map<int, int> _selectedAnswers = {}; // To store <questionNumber, answerIndex>
 
+
   void _handleCreateButtonPress(int totalQuestions) {
+
     if (_selectedAnswers.length < totalQuestions) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -26,6 +29,7 @@ class _OmrCreatePage extends State<OmrCreatePage> {
       );
     } else {
       print('Correct Answers: $_selectedAnswers');
+      Navigator.pushNamed(context, RouteNames.viewDocument);
       // Save the list to the backend or process it further.
     }
   }
