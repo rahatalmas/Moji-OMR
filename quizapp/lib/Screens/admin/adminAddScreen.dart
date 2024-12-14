@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/database/models/admin.dart';
+import 'package:quizapp/providers/adminProvider.dart';
 
 class AdminAddScreen extends StatefulWidget {
   const AdminAddScreen({super.key});
@@ -100,7 +103,8 @@ class _AdminAddScreenState extends State<AdminAddScreen> {
   }
 
   // Function to add the admin user
-  void _addAdminUser() {
+  void _addAdminUser() async {
+    final provider = Provider.of<AdminProvider>(context,listen:false);
     final username = _usernameController.text;
     final password = _passwordController.text;
 
@@ -110,17 +114,25 @@ class _AdminAddScreenState extends State<AdminAddScreen> {
       );
       return;
     }
-
-    // Logic to save the user (you can implement your save logic here)
-    setState(() {
-      _usernameController.clear();
-      _passwordController.clear();
-      _selectedRole = null;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('added successfully')),
-    );
+    Admin newAdmin = Admin(adminUsername: username,password: password, adminRoleKey: _selectedRole!);
+    print(newAdmin.adminRoleKey);
+    bool res = await provider.addAdmin(newAdmin);
+    if(res){
+      // Logic to save the user (you can implement your save logic here)
+      setState(() {
+        _usernameController.clear();
+        _passwordController.clear();
+        _selectedRole = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('added successfully')),
+      );
+      await provider.getAllAdmins();
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('error occured')),
+      );
+    }
   }
 
   @override

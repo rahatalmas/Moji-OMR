@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/scholar/selectableScholarCard.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/database/models/candidate.dart';
 import 'package:quizapp/database/models/scholar.dart';
+import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/scholarProvider.dart';
+
+import '../providers/candidateProvider.dart';
 
 class ScholarList2 extends StatefulWidget {
   const ScholarList2({Key? key}) : super(key: key);
@@ -26,6 +30,7 @@ class _ScholarList2State extends State<ScholarList2> {
   }
 
   final Set<int> _markedScholars = {}; // To store selected scholar IDs
+  List<Candidate> _selectedCandidates = [];
   List<String> selectedSchools = [];
   String? selectedSortOption;
   bool isAscending = true;
@@ -77,6 +82,8 @@ class _ScholarList2State extends State<ScholarList2> {
 
   @override
   Widget build(BuildContext context) {
+    ExamProvider examProvider = Provider.of<ExamProvider>(context,listen: true);
+    CandidateProvider candidateProvider = Provider.of<CandidateProvider>(context,listen: true);
     return Column(
       children: [
         // Filters Row
@@ -133,6 +140,15 @@ class _ScholarList2State extends State<ScholarList2> {
                     _markedScholars.remove(scholar.scholarId);
                   } else {
                     _markedScholars.add(scholar.scholarId);
+                    int len = candidateProvider.candidates.length;
+                    Candidate candidate = Candidate(
+                        serialNumber: candidateProvider.candidates[len-1].serialNumber+_selectedCandidates.length+1,
+                        name: scholar.scholarName,
+                        schoolName: scholar.scholarName,
+                        classLevel: scholar.classLevel,
+                        examId: examProvider.selectedExam!.id
+                    );
+                    _selectedCandidates.add(candidate);
                   }
                 });
               },
@@ -149,8 +165,16 @@ class _ScholarList2State extends State<ScholarList2> {
         ),
         const SizedBox(height: 16),
         InkWell(
-          onTap: () {
+          onTap: () async {
             print(_markedScholars);
+            if(_selectedCandidates.length == 0){
+              print("Nothing selected");
+            }else{
+              if(examProvider.selectedExam != null){
+                int c = await candidateProvider.addMultipleCandidate(_selectedCandidates,examProvider.selectedExam!.id);
+                print(c);
+              }
+            }
           },
           child: Container(
             padding: const EdgeInsets.all(10),

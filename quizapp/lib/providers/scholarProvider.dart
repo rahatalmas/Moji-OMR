@@ -54,4 +54,17 @@ class ScholarProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> deleteScholar(int id) async {
+    try {
+      bool result = await ScholarApi().deleteScholar(id);
+      _dataUpdated = false;
+      _isLoading = false;
+      notifyListeners();
+      return result;
+    } catch (e) {
+      _message = 'Failed to delete Scholar: $e';
+      return false;
+    }
+  }
+
 }

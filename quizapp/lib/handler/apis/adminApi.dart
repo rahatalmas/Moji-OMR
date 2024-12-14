@@ -53,8 +53,6 @@ class AdminApi with ChangeNotifier {
     return admins;
   }
 
-
-
   Future<bool> addAdmin(Admin newAdmin) async {
     _isLoading = true;
     _message = '';
@@ -84,6 +82,31 @@ class AdminApi with ChangeNotifier {
     } catch (e) {
       _message = 'Failed to add Admin: $e';
       return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> deleteAdmin(int id) async {
+    try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await http.delete(
+        Uri.parse('$BASE_URL/api/user/delete/$id'),
+        headers: headers,
+      );
+
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        throw Exception('Error: ${response.statusCode}, ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete exam: $e');
     } finally {
       _isLoading = false;
       notifyListeners();

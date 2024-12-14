@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/providers/scholarProvider.dart';
 
 class ScholarCard extends StatelessWidget {
   final int scholarId;
@@ -20,6 +22,7 @@ class ScholarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scholarProvider = Provider.of<ScholarProvider>(context,listen:true);
     return Container(
 
       //shadowColor: Colors.black87,
@@ -52,9 +55,13 @@ class ScholarCard extends StatelessWidget {
               //     topRight:Radius.circular(12),
               //     bottomRight:Radius.circular(12)
               // ),
-              onPressed: (context) {
+              onPressed: (context) async {
                 // Handle delete action
                 print("Delete button clicked for $scholarId");
+                bool res = await scholarProvider.deleteScholar(scholarId);
+                if(res){
+                  print("Scholar deleted");
+                }
               },
               backgroundColor: Colors.redAccent,
               foregroundColor: Colors.white,

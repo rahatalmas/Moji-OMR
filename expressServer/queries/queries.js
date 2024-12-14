@@ -43,15 +43,27 @@ const scholarQ = {
 
 const candidateQ = {
     getList: "SELECT * FROM candidates WHERE exam_id=?",
+    getCandidateCount: "SELECT COUNT(*) AS candidate_count FROM candidates WHERE exam_id=?",
     addCandidate: `INSERT INTO candidates
                   (serial_number, candidate_name, school_name, class_level, exam_id)
               VALUES 
                   (?, ?, ?, ?, ?);`,
+    deleteCandidate: "DELETE FROM candidates WHERE serial_number=?",
+    deleteAllCandidateForExam: "DELETE FROM candidates WHERE exam_id=?"
+}
+
+const questionQ = {
+    getList:"",
+    getQuestionCount:"",
+    addQuestion:"",
+    deleteQuestion:"",
+    deleteAllQuestionForExam:"DELETE FROM questions WHERE exam_id=?",
 }
 
 module.exports = {
     adminsQ,
     examsQ,
     scholarQ,
-    candidateQ
+    candidateQ,
+    questionQ
 }

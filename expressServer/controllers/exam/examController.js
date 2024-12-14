@@ -1,5 +1,5 @@
 const db = require("../../config/db");
-const { examsQ } = require("../../queries/queries");
+const { examsQ, candidateQ, questionQ } = require("../../queries/queries");
 const { roles } = require("../utility/keys");
 
 const getExamList = async (req,res)=>{
@@ -68,6 +68,15 @@ const updateExam = async (req,res)=>{
                 candidate_count
              } = req.body;
         console.log({exam_id,exam_name,exam_date,exam_location,exam_duration,question_count,candidate_count});
+        
+        const [exam] = await db.query(examsQ.getSpecificById,[id]);
+        if(exam.length != 1){
+            console.log("Exam Id: ",id);
+            console.log("No exam found with this id");
+            res.status(404).json({"message":"Exam not found"});
+            return;
+        }
+
         const result = await db.execute(
             examsQ.editExam,
             [exam_name,exam_date,exam_location,exam_duration,question_count,candidate_count,exam_id]
@@ -82,8 +91,22 @@ const updateExam = async (req,res)=>{
 
 const deleteExam = async (req,res)=>{
     try{
+        console.log("Exam delete controller called: ");
         const id = req.params.id;
         console.log(id);
+        const [exam] = await db.query(examsQ.getSpecificById,[id]);
+        if(exam.length != 1){
+            console.log("Exam Id: ",id);
+            console.log("No exam found with this id");
+            res.status(404).json({"message":"Exam not found"});
+            return;
+        }
+        const removeCandidates = await db.execute(candidateQ.deleteAllCandidateForExam,[id]);
+        console.log(removeCandidates);
+
+        const removeQuestions = await db.execute(questionQ.deleteAllQuestionForExam,[id]);
+        console.log(removeQuestions);
+
         const result = await db.execute(examsQ.deleteExam,[id]);
         console.log(result);
         res.status(204).json({"message":"Exam Deleted"});

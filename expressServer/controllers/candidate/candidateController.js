@@ -3,7 +3,7 @@
 // delete candidate
 // update candidate data
 const db = require("../../config/db");
-const { candidateQ } = require("../../queries/queries");
+const { candidateQ, examsQ } = require("../../queries/queries");
 const { roles } = require("../utility/keys");
 
 const getCandidateList = async (req, res) => {
@@ -36,7 +36,32 @@ const addCandidate = async (req, res) =>{
                class_level,
                exam_id   
              } = req.body;
+        //validating request data
+        if(!serial_number || !candidate_name || !school_name || !class_level || !exam_id){
+            console.log("Invalid request");
+            res.status(306).json({"message":"Invalid Request"});
+            return;
+        }
         console.log("Candidate ",serial_number,candidate_name, school_name,class_level,exam_id);
+
+        //getting exam
+        const [exam] = await db.query(examsQ.getSpecificById,exam_id);
+        console.log(exam[0]);
+        const totalSits = exam[0].candidate_count;
+        console.log("Total Sits: ",totalSits);
+
+        //getting candidate counts 
+        const [count] = await db.query(candidateQ.getCandidateCount,exam_id);
+        const candidateCount = count[0].candidate_count
+        console.log(candidateCount);
+
+        //validation for sits available or not
+        if(candidateCount == totalSits){
+            res.status(406).json({"message":"Seats not available"});
+            return;
+        }
+        
+        //adding candidate
         const [result] = await db.execute(
              candidateQ.addCandidate,
             [serial_number,candidate_name,school_name,class_level, exam_id ]
@@ -45,7 +70,25 @@ const addCandidate = async (req, res) =>{
         res.status(201).json({"message":"New Candidate Added"});
     }catch(err){
         console.log("error ",err);
+        if(err.errno == 1062){
+            console.log("dublicate serial number entry");
+            res.status(406).json({"message":"Serial number already exist"});
+            return;
+        }
         res.status(500).json({"message":"Internal Server Error"});
+        return;
+    }
+}
+
+const candidateCount = async (req,res) => {
+    try{
+        const examId = req.params.examId;
+        console.log("Candidate count query for exam Id: ",examId);
+        const [result] = await db.query(candidateQ.getCandidateCount,[examId]);
+        console.log(result[0].candidate_count);
+        res.status(200).json(result);
+    }catch(err){
+        res.status(500).json({ "message": "Sorry! Internal Server error" })
     }
 }
 
@@ -85,6 +128,7 @@ const addCandidate = async (req, res) =>{
 
 module.exports = {
     getCandidateList,
+    candidateCount,
     addCandidate,
     // updateCandidate,
     // deleteCandidate

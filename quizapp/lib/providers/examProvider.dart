@@ -19,6 +19,7 @@ class ExamProvider with ChangeNotifier {
   String get message => _message;
 
   Exam? get selectedExam => _selectedExam;
+
   void setSelectedExam(Exam exam){
     _selectedExam = exam;
     notifyListeners();
@@ -85,6 +86,9 @@ class ExamProvider with ChangeNotifier {
       _dataUpdated = false;
       _isLoading = false;
       notifyListeners();
+      if(result){
+        _selectedExam = null;
+      }
       return result;
     } catch (e) {
       _message = 'Failed to add exam: $e';

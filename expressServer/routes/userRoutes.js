@@ -24,6 +24,6 @@ userRouter.post("/register",addUser);
 userRouter.put("/update/name",updateUserName);
 userRouter.put("/update/password",updateUserPassword);
 userRouter.put("/update/role",updateUserRole);
-userRouter.delete("/delete",deleteUser);
+userRouter.delete("/delete/:id",deleteUser);
 
 module.exports = userRouter;

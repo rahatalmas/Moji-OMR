@@ -72,7 +72,7 @@ class Dashboard extends StatelessWidget {
       QuestionScreen(),
       const ScholarScreen(),
       QuestionScreen(),
-      const QuestionCreatePage()
+      //const QuestionCreatePage()
     ];
 
     return ListView(

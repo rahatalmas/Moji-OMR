@@ -87,5 +87,30 @@ class ScholarApi with ChangeNotifier {
     }
   }
 
+  Future<bool> deleteScholar(int id) async {
+    try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await http.delete(
+        Uri.parse('$BASE_URL/api/scholar/delete/$id'),
+        headers: headers,
+      );
+
+      if (response.statusCode == 204) {
+        return true;
+      } else {
+        throw Exception('Error: ${response.statusCode}, ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete Scholar: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
 }
 

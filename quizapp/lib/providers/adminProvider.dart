@@ -50,8 +50,22 @@ class AdminProvider with ChangeNotifier {
       notifyListeners();
       return result;
     } catch (e) {
-      _message = 'Failed to add exam: $e';
+      _message = 'Failed to add admin: $e';
       return false;
     }
   }
+
+  Future<bool> deleteAdmin(int id) async {
+    try {
+      bool result = await AdminApi().deleteAdmin(id);
+      _dataUpdated = false;
+      _isLoading = false;
+      notifyListeners();
+      return result;
+    } catch (e) {
+      _message = 'Failed to delete admin: $e';
+      return false;
+    }
+  }
+
 }

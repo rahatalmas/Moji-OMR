@@ -15,6 +15,13 @@ class ExamScreen extends StatefulWidget {
 class _ExamScreenState extends State<ExamScreen> {
   late ExamProvider _examProvider;
 
+  // @override
+  // void initState(){
+  //   super.initState();
+  //   _examProvider = context.watch<ExamProvider>();
+  //   _examProvider.getAllExams();
+  // }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

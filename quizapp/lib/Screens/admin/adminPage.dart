@@ -299,8 +299,10 @@ class _AdminPageState extends State<AdminPage> {
                               Icon(Icons.edit, color: colorPrimary),
                             ),
                             IconButton(
-                              onPressed: () {
+                              onPressed: ()async {
                                 print('delete button');
+                                bool res = await adminProvider.deleteAdmin(filteredList[index].adminId!);
+                                print(res);
                               },
                               icon:
                                   Icon(Icons.delete, color: Colors.red[900]),

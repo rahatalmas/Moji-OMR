@@ -5,17 +5,21 @@ part 'admin.g.dart';
 @JsonSerializable()
 class Admin {
   @JsonKey(name: 'admin_id')
-  final int adminId;
+  final int? adminId;
 
   @JsonKey(name: 'admin_username')
   final String adminUsername;
+
+  @JsonKey(name:'admin_password')
+  final String? password;
 
   @JsonKey(name: 'admin_role_key')
   final String adminRoleKey;
 
   Admin({
-    required this.adminId,
+    this.adminId,
     required this.adminUsername,
+    this.password,
     required this.adminRoleKey,
   });
 

@@ -34,32 +34,36 @@ const indiVidualUser = async (req,res) =>{
 //user adding : ner user registration
 const addUser = async (req,res) =>{
     try{
-        const {username,password,role} = req.body;
-        if (!username || !password || !role) {
+        const {admin_username,admin_password,admin_role_key} = req.body;
+        if (!admin_username || !admin_password || !admin_role_key) {
             return res.status(400).json({ "message": "Missing required fields" });
         }
-        console.log("add user Post: ",{username,password,role});
-        const [user] = await db.query(adminsQ.getSpecificByName,[username]);
-        if(user.length>0 && user[0].admin_username === username){
+        console.log("add user Post: ",{admin_username,admin_password,admin_role_key});
+        const [user] = await db.query(adminsQ.getSpecificByName,[admin_username]);
+        if(user.length>0 && user[0].admin_username === admin_username){
             res.status(409).json({"message":"User name already exists"});
             return;
         }
         console.log("req user: ",req.user.key)
         console.log(roles[req.user.key])
+
         if(roles[req.user.key] != "admin"){
             res.status(401).json({"message":"Access Denied"});
             return;
         }
-        const hashedPassword = await generateHash(password);
+        const hashedPassword = await generateHash(admin_password);
+        
         let role_key = ""
-        if(role == "admin"){
+        const key = admin_role_key.toLowerCase();
+        console.log("role to lower: ",admin_role_key);
+        if(key == "admin"){
             role_key = "admin_key";
-        }else if(role == "editor"){
+        }else if(key == "editor"){
             role_key = "editor_key"
         }else{
             role_key = "user_key"
         }
-        const result = await db.execute(adminsQ.addAdmin,[username,hashedPassword,role_key]);
+        const result = await db.execute(adminsQ.addAdmin,[admin_username,hashedPassword,role_key]);
         console.log(result);
         res.status(201).json({"message":"New User Added"});
     }catch(err){
@@ -157,11 +161,12 @@ const updateUserRole = async (req,res)=>{
 //delete user
 const deleteUser = async (req,res)=>{
     try{
-        const {id} = req.body;
+        const id = req.params.id;
         console.log(id);
         const result = await db.execute(adminsQ.deleteAdmin,[id]);
         console.log(result);
-        res.status(201).json({"message":"User Deleted"});
+        console.log("user deleted");
+        res.status(204).json({"message":"User Deleted"});
     }catch(err){
         console.log(err.message)
         res.status(500).json({"message":"Internal Server Error"});

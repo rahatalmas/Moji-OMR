@@ -65,6 +65,61 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
       });
     }
   }
+  void addScholar() async {
+    final scholarProvider = Provider.of<ScholarProvider>(context, listen: false);
+
+    // Validate inputs
+    if (_fullNameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please enter a name"), duration: Duration(milliseconds: 500)),
+      );
+      return; // Exit function if validation fails
+    }
+
+    if (_schoolNameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please enter the school name"), duration: Duration(milliseconds: 500)),
+      );
+      return; // Exit function if validation fails
+    }
+
+    if (_classLevelController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please enter the class level"), duration: Duration(milliseconds: 500)),
+      );
+      return; // Exit function if validation fails
+    }
+
+    // Create new Scholar object
+    Scholar newScholar = Scholar.forPost(
+      scholarName: _fullNameController.text,
+      scholarSchool: _schoolNameController.text,
+      classLevel: _classLevelController.text,
+    );
+
+    // Add scholar and handle the result
+    bool res = await scholarProvider.addScholar(newScholar);
+    if (res) {
+      await scholarProvider.getAllScholars();
+
+      // Clear the fields
+      _fullNameController.clear();
+      _schoolNameController.clear();
+      _classLevelController.clear();
+
+      // Show success Snackbar with a short duration
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("New scholar added"), duration: Duration(milliseconds: 500)),
+      );
+      print("New scholar added from screen add scholar");
+    } else {
+      // Show error Snackbar with a short duration
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Something went wrong, try again."), duration: Duration(milliseconds: 500)),
+      );
+      print("Something went wrong");
+    }
+  }
 
   @override
   void dispose() {
@@ -76,7 +131,6 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final scholarProvider = Provider.of<ScholarProvider>(context,listen: false);
     final bool isKeyboardVisible =
     KeyboardVisibilityProvider.isKeyboardVisible(context);
     return Scaffold(
@@ -165,20 +219,7 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: InkWell(
-                onTap: () async {
-                  Scholar newScholar = Scholar.forPost(
-                      scholarName: _fullNameController.text,
-                      scholarSchool: _schoolNameController.text,
-                      classLevel: _classLevelController.text
-                  );
-                  bool res = await scholarProvider.addScholar(newScholar);
-                  if(res){
-                    await scholarProvider.getAllScholars();
-                    print("new scholar added from screen add scholar ");
-                  }else{
-                    print("something went wrong");
-                  }
-                },
+                onTap: addScholar,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(10),

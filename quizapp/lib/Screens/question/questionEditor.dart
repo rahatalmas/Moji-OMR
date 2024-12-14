@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/Widgets/answerCircle.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/providers/examProvider.dart';
 
 import '../../database/models/exammodel.dart';
 import '../../database/models/question.dart';
@@ -32,7 +34,6 @@ class _QuestionEditor extends State<QuestionEditor> {
   int totalQuestions = 10; // Default total questions
   int optionsPerQuestion = 4; // Default options per question
   int currentQuestionIndex = 1; // To track the current question number
-  Exam? _selectedExam; // Store the selected exam
 
   final InputDecoration _textFieldDecoration = InputDecoration(
     labelText: "Type here...",
@@ -75,13 +76,7 @@ class _QuestionEditor extends State<QuestionEditor> {
     _optionControllers =
         List.generate(optionsPerQuestion, (_) => TextEditingController());
   }
-  // for exam selection
-  void _onExamSelected(Exam exam) {
-    setState(() {
-      _selectedExam = exam;
-      totalQuestions = exam.totalQuestions;
-    });
-  }
+
   void _showModeSelectionModal() {
     showModalBottomSheet(
       context: context,
@@ -201,6 +196,7 @@ class _QuestionEditor extends State<QuestionEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final examProvider = Provider.of<ExamProvider>(context,listen:true);
     return ListView(
       children: [
         Column(
@@ -211,7 +207,7 @@ class _QuestionEditor extends State<QuestionEditor> {
             ),
 
             const SizedBox(height: 10),
-            _selectedExam == null
+            examProvider.selectedExam == null
                 ? Center(
               child: Column(
                 children: [

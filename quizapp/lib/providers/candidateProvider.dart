@@ -38,6 +38,7 @@ class CandidateProvider with ChangeNotifier {
     }
   }
 
+
   Future<bool> addCandidate(Candidate newCandidate) async {
     _isLoading = true;
     _message = '';
@@ -54,4 +55,37 @@ class CandidateProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<int> addMultipleCandidate(List<Candidate> newCandidates,int examId) async {
+    int count = 0;
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    try {
+      print("length from add mul "+newCandidates.length.toString());
+      for (int i=0;i<newCandidates.length;i++) {
+        bool result = await CandidateApi().addCandidate(newCandidates[i]);
+        if (result) {
+          count++;
+          print("print: " + count.toString());
+        }
+      }
+
+      if (count > 0) {
+        print("print from if block: " + count.toString());
+        await getAllCandidates(examId);
+        _dataUpdated = false;
+        _isLoading = false;
+        notifyListeners();
+      }
+      return count;
+    } catch (err) {
+      _message = 'Failed to add exam: $err';
+      _isLoading = false;
+      notifyListeners();
+      return 0;
+    }
+  }
 }
+
