@@ -7,8 +7,8 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:quizapp/pdf/widgets/omr_options.dart';
 
 Future<Uint8List> getDocumentBytes(
-    pw.Document document,
-    ) async {
+  pw.Document document,
+) async {
   document.addPage(
     pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
@@ -17,8 +17,15 @@ Future<Uint8List> getDocumentBytes(
           pw.Row(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Padding(
-                padding: const pw.EdgeInsets.symmetric(vertical: 16),
+              pw.Container(
+                padding:
+                    const pw.EdgeInsets.symmetric(vertical: 16, horizontal: 5),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(
+                    color: PdfColor.fromHex('#000000'),
+                    width: 2,
+                  ),
+                ),
                 child: pw.Column(
                     mainAxisAlignment: pw.MainAxisAlignment.start,
                     children: [
@@ -32,16 +39,16 @@ Future<Uint8List> getDocumentBytes(
                                 style: const pw.TextStyle(fontSize: 22),
                               ),
                             ),
-                            pw.SizedBox(height: 10),
+                            if (index < 14) pw.SizedBox(height: 10),
                           ],
                         );
                       }),
                     ]),
               ),
-              pw.SizedBox(width: 10),
+              pw.SizedBox(width: 12),
               pw.Container(
                 padding:
-                const pw.EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    const pw.EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                 decoration: pw.BoxDecoration(
                   border: pw.Border.all(
                     color: PdfColor.fromHex('#000000'),

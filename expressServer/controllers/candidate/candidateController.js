@@ -3,8 +3,9 @@
 // delete candidate
 // update candidate data
 const db = require("../../config/db");
-const { candidateQ, examsQ } = require("../../queries/queries");
+const { candidateQ, examsQ, scholarQ } = require("../../queries/queries");
 const { roles } = require("../utility/keys");
+
 
 const getCandidateList = async (req, res) => {
     const examId = req.params.examId;
@@ -27,17 +28,20 @@ const getCandidateList = async (req, res) => {
     }
 }
 
+
 const addCandidate = async (req, res) =>{
+    let lastInsertedScholoarId = null; 
     try{
         const{
                serial_number,
                candidate_name,
                school_name,
                class_level,
+               scholar_id,
                exam_id   
              } = req.body;
         //validating request data
-        if(!serial_number || !candidate_name || !school_name || !class_level || !exam_id){
+        if(!serial_number || !candidate_name || !school_name || !class_level || !exam_id ){
             console.log("Invalid request");
             res.status(306).json({"message":"Invalid Request"});
             return;
@@ -46,14 +50,21 @@ const addCandidate = async (req, res) =>{
 
         //getting exam
         const [exam] = await db.query(examsQ.getSpecificById,exam_id);
-        console.log(exam[0]);
+        console.log("exam for candidate registration request: ", exam);
+        if(exam.length == 0){
+            console.log("No Exam found with this ID: "+exam_id);
+            res.status(404).json({"message":"No Exam Found"});
+            return;
+        }
+
+        //getting sits count
         const totalSits = exam[0].candidate_count;
         console.log("Total Sits: ",totalSits);
 
         //getting candidate counts 
         const [count] = await db.query(candidateQ.getCandidateCount,exam_id);
         const candidateCount = count[0].candidate_count
-        console.log(candidateCount);
+        console.log("candidate count :",candidateCount);
 
         //validation for sits available or not
         if(candidateCount == totalSits){
@@ -61,11 +72,53 @@ const addCandidate = async (req, res) =>{
             return;
         }
         
+        //checking serial number exist or not 
+        const [candiate] = await db.query(candidateQ.getCandidateBySerialNumber,[serial_number,exam_id]);
+        if(candiate.length != 0 ){
+            console.log("dublicate serial number entry");
+            console.log(candiate);
+            res.status(406).json({"message":"Serial number already exist"});
+            return;
+        }
+        
+        //checking scholar from scholars if scholar id passed (from data base selection)
+        if(scholar_id != null){
+            console.log("scholar id",scholar_id);
+            [existScholar] = await db.query(scholarQ.getSpecificById,[scholar_id]);
+            console.log((existScholar));
+            if(existScholar.length == 0 ){
+                const [scholar] = await db.execute(
+                    scholarQ.addScholar,
+                    [candidate_name,school_name,class_level]
+                )
+                if(scholar.affectedRows != 1 || scholar.insertId == null){
+                    res.status(406).json({"message":"Scholar adding failed"});
+                    return;
+                }
+                lastInsertedScholoarId = scholar.insertId;
+                console.log("Scholar form Candidate Request: ",scholar.affectedRows," ",lastInsertedScholoarId);        
+            }else{
+                lastInsertedScholoarId = scholar_id;
+            }
+        }else{
+            const [scholar] = await db.execute(
+                scholarQ.addScholar,
+                [candidate_name,school_name,class_level]
+            )
+            if(scholar.affectedRows != 1 || scholar.insertId == null){
+                res.status(406).json({"message":"Scholar adding failed"});
+                return;
+            }
+            lastInsertedScholoarId = scholar.insertId;
+            console.log("Scholar form Candidate Request: ",scholar.affectedRows," ",lastInsertedScholoarId);    
+        }
+        
         //adding candidate
         const [result] = await db.execute(
              candidateQ.addCandidate,
-            [serial_number,candidate_name,school_name,class_level, exam_id ]
+            [serial_number,candidate_name,school_name,class_level,lastInsertedScholoarId, exam_id ]
         );
+
         console.log("Query result ",result);
         res.status(201).json({"message":"New Candidate Added"});
     }catch(err){
@@ -79,6 +132,7 @@ const addCandidate = async (req, res) =>{
         return;
     }
 }
+
 
 const candidateCount = async (req,res) => {
     try{

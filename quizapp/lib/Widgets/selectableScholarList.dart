@@ -10,7 +10,8 @@ import 'package:quizapp/providers/scholarProvider.dart';
 import '../providers/candidateProvider.dart';
 
 class ScholarList2 extends StatefulWidget {
-  const ScholarList2({Key? key}) : super(key: key);
+  final int examId;
+  const ScholarList2({Key? key,required this.examId}) : super(key: key);
 
   @override
   _ScholarList2State createState() => _ScholarList2State();
@@ -24,7 +25,7 @@ class _ScholarList2State extends State<ScholarList2> {
     _scholarProvider = context.watch<ScholarProvider>();
     if (!_scholarProvider.dataUpdated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scholarProvider.getAllScholars();
+        _scholarProvider.getFilteredScholars(widget.examId);
       });
     }
   }
@@ -128,9 +129,9 @@ class _ScholarList2State extends State<ScholarList2> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: _scholarProvider.scholars.length,
+          itemCount: _scholarProvider.filteredScholars.length,
           itemBuilder: (context, index) {
-            final scholar = _scholarProvider.scholars[index];
+            final scholar = _scholarProvider.filteredScholars[index];
             final isMarked = _markedScholars.contains(scholar.scholarId);
 
             return GestureDetector(
@@ -146,6 +147,7 @@ class _ScholarList2State extends State<ScholarList2> {
                         name: scholar.scholarName,
                         schoolName: scholar.scholarName,
                         classLevel: scholar.classLevel,
+                        scholarId: scholar.scholarId,
                         examId: examProvider.selectedExam!.id
                     );
                     _selectedCandidates.add(candidate);

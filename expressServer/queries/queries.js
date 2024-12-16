@@ -13,6 +13,7 @@ const adminsQ = {
     deleteAdmin: `DELETE FROM admins WHERE admin_id=?`
 }
 
+
 const examsQ = {
     getList: "SELECT * FROM exams",
     getSpecificById:"SELECT * FROM exams WHERE exam_id=?",
@@ -24,11 +25,20 @@ const examsQ = {
               exam_name=?, exam_date=?, exam_location=?, exam_duration=?, question_count=?, candidate_count=?
               WHERE exam_id=?`,
     deleteExam: `DELETE FROM exams WHERE exam_id=?`
-
 }
+
 
 const scholarQ = {
     getList: "SELECT * FROM scholars",
+    getFilteredList:`
+    SELECT * 
+    FROM scholars 
+    WHERE scholar_id NOT IN (
+        SELECT c.scholar_id 
+        FROM candidates c
+        JOIN exams e ON c.exam_id = e.exam_id
+        WHERE e.exam_id = ?
+    )`,
     getSpecificById:"SELECT * FROM scholars WHERE scholar_id=?",
     addScholar: `INSERT INTO scholars
                   (scholar_name, scholar_school, class_level)
@@ -38,20 +48,22 @@ const scholarQ = {
               scholar_name=?, scholar_school=?, class_level=?
               WHERE scholar_id=?`,
     deleteScholar: `DELETE FROM scholars WHERE scholar_id=?`
-
 }
 
+//modifying
 const candidateQ = {
     getList: "SELECT * FROM candidates WHERE exam_id=?",
     getCandidateCount: "SELECT COUNT(*) AS candidate_count FROM candidates WHERE exam_id=?",
+    getCandidateBySerialNumber:"SELECT * FROM candidates WHERE serial_number=? AND exam_id=?",
     addCandidate: `INSERT INTO candidates
-                  (serial_number, candidate_name, school_name, class_level, exam_id)
+                  (serial_number, candidate_name, school_name, class_level, scholar_id, exam_id)
               VALUES 
-                  (?, ?, ?, ?, ?);`,
+                  (?, ?, ?, ?, ?, ?);`,
     deleteCandidate: "DELETE FROM candidates WHERE serial_number=?",
     deleteAllCandidateForExam: "DELETE FROM candidates WHERE exam_id=?"
 }
 
+//incomplete
 const questionQ = {
     getList:"",
     getQuestionCount:"",

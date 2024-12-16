@@ -42,11 +42,11 @@ class Dashboard extends StatelessWidget {
       },
 
       {
-        "title": "Questions",
+        "title": "Scholars",
         "image": "assets/images/nine.svg",
       },
       {
-        "title": "Scholars",
+        "title": "Question",
         "image": "assets/images/two.svg",
       },
       {
@@ -69,9 +69,10 @@ class Dashboard extends StatelessWidget {
 
     final List<Widget> _shortcutOptions = [
       ExamScreen(),
-      QuestionScreen(),
       const ScholarScreen(),
-      QuestionScreen(),
+      //QuestionScreen(),
+
+      //QuestionScreen(),
       //const QuestionCreatePage()
     ];
 

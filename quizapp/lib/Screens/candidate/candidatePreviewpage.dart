@@ -156,6 +156,10 @@ class CandidatePreviewScreen extends StatelessWidget {
                                     style: TextStyle(color: Colors.black, fontSize: 16),
                                   ),
                                   Text(
+                                    'Scholar Id: ${candidateProvider.candidates[index].scholarId}',
+                                    style: TextStyle(color: Colors.black, fontSize: 16),
+                                  ),
+                                  Text(
                                     'Level: ${candidateProvider.candidates[index].classLevel}',
                                     style: TextStyle(color: Colors.black, fontSize: 16),
                                   ),

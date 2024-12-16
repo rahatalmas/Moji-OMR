@@ -421,7 +421,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                         ),
                       ],
                     )
-                      : ScholarList2(),
+                      : ScholarList2(examId:examProvider.selectedExam!.id),
                 ],
               ),
             ),

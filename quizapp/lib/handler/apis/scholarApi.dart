@@ -52,6 +52,37 @@ class ScholarApi with ChangeNotifier {
     return scholars;
   }
 
+  Future<List<Scholar>> fetchFilteredScholars(int examId) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+    List<Scholar> scholars = [];
+
+    try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+      print("filtered scholar list called");
+      final response = await http.get(
+          Uri.parse('$BASE_URL/api/scholar/filteredlist/$examId'), headers: headers);
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = json.decode(response.body);
+        scholars = jsonData.map((data) => Scholar.fromJson(data)).toList();
+        print(scholars.length);
+      } else {
+        _message = 'Error ${response.statusCode}';
+      }
+    } catch (err) {
+      print('Failed to fetch scholars: $err');
+      _message = 'Failed to fetch exams: $err';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+    return scholars;
+  }
+
   Future<bool> addScholar(Scholar newScholar) async {
     _isLoading = true;
     _message = '';

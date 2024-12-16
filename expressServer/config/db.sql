@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS candidates (
     school_name VARCHAR(255) NOT NULL,
     class_level VARCHAR(25) NOT NULL,
     candidate_picture VARCHAR(255),
+    scholar_id INT NOT NULL,
     exam_id INT NOT NULL,
     PRIMARY KEY(serial_number,exam_id),
     CONSTRAINT fk_exam_candidates FOREIGN KEY (exam_id) REFERENCES exams(exam_id)

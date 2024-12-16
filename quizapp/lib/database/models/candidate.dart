@@ -19,6 +19,9 @@ class Candidate {
   @JsonKey(name: 'candidate_picture')
   final String? picture;
 
+  @JsonKey(name:'scholar_id')
+  final int? scholarId;
+
   @JsonKey(name: 'exam_id')
   final int examId;
 
@@ -28,6 +31,7 @@ class Candidate {
     required this.schoolName,
     required this.classLevel,
     this.picture,
+    this.scholarId,
     required this.examId
   });
 

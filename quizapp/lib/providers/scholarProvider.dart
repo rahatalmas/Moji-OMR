@@ -4,12 +4,14 @@ import '../handler/apis/scholarApi.dart';
 
 class ScholarProvider with ChangeNotifier {
   List<Scholar> _scholars = [];
+  List<Scholar> _fiteredList = [];
   bool _isLoading = false;
   bool _dataUpdated = false;
   String _message = '';
 
   // Getters
   List<Scholar> get scholars => _scholars;
+  List<Scholar> get filteredScholars => _fiteredList;
 
   bool get isLoading => _isLoading;
 
@@ -29,6 +31,7 @@ class ScholarProvider with ChangeNotifier {
 
     try {
       _scholars = await ScholarApi().fetchScholars();
+      print(_scholars.length);
       _isLoading = false;
       _dataUpdated = true;
       notifyListeners();
@@ -36,6 +39,23 @@ class ScholarProvider with ChangeNotifier {
       debugPrint(e.toString());
     }
   }
+
+  Future<void> getFilteredScholars(int examId) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    try {
+      _fiteredList = await ScholarApi().fetchFilteredScholars(examId);
+      print(_fiteredList);
+      _isLoading = false;
+      _dataUpdated = true;
+      notifyListeners();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
 
   Future<bool> addScholar(Scholar newScholar) async {
     _isLoading = true;

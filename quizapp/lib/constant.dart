@@ -9,7 +9,6 @@ const kColorButton = Color(0xFF222831);
 const kColorSecondary2 = Color(0xFFF3EEEA);
 const kColorSecondary = Color(0xFFEBE3D5);
 
-//
 
 const neutralWhite = Color(0xFFFFFFFF);
 const neutralBG = Color(0xFFF6F6F9);
