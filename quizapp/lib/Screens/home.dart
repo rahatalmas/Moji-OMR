@@ -4,7 +4,10 @@ import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/omr/omrCreatePage.dart';
 import 'package:quizapp/Screens/question/questionScreen.dart';
+import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/Screens/scholar/scholarScreen.dart';
+
+
 import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/Widgets/menuButton.dart';
 import 'package:quizapp/Screens/question/questionCreatePage.dart';
@@ -37,27 +40,21 @@ class Dashboard extends StatelessWidget {
     ];
     List _shortcutMenu = [
       {
+        "title": "Scholars",
+        "image": "assets/images/two.svg",
+      },
+      {
         "title": "Exams",
         "image": "assets/images/one.svg",
-      },
-
-      {
-        "title": "Scholars",
-        "image": "assets/images/nine.svg",
-      },
-      {
-        "title": "Question",
-        "image": "assets/images/two.svg",
       },
       {
         "title": "Results",
         "image": "assets/images/eleven.svg",
       },
       {
-        "title": "Schools",
-        "image": "assets/images/four.svg",
+        "title": "Question",
+        "image": "assets/images/two.svg",
       },
-
 
     ];
     final List<Widget> _menuoptions = [
@@ -68,12 +65,10 @@ class Dashboard extends StatelessWidget {
     ];
 
     final List<Widget> _shortcutOptions = [
-      ExamScreen(),
       const ScholarScreen(),
-      //QuestionScreen(),
-
-      //QuestionScreen(),
-      //const QuestionCreatePage()
+      ExamScreen(),
+      ResultScreen(),
+      QuestionScreen(),
     ];
 
     return ListView(

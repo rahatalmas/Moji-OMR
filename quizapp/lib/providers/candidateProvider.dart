@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/handler/apis/candidateApi.dart';
+import 'package:quizapp/providers/scholarProvider.dart';
 import '../database/models/candidate.dart';
 import '../handler/apis/login.dart';
 
@@ -72,13 +74,13 @@ class CandidateProvider with ChangeNotifier {
         }
       }
 
-      if (count > 0) {
-        print("print from if block: " + count.toString());
+      //if (count > 0) {
+        print("print count: " + count.toString());
         await getAllCandidates(examId);
         _dataUpdated = false;
         _isLoading = false;
         notifyListeners();
-      }
+      //}
       return count;
     } catch (err) {
       _message = 'Failed to add exam: $err';
@@ -87,5 +89,19 @@ class CandidateProvider with ChangeNotifier {
       return 0;
     }
   }
+
+  Future<bool> deleteCandidate(int id,int examId) async {
+    try {
+      bool result = await CandidateApi().deleteCandidate(id, examId);
+      _dataUpdated = false;
+      _isLoading = false;
+      notifyListeners();
+      return result;
+    } catch (e) {
+      _message = 'Failed to delete Candidate: $e';
+      return false;
+    }
+  }
+
 }
 

@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/Screens/candidate/ItemWrapper.dart';
 import 'package:quizapp/Screens/exam/dummyExamList.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/Widgets/selectableScholarList.dart';
@@ -129,7 +130,6 @@ class _CandidateEditor extends State<CandidateEditor> {
     bool res = await candidateProvider.addCandidate(newCandidate);
     if(res){
       await candidateProvider.getAllCandidates(examProvider.selectedExam!.id);
-
     }else{
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('failed to add candidate')),
@@ -202,7 +202,8 @@ class _CandidateEditor extends State<CandidateEditor> {
             ),
             const SizedBox(height: 10),
             examProvider.selectedExam == null
-                ? Center(
+                ?
+            Center(
               child: Column(
                 children: [
                   SizedBox(height: 100),
@@ -219,9 +220,14 @@ class _CandidateEditor extends State<CandidateEditor> {
                 ],
               ),
             )
-                : Container(
+                :
+            examProvider.selectedExam!.numberOfCandidates == candidateProvider.candidates.length
+                ?
+            ItemWrapper()
+                :
+            Container(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              decoration: BoxDecoration(
+              decoration:const BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   color: neutralBG),
               child: Column(
@@ -311,7 +317,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                           Lottie.asset("assets/images/fileAdding.json", height: 110),
                         ],
                       ):
-                      candidateProvider.candidates.length > 1 ?
+                      candidateProvider.candidates.length > 0 ?
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -326,10 +332,10 @@ class _CandidateEditor extends State<CandidateEditor> {
                     ),
                   ),
                   const SizedBox(height: 16),
-
                   // Mode selection
                   _selectedMode == 0
-                      ? Column(
+                      ?
+                  Column(
                     children: [
                       _buildTextField("Serial Number", _serialNumberController, Icons.confirmation_number),
                       const SizedBox(height: 10),
@@ -365,8 +371,10 @@ class _CandidateEditor extends State<CandidateEditor> {
                       ),
                     ],
                   )
-                      : _selectedMode == 2
-                      ?Column(
+                      :
+                  _selectedMode == 2
+                      ?
+                  Column(
                       children: [
                         InkWell(
                           onTap: _pickFile,
@@ -421,7 +429,8 @@ class _CandidateEditor extends State<CandidateEditor> {
                         ),
                       ],
                     )
-                      : ScholarList2(examId:examProvider.selectedExam!.id),
+                      :
+                  ScholarList2(examId:examProvider.selectedExam!.id),
                 ],
               ),
             ),

@@ -17,6 +17,10 @@ class ScholarProvider with ChangeNotifier {
 
   bool get dataUpdated => _dataUpdated;
 
+  void updateData(){
+    _dataUpdated = false;
+  }
+
   String get message => _message;
 
   void reset() {

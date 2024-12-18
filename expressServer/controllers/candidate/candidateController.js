@@ -146,6 +146,7 @@ const candidateCount = async (req,res) => {
     }
 }
 
+
 // const updateCandidate = async (req, res) => {
 //     try {
 //         try {
@@ -165,25 +166,29 @@ const candidateCount = async (req,res) => {
 //     }
 // }
 
-// const deleteCandidate = async (req, res) => {
-//     try {
-//         try {
-//             const id = req.params.id;
-//             const result = await db.execute(, [id]);
-//             res.status(204).json({ "message": "Candidate Deleted" });
-//         } catch (err) {
-//             console.log(err.message)
-//             res.status(500).json({ "message": "Internal Server Error" });
-//         }
-//     } catch (err) {
-//         res.status(500).json({ "message": "Sorry! Internal Server error" });
-//     }
-// }
+const deleteCandidate = async (req, res) => {
+    try {
+        try {
+            const id = req.params.serialNumber;
+            const examId = req.params.examId;
+            console.log(id,examId);
+            const [result] = await db.execute(candidateQ.deleteCandidate, [id,examId]);
+            console.log("Candidate Delete Request: ");
+            console.log(result);
+            res.status(204).json({"message": "Candidate Deleted"});
+        } catch (err) {
+            console.log(err.message)
+            res.status(500).json({ "message": "Internal Server Error" });
+        }
+    } catch (err) {
+        res.status(500).json({ "message": "Sorry! Internal Server error" });
+    }
+}
 
 module.exports = {
     getCandidateList,
     candidateCount,
     addCandidate,
     // updateCandidate,
-    // deleteCandidate
+    deleteCandidate
 }

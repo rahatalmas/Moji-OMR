@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/candidateProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
+import 'package:quizapp/providers/scholarProvider.dart';
 
 import '../database/models/exammodel.dart';
 
@@ -19,15 +20,31 @@ class ExamFilterWidget extends StatefulWidget {
 }
 
 class _ExamFilterWidgetState extends State<ExamFilterWidget> {
+  late ExamProvider _examProvider;
+
+  // @override
+  // void initState(){
+  //   super.initState();
+  //   _examProvider = context.watch<ExamProvider>();
+  //   _examProvider.getAllExams();
+  // }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _examProvider = context.watch<ExamProvider>();
+    if (!_examProvider.dataUpdated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _examProvider.getAllExams();
+      });
+    }
+  }
 
   void _showExamFilterModal(BuildContext context) async {
-    final examProvider = Provider.of<ExamProvider>(context, listen: false);
     final candidateProvider = Provider.of<CandidateProvider>(context,listen: false);
-    if(examProvider.exams.isEmpty){
-      await examProvider.getAllExams();
-    }
+    final scholarProvider = Provider.of<ScholarProvider>(context,listen: false);
 
-    List<Exam> examList = examProvider.exams;
+    List<Exam> examList = _examProvider.exams;
 
     //the bottom sheet modal
     showModalBottomSheet(
@@ -64,8 +81,9 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
                             "Date: ${exam.dateTime}, Location: ${exam.location}"),
                         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                         onTap: () {
-                          examProvider.setSelectedExam(exam);
+                          _examProvider.setSelectedExam(exam);
                           candidateProvider.getAllCandidates(exam.id);
+                          scholarProvider.getFilteredScholars(exam.id);
                           Navigator.pop(context); // Close the modal
                         },
                       );

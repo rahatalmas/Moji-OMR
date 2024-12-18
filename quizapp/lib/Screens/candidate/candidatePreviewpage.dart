@@ -7,7 +7,8 @@ class CandidatePreviewScreen extends StatelessWidget {
   const CandidatePreviewScreen({super.key});
 
   // Function to show the modal with options
-  void _showOptionsModal(BuildContext context, int index) {
+  void _showOptionsModal(BuildContext context, int index){
+    final candidateProvider = Provider.of<CandidateProvider>(context,listen:false);
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -28,7 +29,15 @@ class CandidatePreviewScreen extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.delete),
                 title: Text('Remove'),
-                onTap: () {
+                onTap: () async  {
+                  int examId = candidateProvider.candidates[index].examId;
+                  bool res = await candidateProvider.deleteCandidate(
+                      candidateProvider.candidates[index].serialNumber,
+                      examId
+                  );
+                  if(res){
+                    await candidateProvider.getAllCandidates(examId);
+                  }
                   Navigator.pop(context);
                   // Add your remove functionality here
                   print('Remove candidate: ${index}');
@@ -50,7 +59,7 @@ class CandidatePreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final candidateProvider = Provider.of<CandidateProvider>(context,listen: false);
+    final candidateProvider = Provider.of<CandidateProvider>(context,listen: true);
     return  ListView(
       children: [
         candidateProvider.candidates.isEmpty
@@ -72,7 +81,7 @@ class CandidatePreviewScreen extends StatelessWidget {
             itemCount: candidateProvider.candidates.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
+                padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 2),
                 child: Container(
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -91,8 +100,8 @@ class CandidatePreviewScreen extends StatelessWidget {
                             ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image.asset("assets/images/man.png",
-                                  width: 115,
-                                  height: 115,
+                                  width: 116,
+                                  height: 116,
                                   fit: BoxFit.cover,
                                 )
                             ),

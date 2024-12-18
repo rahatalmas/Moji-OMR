@@ -91,7 +91,7 @@ class ExamProvider with ChangeNotifier {
       }
       return result;
     } catch (e) {
-      _message = 'Failed to add exam: $e';
+      _message = 'Failed to delete exam: $e';
       return false;
     }
   }

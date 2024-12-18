@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS admins (
     PRIMARY KEY (admin_id)
 );
 
-
 CREATE TABLE IF NOT EXISTS exams (
     exam_id INT NOT NULL AUTO_INCREMENT,
     exam_name VARCHAR(255) NOT NULL,
@@ -40,6 +39,38 @@ CREATE TABLE IF NOT EXISTS scholars(
     PRIMARY KEY(scholar_id)
 );
 
+CREATE TABLE IF NOT EXISTS question_answers (
+    exam_id INT NOT NULL,
+    question_set_id INT NOT NULL,
+    question_number INT NOT NULL,
+    correct_answer INT NOT NULL,
+    PRIMARY KEY (exam_id, question_set_id,question_number),
+    CONSTRAINT fk_exam_answer_set FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
+);
+
+CREATE TABLE IF NOT EXISTS candidate_answers (
+    exam_id INT NOT NULL,
+    serial_number INT NOT NULL,
+    question_set_id INT NOT NULL,
+    question_number INT NOT NULL,
+    selected_answer INT NOT NULL,
+    PRIMARY KEY (exam_id, serial_number, question_set_id,question_number),
+    CONSTRAINT fk_candidate_exam FOREIGN KEY (exam_id) REFERENCES exams(exam_id),
+    CONSTRAINT fk_candidate_serial FOREIGN KEY (serial_number) REFERENCES candidates(serial_number)
+);
+
+CREATE TABLE IF NOT EXISTS results (
+    exam_id INT NOT NULL,
+    serial_number INT NOT NULL,
+    correct_answers INT NOT NULL CHECK (correct_answers >= 0),
+    incorrect_answers INT NOT NULL CHECK (incorrect_answers >= 0),
+    grade VARCHAR(20) NOT NULL,
+    PRIMARY KEY (exam_id, serial_number),
+    CONSTRAINT fk_candidate FOREIGN KEY (serial_number) REFERENCES candidates(serial_number),
+    CONSTRAINT fk_exam_result FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
+);
+
+
 CREATE TABLE IF NOT EXISTS questions (
     question_id INT NOT NULL AUTO_INCREMENT,
     question_text VARCHAR(255) NOT NULL,
@@ -49,22 +80,10 @@ CREATE TABLE IF NOT EXISTS questions (
     CONSTRAINT fk_exam_questions FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
 );
 
-
 CREATE TABLE IF NOT EXISTS options (
     option_id INT NOT NULL AUTO_INCREMENT,
     option_text VARCHAR(255) NOT NULL,
     question_id INT NOT NULL,
     PRIMARY KEY(option_id),
     CONSTRAINT fk_question FOREIGN KEY (question_id) REFERENCES questions(question_id)
-);
-
-CREATE TABLE IF NOT EXISTS results (
-    result_id INT NOT NULL AUTO_INCREMENT,
-    total_mark INT NOT NULL,
-    grade VARCHAR(20) NOT NULL,
-    serial_number INT NOT NULL,
-    exam_id INT NOT NULL,
-    PRIMARY KEY(result_id),
-    CONSTRAINT fk_candidate FOREIGN KEY (serial_number) REFERENCES candidates(serial_number),
-    CONSTRAINT fk_exam_result FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
 );

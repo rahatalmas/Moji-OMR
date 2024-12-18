@@ -50,7 +50,7 @@ const scholarQ = {
     deleteScholar: `DELETE FROM scholars WHERE scholar_id=?`
 }
 
-//modifying
+//modifying (for adding candidate i need to check the candidate id and serial nubmer composite key dattebayo)
 const candidateQ = {
     getList: "SELECT * FROM candidates WHERE exam_id=?",
     getCandidateCount: "SELECT COUNT(*) AS candidate_count FROM candidates WHERE exam_id=?",
@@ -59,7 +59,7 @@ const candidateQ = {
                   (serial_number, candidate_name, school_name, class_level, scholar_id, exam_id)
               VALUES 
                   (?, ?, ?, ?, ?, ?);`,
-    deleteCandidate: "DELETE FROM candidates WHERE serial_number=?",
+    deleteCandidate: "DELETE FROM candidates WHERE serial_number=? AND exam_id=?",
     deleteAllCandidateForExam: "DELETE FROM candidates WHERE exam_id=?"
 }
 
@@ -72,10 +72,17 @@ const questionQ = {
     deleteAllQuestionForExam:"DELETE FROM questions WHERE exam_id=?",
 }
 
+//result queries
+const resultQ = {
+    getAllResult: "SELECT * FROM results WHERE exam_id=?",
+    getMyResult: "SELECT * FROM results WHERE exam_id=? AND serial_number=?",
+}
+
 module.exports = {
     adminsQ,
     examsQ,
     scholarQ,
     candidateQ,
+    resultQ,
     questionQ
 }

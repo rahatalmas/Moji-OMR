@@ -18,12 +18,14 @@ const login = async (req,res)=>{
             res.status(404).json({"message":"No User Found"});
             return;
         }
+
         const result = await hashCompare(password,user[0].admin_password);
         console.log("pass: ",result);
         if(!result){
             res.status(401).json({"message":"Incorrect Password"})
             return;
         }
+
         const accesstoken = generateAccessToken({ username: username, key: user[0].admin_role_key });
         const refreshtoken = generateRefreshToken({ username: username, key: user[0].admin_role_key });
         //console.log("Access Token: ",accesstoken);
@@ -35,6 +37,7 @@ const login = async (req,res)=>{
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
             sameSite: 'Strict'
         });
+        
         const role = roles[user[0].admin_role_key];
         console.log("role: ",role);
         let permissions;

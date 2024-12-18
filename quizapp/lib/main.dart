@@ -3,7 +3,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/admin/adminPage.dart';
 import 'package:quizapp/Screens/home.dart';
-import 'package:quizapp/Screens/result/resultScreen.dart';
+import 'package:quizapp/Screens/result/resultChecking.dart';
 import 'package:quizapp/handler/apis/login.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/adminProvider.dart';
@@ -67,7 +67,7 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
 
   final List<Widget> _children = [
     const Dashboard(),
-    const ResultScreen(),
+    const ResultCheckScreen(),
   ];
 
   // Global key to access the scaffold state

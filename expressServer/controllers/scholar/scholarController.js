@@ -3,21 +3,44 @@ const { scholarQ } = require("../../queries/queries");
 const { roles } = require("../utility/keys");
 
 const getScholarList = async (req, res) => {
+
     try {
-        // const rolekey = req.user.key;
-        // const role = roles[rolekey];
-        // console.log(role);
-        // if(role != "admin" && role != "editor"){
-        //     res.status(401).json({"message":"Access Denied"});
-        //     return;
-        // }
+        const rolekey = req.user.key;
+        const role = roles[rolekey];
+        console.log(role);
+        if(role != "admin" && role != "editor"){
+            res.status(401).json({"message":"Access Denied"});
+            return;
+        }
         const [scholars] = await db.query(scholarQ.getList);
         //scholars.reverse();
         res.status(200).json(scholars);
     } catch (err) {
+        console.log(err);
         res.status(500).json({ "message": "Sorry! Internal Server error" });
     }
 }
+
+const getFilteredScholarList = async (req, res) => {
+    console.log("filtered list called");
+    try {
+        const examId = req.params.examId;
+        const rolekey = req.user.key;
+        const role = roles[rolekey];
+        console.log(role);
+        if(role != "admin" && role != "editor"){
+            res.status(401).json({"message":"Access Denied"});
+            return;
+        }
+        const [filteredScholars] = await db.query(scholarQ.getFilteredList,[examId]);
+        //scholars.reverse();
+        res.status(200).json(filteredScholars);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ "message": "Sorry! Internal Server error" });
+    }
+}
+
 
 const AddScholar = async (req, res) => {
     try{
@@ -84,6 +107,7 @@ const DeleteScholar = async (req, res) => {
 
 module.exports = {
     getScholarList,
+    getFilteredScholarList,
     AddScholar,
     UpdateScholar,
     DeleteScholar

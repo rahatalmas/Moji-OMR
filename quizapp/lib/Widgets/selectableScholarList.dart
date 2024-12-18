@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/Screens/candidate/CandidateListAddResult.dart';
 import 'package:quizapp/Screens/scholar/selectableScholarCard.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/database/models/candidate.dart';
@@ -19,13 +20,15 @@ class ScholarList2 extends StatefulWidget {
 
 class _ScholarList2State extends State<ScholarList2> {
   late ScholarProvider _scholarProvider;
+  late ExamProvider _examProvider;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _scholarProvider = context.watch<ScholarProvider>();
+    _examProvider = context.watch<ExamProvider>();
     if (!_scholarProvider.dataUpdated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scholarProvider.getFilteredScholars(widget.examId);
+        _scholarProvider.getFilteredScholars(_examProvider.selectedExam!.id);
       });
     }
   }
@@ -139,11 +142,18 @@ class _ScholarList2State extends State<ScholarList2> {
                 setState(() {
                   if (isMarked) {
                     _markedScholars.remove(scholar.scholarId);
+                    print(_selectedCandidates.length);
                   } else {
                     _markedScholars.add(scholar.scholarId);
                     int len = candidateProvider.candidates.length;
+                    int serialNumber;
+                    if(len == 0){
+                      serialNumber = 1000+_selectedCandidates.length+1;
+                    }else{
+                      serialNumber = candidateProvider.candidates[len-1].serialNumber+_selectedCandidates.length+1;
+                    }
                     Candidate candidate = Candidate(
-                        serialNumber: candidateProvider.candidates[len-1].serialNumber+_selectedCandidates.length+1,
+                        serialNumber: serialNumber,
                         name: scholar.scholarName,
                         schoolName: scholar.scholarName,
                         classLevel: scholar.classLevel,
@@ -171,10 +181,26 @@ class _ScholarList2State extends State<ScholarList2> {
             print(_markedScholars);
             if(_selectedCandidates.length == 0){
               print("Nothing selected");
+              print(examProvider.selectedExam!.name);
             }else{
               if(examProvider.selectedExam != null){
-                int c = await candidateProvider.addMultipleCandidate(_selectedCandidates,examProvider.selectedExam!.id);
-                print(c);
+                int c = 0;
+                c = await candidateProvider.addMultipleCandidate(_selectedCandidates,examProvider.selectedExam!.id);
+                //print("popped "+c.toString());
+                if (c > 0) {
+                  final a = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context){
+                        return CandidateListAddResult(candidates: _selectedCandidates, count: c);
+                      }
+                    )
+                  );
+                  print("popped "+a.toString());
+                  setState(() {
+                    _selectedCandidates = a;
+                  });
+                }
               }
             }
           },
