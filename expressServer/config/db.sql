@@ -55,15 +55,11 @@ CREATE TABLE IF NOT EXISTS results (
     correct_answers INT NOT NULL CHECK (correct_answers >= 0),
     incorrect_answers INT NOT NULL CHECK (incorrect_answers >= 0),
     grade VARCHAR(20) NOT NULL,
-    PRIMARY KEY (exam_id),
+    PRIMARY KEY (exam_id,serial_number),
     CONSTRAINT fk_candidate FOREIGN KEY (serial_number) REFERENCES candidates(serial_number),
     CONSTRAINT fk_exam_result FOREIGN KEY (exam_id) REFERENCES exams(exam_id)
 );
 
-
-
-
--- later 
 CREATE TABLE IF NOT EXISTS questions (
     question_id INT NOT NULL AUTO_INCREMENT,
     question_text VARCHAR(255) NOT NULL,
@@ -79,15 +75,4 @@ CREATE TABLE IF NOT EXISTS options (
     question_id INT NOT NULL,
     PRIMARY KEY(option_id),
     CONSTRAINT fk_question FOREIGN KEY (question_id) REFERENCES questions(question_id)
-);
-
---related to exam and candidate (future implementaion)
-CREATE TABLE IF NOT EXISTS candidate_answers (
-    exam_id INT NOT NULL,
-    serial_number INT NOT NULL,
-    question_number INT NOT NULL,
-    selected_answer INT NOT NULL,
-    PRIMARY KEY (exam_id, serial_number,question_number),
-    CONSTRAINT fk_candidate_exam FOREIGN KEY (exam_id) REFERENCES exams(exam_id),
-    CONSTRAINT fk_candidate_serial FOREIGN KEY (serial_number) REFERENCES candidates(serial_number)
 );
