@@ -93,6 +93,7 @@ const DeleteScholar = async (req, res) => {
     try {
         try {
             const id = req.params.id;
+            //const scholarId = req.params.scholarId;
             const result = await db.execute(scholarQ.deleteScholar, [id]);
             console.log(result);
             res.status(204).json({ "message": "Exam Deleted" });

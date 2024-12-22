@@ -13,7 +13,6 @@ const adminsQ = {
     deleteAdmin: `DELETE FROM admins WHERE admin_id=?`
 }
 
-
 const examsQ = {
     getList: "SELECT * FROM exams",
     getSpecificById:"SELECT * FROM exams WHERE exam_id=?",
@@ -26,7 +25,6 @@ const examsQ = {
               WHERE exam_id=?`,
     deleteExam: `DELETE FROM exams WHERE exam_id=?`
 }
-
 
 const scholarQ = {
     getList: "SELECT * FROM scholars",
@@ -76,7 +74,32 @@ const questionQ = {
 const resultQ = {
     getAllResult: "SELECT * FROM results WHERE exam_id=?",
     getMyResult: "SELECT * FROM results WHERE exam_id=? AND serial_number=?",
+    addResult: `INSERT INTO results
+                  (exam_id, serial_number, correct_answers, incorrect_answers, grade)
+              VALUES 
+                  (?, ?, ?, ?, ?);`,
+    deleteAllResultForExam: "DELETE FROM results WHERE exam_id=?",
+    deleteResultForCandidate: "DELETE FROM results WHERE serial_number=?",
+    updateCandidateResult: `UPDATE results SET 
+    correct_answers=?, incorrect_answers=?, grade=?
+    WHERE exam_id=? AND serial_number=?`,
 }
+
+//question answer queries
+const questionAnswerQ = {
+    getQuestionCount: "SELECT COUNT(*) AS question_count FROM question_answers WHERE exam_id=? AND question_set_id=?",
+    getAllAnswer: "SELECT * FROM question_answers WHERE exam_id=?",
+    addAnswer: `INSERT INTO question_answers
+                  (exam_id, question_set_id, question_number, correct_answer)
+              VALUES 
+                  (?, ?, ?, ?);`,
+   
+    deleteAnswerForExam: "DELETE FROM question_answers WHERE exam_id=?",
+    updateQuestionAnswer: `UPDATE question_answers SET correct_answer=?
+    WHERE exam_id=? AND question_set_id=? AND question_number=?`,
+}
+
+const candidateAnswerQ = {/*future implementation*/}
 
 module.exports = {
     adminsQ,
@@ -84,5 +107,6 @@ module.exports = {
     scholarQ,
     candidateQ,
     resultQ,
+    questionAnswerQ,
     questionQ
 }

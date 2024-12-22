@@ -1,5 +1,5 @@
 const db = require("../../config/db");
-const { examsQ, candidateQ, questionQ } = require("../../queries/queries");
+const { examsQ, candidateQ, questionQ, questionAnswerQ, resultQ } = require("../../queries/queries");
 const { roles } = require("../utility/keys");
 
 const getExamList = async (req,res)=>{
@@ -69,7 +69,7 @@ const updateExam = async (req,res)=>{
              } = req.body;
         console.log({exam_id,exam_name,exam_date,exam_location,exam_duration,question_count,candidate_count});
         
-        const [exam] = await db.query(examsQ.getSpecificById,[id]);
+        const [exam] = await db.query(examsQ.getSpecificById,[ex]);
         if(exam.length != 1){
             console.log("Exam Id: ",id);
             console.log("No exam found with this id");
@@ -95,15 +95,30 @@ const deleteExam = async (req,res)=>{
         const id = req.params.id;
         console.log(id);
         const [exam] = await db.query(examsQ.getSpecificById,[id]);
+        //checking exam exist or not
         if(exam.length != 1){
             console.log("Exam Id: ",id);
             console.log("No exam found with this id");
             res.status(404).json({"message":"Exam not found"});
             return;
         }
+        
+        //removing question answers for this exam
+        console.log("removing qustion answers for this exam: ");
+        const removeAnswers = await db.execute(questionAnswerQ.deleteAnswerForExam,[id]);
+        console.log(removeAnswers);
+
+        //removing results related to exam
+        console.log("removing Results for this exam: ");
+        const removeResults = await db.execute(resultQ.deleteAllResultForExam,[id]);
+        console.log(removeResults);
+      
+        //removing candidates related to exam
+        console.log("removing Candidates for this exam: ");
         const removeCandidates = await db.execute(candidateQ.deleteAllCandidateForExam,[id]);
         console.log(removeCandidates);
 
+        //removing questions
         const removeQuestions = await db.execute(questionQ.deleteAllQuestionForExam,[id]);
         console.log(removeQuestions);
 
