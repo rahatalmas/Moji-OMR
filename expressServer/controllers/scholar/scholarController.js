@@ -94,6 +94,7 @@ const DeleteScholar = async (req, res) => {
         try {
             const id = req.params.id;
             //const scholarId = req.params.scholarId;
+            //need to delete from candidate registrations and results as well(undone)
             const result = await db.execute(scholarQ.deleteScholar, [id]);
             console.log(result);
             res.status(204).json({ "message": "Exam Deleted" });

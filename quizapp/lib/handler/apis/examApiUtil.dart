@@ -6,13 +6,10 @@ import '../../database/models/exammodel.dart';
 import 'login.dart';
 
 class ExamApiUtil with ChangeNotifier {
-  // Private constructor for singleton pattern
   ExamApiUtil._privateConstructor();
 
-  // Static instance of ExamApiUtil
   static final ExamApiUtil _instance = ExamApiUtil._privateConstructor();
 
-  // Factory constructor to return the same instance
   factory ExamApiUtil() {
     return _instance;
   }
@@ -20,7 +17,6 @@ class ExamApiUtil with ChangeNotifier {
   bool _isLoading = false;
   String _message = '';
 
-  // Getters
   bool get isLoading => _isLoading;
   String get message => _message;
 

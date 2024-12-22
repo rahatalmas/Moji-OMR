@@ -58,6 +58,7 @@ const candidateQ = {
               VALUES 
                   (?, ?, ?, ?, ?, ?);`,
     deleteCandidate: "DELETE FROM candidates WHERE serial_number=? AND exam_id=?",
+    deleteCandidateByScholarId: "DELETE FROM candidates WHERE scholar_id=?",
     deleteAllCandidateForExam: "DELETE FROM candidates WHERE exam_id=?"
 }
 

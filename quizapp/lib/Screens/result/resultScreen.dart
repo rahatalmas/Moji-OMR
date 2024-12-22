@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
+import 'package:quizapp/Screens/result/resultDetails.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/examProvider.dart';
 
@@ -105,6 +106,14 @@ class _ResultScreen extends State<ResultScreen> {
                                 child: InkWell(
                                   onTap: () {
                                     print("Result Card");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context){
+                                              return ResultDetailsScreen();
+                                            }
+                                        )
+                                    );
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(8),
@@ -116,7 +125,7 @@ class _ResultScreen extends State<ResultScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Expanded(
+                                           const Expanded(
                                               child: Row(
                                                 children: [
                                                   Icon(
@@ -159,7 +168,7 @@ class _ResultScreen extends State<ResultScreen> {
                                         SizedBox(
                                           height: 2,
                                         ),
-                                        Row(
+                                        const Row(
                                           children: [
                                             Row(
                                               children: [
@@ -225,7 +234,7 @@ class _ResultScreen extends State<ResultScreen> {
                           },
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
                       InkWell(
                         onTap: () {},
                         child: Ink(
@@ -237,10 +246,11 @@ class _ResultScreen extends State<ResultScreen> {
                           child: const Align(
                             alignment: Alignment.center,
                             child: Text(
-                              "add results",
+                              "Add Result",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 16
                               ),
                             ),
                           ),
