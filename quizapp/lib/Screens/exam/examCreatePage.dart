@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/examProvider.dart';
@@ -122,7 +123,12 @@ class _ExamCreatePage extends State<ExamCreatePage> {
       ),
       backgroundColor: neutralWhite,
       //resizeToAvoidBottomInset: false,
-      body: Column(
+      body: _examProvider.isLoading?
+      Center(
+        child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),
+      )
+          :
+      Column(
         children: [
           Expanded(
             child: ListView(

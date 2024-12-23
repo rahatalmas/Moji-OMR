@@ -14,11 +14,8 @@ class CandidateProvider with ChangeNotifier {
   String _message = '';
 
   List<Candidate> get candidates => _candidates;
-
   bool get isLoading => _isLoading;
-
   bool get dataUpdated => _dataUpdated;
-
   String get message => _message;
 
   void reset() {

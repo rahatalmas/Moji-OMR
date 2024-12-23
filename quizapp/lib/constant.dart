@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 const String BASE_URL = "https://api.rahatalmas.com";
+//const String BASE_URL = "http://192.168.31.184:8080";
 
 const kColorPrimary = Color(0xFFF5F5F5);
 const appTextPrimary = Color(0xFF070F2B);

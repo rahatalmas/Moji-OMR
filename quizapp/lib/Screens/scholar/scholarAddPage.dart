@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/database/models/scholar.dart';
@@ -133,6 +134,7 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
   Widget build(BuildContext context) {
     final bool isKeyboardVisible =
     KeyboardVisibilityProvider.isKeyboardVisible(context);
+    final scholarProvider = Provider.of<ScholarProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -145,7 +147,9 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
         shadowColor: Colors.grey,
       ),
       backgroundColor: neutralWhite,
-      body: Column(
+      body:  scholarProvider.isLoading?Center(
+        child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),
+      ):Column(
         children: [
           Expanded(
             child: ListView(
