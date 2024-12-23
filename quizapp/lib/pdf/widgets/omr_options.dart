@@ -2,62 +2,85 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class OmrOptions extends pw.StatelessWidget {
-  OmrOptions(this.totalOptionCount);
+  OmrOptions({
+    this.totalOptionCount = 4,
+    required this.value,
+    this.isSingle = false,
+  });
 
   final int totalOptionCount;
+  final String value;
+  final bool isSingle;
 
   @override
   pw.Widget build(pw.Context context) {
-    return pw.Row(
-      children: [
-        pw.Container(
-          height: 30,
-          width: 30,
-          decoration: pw.BoxDecoration(
-            shape: pw.BoxShape.circle,
-            border: pw.Border.all(color: PdfColor.fromHex('#000000'), width: 2),
-          ),
-          child: pw.Center(
-            child: pw.Text("A"),
-          ),
-        ),
-        pw.SizedBox(width: 7),
-        pw.Container(
-          height: 30,
-          width: 30,
-          decoration: pw.BoxDecoration(
-            shape: pw.BoxShape.circle,
-            border: pw.Border.all(color: PdfColor.fromHex('#000000'), width: 2),
-          ),
-          child: pw.Center(
-            child: pw.Text("B"),
-          ),
-        ),
-        pw.SizedBox(width: 7),
-        pw.Container(
-          height: 30,
-          width: 30,
-          decoration: pw.BoxDecoration(
-            shape: pw.BoxShape.circle,
-            border: pw.Border.all(color: PdfColor.fromHex('#000000'), width: 2),
-          ),
-          child: pw.Center(
-            child: pw.Text("C"),
-          ),
-        ),
-        pw.SizedBox(width: 7),
-        pw.Container(
-          height: 30,
-          width: 30,
-          decoration: pw.BoxDecoration(
-            shape: pw.BoxShape.circle,
-            border: pw.Border.all(color: PdfColor.fromHex('#000000'), width: 2),
-          ),
-          child: pw.Center(
-            child: pw.Text("D"),
-          ),
-        ),
-      ],
-    );
+    return isSingle
+        ? pw.Container(
+            height: 15,
+            width: 15,
+            decoration: pw.BoxDecoration(
+              shape: pw.BoxShape.circle,
+              border:
+                  pw.Border.all(color: PdfColor.fromHex('#000000'), width: 1),
+            ),
+            child: pw.Center(
+              child: pw.Text(value, style: const pw.TextStyle(fontSize: 9)),
+            ),
+          )
+        : pw.Row(
+            children: [
+              pw.Container(
+                height: 15,
+                width: 15,
+                decoration: pw.BoxDecoration(
+                  shape: pw.BoxShape.circle,
+                  border: pw.Border.all(
+                      color: PdfColor.fromHex('#000000'), width: 1),
+                ),
+                child: pw.Center(
+                  child: pw.Text(value, style: pw.TextStyle(fontSize: 9)),
+                ),
+              ),
+              pw.SizedBox(width: 5),
+              pw.Container(
+                height: 15,
+                width: 15,
+                decoration: pw.BoxDecoration(
+                  shape: pw.BoxShape.circle,
+                  border: pw.Border.all(
+                      color: PdfColor.fromHex('#000000'), width: 1),
+                ),
+                child: pw.Center(
+                  child: pw.Text(value, style: pw.TextStyle(fontSize: 9)),
+                ),
+              ),
+              pw.SizedBox(width: 5),
+              pw.Container(
+                height: 15,
+                width: 15,
+                decoration: pw.BoxDecoration(
+                  shape: pw.BoxShape.circle,
+                  border: pw.Border.all(
+                      color: PdfColor.fromHex('#000000'), width: 1),
+                ),
+                child: pw.Center(
+                  child: pw.Text(value, style: pw.TextStyle(fontSize: 9)),
+                ),
+              ),
+              pw.SizedBox(width: 5),
+              pw.Container(
+                height: 15,
+                width: 15,
+                decoration: pw.BoxDecoration(
+                  shape: pw.BoxShape.circle,
+                  border: pw.Border.all(
+                      color: PdfColor.fromHex('#000000'), width: 1),
+                ),
+                child: pw.Center(
+                  child: pw.Text(value, style: pw.TextStyle(fontSize: 9)),
+                ),
+              ),
+            ],
+          );
   }
 }
