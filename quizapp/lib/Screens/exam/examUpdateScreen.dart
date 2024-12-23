@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/database/models/exammodel.dart';
@@ -143,7 +144,11 @@ class _UpdateExamScreenState extends State<UpdateExamScreen> {
         shadowColor: Colors.grey,
       ),
       backgroundColor: neutralWhite,
-      body: Column(
+      body:
+      _examProvider.isLoading?Center(
+        child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),
+      ):
+      Column(
         children: [
           Expanded(
             child: ListView(

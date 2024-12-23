@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/candidateProvider.dart';
@@ -69,7 +70,9 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
                 ),
                 const SizedBox(height: 10),
                 Expanded(
-                  child: ListView.separated(
+                  child:
+                   _examProvider.isLoading?Center(child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),):
+                  ListView.separated(
                     shrinkWrap: true,
                     itemCount: examList.length,
                     separatorBuilder: (context, index) => const Divider(),

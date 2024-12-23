@@ -61,7 +61,7 @@ class _ExamScreenState extends State<ExamScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Lottie.asset("assets/images/animation5.json", height: 200),
+                  Lottie.asset("assets/images/animation5.json", height: 150),
                   Text("Fetching Data...")
                 ],
               )

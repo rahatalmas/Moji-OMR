@@ -1,7 +1,8 @@
 const express = require('express');
-const { getAllResult, myResult, addResult, updateExamResults, deleteExamResults, deleteMyResult } = require('../controllers/result/resultController');
+const { getAllResult, myResult, addResult, updateExamResults, deleteExamResults, deleteMyResult, getAllResultWithExamAndCandidate } = require('../controllers/result/resultController');
 const resultRouter = express.Router();
 
+resultRouter.get("/allresult",getAllResultWithExamAndCandidate);
 resultRouter.get("/all/:examId",getAllResult);
 resultRouter.get("/all/myresult/:examId/:serialNumber",myResult);
 resultRouter.post("/add",addResult);

@@ -16,6 +16,21 @@ const getAllResult = async (req,res)=> {
     }
 }
 
+//get result with exam and candidates
+const getAllResultWithExamAndCandidate = async (req,res)=> {
+    console.log("All Result with exam and candidate Controller: ");
+    const examId = req.params.examId;
+    console.log("ExamId: ",examId);
+    try{
+        const [result] = await db.query(resultQ.getAllResultWithExamAndCandidate);
+        console.log([result]);
+        res.status(200).json(result);          
+    }catch(err){
+        console.log(err);
+        res.status(500).json({"message":"Internal Server Error"});    
+    }
+}
+
 //Specific students result for a exam
 const myResult = async (req,res)=>{
     console.log("My Result Controller: ");
@@ -97,6 +112,7 @@ const deleteMyResult = async (req,res)=>{
 
 module.exports = {
     getAllResult,
+    getAllResultWithExamAndCandidate,
     myResult,
     addResult,
     updateExamResults,

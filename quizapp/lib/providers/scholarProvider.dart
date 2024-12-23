@@ -79,6 +79,9 @@ class ScholarProvider with ChangeNotifier {
   }
 
   Future<bool> deleteScholar(int id) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
     try {
       bool result = await ScholarApi().deleteScholar(id);
       _dataUpdated = false;

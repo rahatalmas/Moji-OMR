@@ -74,6 +74,31 @@ const questionQ = {
 //result queries
 const resultQ = {
     getAllResult: "SELECT * FROM results WHERE exam_id=?",
+    getAllResultWithExamAndCandidate:
+    `  SELECT 
+            e.exam_id,
+            e.exam_name,
+            e.exam_date,
+            e.exam_location,
+            e.exam_duration,
+            e.question_count,
+            e.candidate_count,
+            c.serial_number,
+            c.candidate_name,
+            c.school_name,
+            c.class_level,
+            c.candidate_picture,
+            c.scholar_id,
+            r.correct_answers,
+            r.incorrect_answers,
+            r.grade
+        FROM 
+            exams e
+        INNER JOIN 
+            candidates c ON e.exam_id = c.exam_id
+        INNER JOIN 
+            results r ON e.exam_id = r.exam_id AND c.serial_number = r.serial_number;
+    `,
     getMyResult: "SELECT * FROM results WHERE exam_id=? AND serial_number=?",
     addResult: `INSERT INTO results
                   (exam_id, serial_number, correct_answers, incorrect_answers, grade)

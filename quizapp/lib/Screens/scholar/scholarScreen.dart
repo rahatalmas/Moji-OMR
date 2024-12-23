@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
 import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
@@ -95,7 +96,10 @@ class _ScholarScreenState extends State<ScholarScreen> {
           SizedBox(width: 16),
         ],
       ),
-      body: Padding(
+      body: _scholarProvider.isLoading?Center(
+        child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),
+      ):
+      Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [

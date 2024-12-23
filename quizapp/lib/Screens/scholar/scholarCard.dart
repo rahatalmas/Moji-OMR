@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/scholarProvider.dart';
@@ -23,8 +24,8 @@ class ScholarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scholarProvider = Provider.of<ScholarProvider>(context,listen:true);
-    return Container(
-
+    return
+      Container(
       //shadowColor: Colors.black87,
       //elevation: 4,
       decoration: BoxDecoration(
@@ -70,7 +71,8 @@ class ScholarCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Padding(
+        child:
+        Padding(
           padding: EdgeInsets.all(12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

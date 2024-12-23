@@ -2,29 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/providers/examProvider.dart';
+import '../../providers/resultProvider.dart';
 
 class ResultDetailsScreen extends StatefulWidget {
+  final Map<String, dynamic> examResult;
+  ResultDetailsScreen({super.key, required this.examResult});
   @override
   _ResultDetailsScreen createState() => _ResultDetailsScreen();
 }
 
 class _ResultDetailsScreen extends State<ResultDetailsScreen> {
-  late ExamProvider _examProvider;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _examProvider = context.watch<ExamProvider>();
-    if (!_examProvider.dataUpdated) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _examProvider.getAllExams();
-      });
-    }
-  }
+  // late ResultProvider _resultProvider;
+  //
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _resultProvider = context.watch<ResultProvider>();
+  //   if (!_resultProvider.dataUpdated) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _resultProvider.getAllResults();
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> examResult = widget.examResult;
     return Scaffold(
       appBar: AppBar(
         title: Text('Results Details'),
@@ -63,7 +66,7 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text("Operation System",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: colorPrimary),)),
+                      Expanded(child: Text(examResult['exam_name'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: colorPrimary),)),
                       InkWell(
                           onTap: () {
                             print("info");
@@ -78,12 +81,12 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
                   SizedBox(
                     height: 2,
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.supervisor_account,size: 20,color: colorPrimary,),
-                          Text("Total Student: 100"),
+                          Icon(Icons.supervisor_account,size: 20,color: colorPrimary,),SizedBox(width: 2,),
+                         Text(examResult['candidate_count'].toString()),
                         ],
                       ),
                       SizedBox(
@@ -91,14 +94,14 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
                       ),
                       Row(
                         children: [
-                          Icon(Icons.fact_check_outlined,size: 20,color: colorPrimary,),
-                          Text("Checked: 50"),
+                          Icon(Icons.fact_check_outlined,size: 20,color: colorPrimary,),SizedBox(width: 2,),
+                          Text('${examResult['candidates'].length}'),
                         ],
                       )
                     ],
                   ),
                   SizedBox(height: 2,),
-                  const Row(
+                  Row(
                     children: [
                       Row(
                         children: [
@@ -110,7 +113,7 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
                           SizedBox(
                             width: 4,
                           ),
-                          Text("Passed: 50"),
+                          Text('Passed: ${examResult['candidates'].length-examResult['fail_count']}'),
                         ],
                       ),
                       SizedBox(
@@ -130,7 +133,7 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
                           SizedBox(
                             width: 4,
                           ),
-                          Text("Fail: 0"),
+                          Text('Fail: ${examResult['fail_count']}'),
                         ],
                       )
                     ],
@@ -155,9 +158,8 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
             SizedBox(height: 4,),
             Expanded(
               child: ListView.builder(
-                itemCount: _examProvider.exams.length,
+                itemCount: examResult['candidates'].length,
                 itemBuilder: (context, index) {
-                  final exam = _examProvider.exams[index];
                   return Container(
                     margin: const EdgeInsets.symmetric(
                       vertical: 4,
@@ -194,7 +196,7 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Expanded(
-                                            child: Text("Rahat Almas",
+                                            child: Text(examResult['candidates'][index]['candidate_name'],
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
@@ -211,15 +213,15 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
                                           )
                                         ],
                                       ),
-                                      Text("Serial Number: 1001"),
+                                      Text('Serial: ${examResult['candidates'][index]['serial_number']}'),
                                       Row(
                                         children: [
-                                          Text("Mark: 45"),
+                                          Text('Marks: ${examResult['candidates'][index]['correct_answers']}'),
                                           SizedBox(width: 8,),
-                                          Text("Out of: 50")
+                                          Text('Out Of: ${examResult['question_count']}')
                                         ],
                                       ),
-                                      Text("Grade: A+",style: TextStyle(color: Colors.green,fontWeight: FontWeight.w500),)
+                                      Text('Grade: ${examResult['candidates'][index]['grade']}',style: TextStyle(color: Colors.green,fontWeight: FontWeight.w500),)
                                     ],
                                   )
                               )

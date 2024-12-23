@@ -5,6 +5,7 @@ import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Screens/result/resultDetails.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/examProvider.dart';
+import 'package:quizapp/providers/resultProvider.dart';
 
 class ResultScreen extends StatefulWidget {
   @override
@@ -12,15 +13,15 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreen extends State<ResultScreen> {
-  late ExamProvider _examProvider;
+  late ResultProvider _resultProvider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _examProvider = context.watch<ExamProvider>();
-    if (!_examProvider.dataUpdated) {
+    _resultProvider = context.watch<ResultProvider>();
+    if (!_resultProvider.dataUpdated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _examProvider.getAllExams();
+        _resultProvider.getAllResults();
       });
     }
   }
@@ -48,7 +49,7 @@ class _ResultScreen extends State<ResultScreen> {
         ],
       ),
       backgroundColor: neutralWhite,
-      body: _examProvider.isLoading
+      body: _resultProvider.isLoading
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -59,8 +60,8 @@ class _ResultScreen extends State<ResultScreen> {
                 const Text("Fetching Data...")
               ],
             )
-          : _examProvider.message.isNotEmpty
-              ? Text(_examProvider.message)
+          : _resultProvider.message.isNotEmpty
+              ? Text(_resultProvider.message)
               : Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8.0),
@@ -82,9 +83,10 @@ class _ResultScreen extends State<ResultScreen> {
                       SizedBox(height: 4,),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: _examProvider.exams.length,
+                          itemCount: _resultProvider.groupedResults.length,
                           itemBuilder: (context, index) {
-                            final exam = _examProvider.exams[index];
+                            //final exam = _examProvider.exams[index];
+                            final result = _resultProvider.groupedResults[index];
                             return Container(
                               margin: const EdgeInsets.symmetric(
                                 vertical: 4,
@@ -110,11 +112,14 @@ class _ResultScreen extends State<ResultScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context){
-                                              return ResultDetailsScreen();
+                                              return ResultDetailsScreen(examResult: result,
+                                              );
                                             }
                                         )
                                     );
                                   },
+
+                                  //result screen card
                                   child: Container(
                                     padding: EdgeInsets.all(8),
                                     child: Column(
@@ -125,21 +130,21 @@ class _ResultScreen extends State<ResultScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                           const Expanded(
+                                           Expanded(
                                               child: Row(
                                                 children: [
-                                                  Icon(
+                                                  const Icon(
                                                     Icons.open_in_new,
                                                     size: 16,
                                                     color: colorPrimary,
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 4,
                                                   ),
                                                   Expanded(
                                                     child: Text(
-                                                      "Operating System",
-                                                      style: TextStyle(
+                                                      result['exam_name'],
+                                                      style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontSize: 16,
@@ -168,12 +173,12 @@ class _ResultScreen extends State<ResultScreen> {
                                         SizedBox(
                                           height: 2,
                                         ),
-                                        const Row(
+                                        Row(
                                           children: [
                                             Row(
                                               children: [
-                                                Icon(Icons.supervisor_account,size: 20,color: colorPrimary,),
-                                                Text("Total Student: 100"),
+                                                Icon(Icons.supervisor_account,size: 20,color: colorPrimary,),SizedBox(width: 2,),
+                                                Text(result['candidate_count'].toString()),
                                               ],
                                             ),
                                             SizedBox(
@@ -181,14 +186,14 @@ class _ResultScreen extends State<ResultScreen> {
                                             ),
                                             Row(
                                               children: [
-                                                Icon(Icons.fact_check_outlined,size: 20,color: colorPrimary,),
-                                                Text("Checked: 50"),
+                                                Icon(Icons.fact_check_outlined,size: 20,color: colorPrimary,),SizedBox(width: 2,),
+                                                Text('${result['candidates'].length}'),
                                               ],
                                             )
                                           ],
                                         ),
                                         SizedBox(height: 2,),
-                                        const Row(
+                                        Row(
                                           children: [
                                             Row(
                                               children: [
@@ -200,7 +205,7 @@ class _ResultScreen extends State<ResultScreen> {
                                                 SizedBox(
                                                   width: 4,
                                                 ),
-                                                Text("Passed: 50"),
+                                                Text('Passed: ${result['candidates'].length-result['fail_count']}'),
                                               ],
                                             ),
                                             SizedBox(
@@ -220,7 +225,7 @@ class _ResultScreen extends State<ResultScreen> {
                                                 SizedBox(
                                                   width: 4,
                                                 ),
-                                                Text("Fail: 0"),
+                                                Text('Fail: ${result['fail_count']}'),
                                               ],
                                             )
                                           ],
