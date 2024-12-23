@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:quizapp/Screens/home.dart';
 import 'package:quizapp/pdf/widgets/omr_options.dart';
 import 'package:collection/collection.dart';
 
