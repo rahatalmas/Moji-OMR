@@ -105,7 +105,7 @@ const resultQ = {
               VALUES 
                   (?, ?, ?, ?, ?);`,
     deleteAllResultForExam: "DELETE FROM results WHERE exam_id=?",
-    deleteResultForCandidate: "DELETE FROM results WHERE serial_number=?",
+    deleteResultForCandidate: "DELETE FROM results WHERE exam_id=? AND serial_number=?",
     updateCandidateResult: `UPDATE results SET 
     correct_answers=?, incorrect_answers=?, grade=?
     WHERE exam_id=? AND serial_number=?`,

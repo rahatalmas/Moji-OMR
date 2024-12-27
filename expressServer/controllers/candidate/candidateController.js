@@ -3,7 +3,7 @@
 // delete candidate
 // update candidate data
 const db = require("../../config/db");
-const { candidateQ, examsQ, scholarQ } = require("../../queries/queries");
+const { candidateQ, examsQ, scholarQ, resultQ } = require("../../queries/queries");
 const { roles } = require("../utility/keys");
 
 
@@ -146,7 +146,6 @@ const candidateCount = async (req,res) => {
     }
 }
 
-
 // const updateCandidate = async (req, res) => {
 //     try {
 //         try {
@@ -168,22 +167,30 @@ const candidateCount = async (req,res) => {
 
 const deleteCandidate = async (req, res) => {
     try {
-        try {
-            const id = req.params.serialNumber;
-            const examId = req.params.examId;
-            console.log(id,examId);
-            const [result] = await db.execute(candidateQ.deleteCandidate, [id,examId]);
-            console.log("Candidate Delete Request: ");
-            console.log(result);
-            res.status(204).json({"message": "Candidate Deleted"});
-        } catch (err) {
-            console.log(err.message)
-            res.status(500).json({ "message": "Internal Server Error" });
+        const id = req.params.serialNumber;
+        const examId = req.params.examId;
+        console.log(id, examId);
+        // const [candidateres] = await db.execute(resultQ.getMyResult,[examId,id]);
+        // console.log(candidateres);
+        const [candidateresdel] = await db.execute(resultQ.deleteResultForCandidate,[examId,id]);
+        console.log(candidateresdel);
+        // Perform the delete query
+        const [result] = await db.execute(candidateQ.deleteCandidate, [id, examId]);
+        
+        // Check if the deletion was successful
+        if (result.affectedRows > 0) {
+            console.log("Candidate Delete Request: Success");
+            res.status(204).json({ "message": "Candidate Deleted" });
+        } else {
+            console.log("Candidate not found");
+            res.status(404).json({ "message": "Candidate not found" });
         }
     } catch (err) {
-        res.status(500).json({ "message": "Sorry! Internal Server error" });
+        console.error(err.message);
+        res.status(500).json({ "message": "Internal Server Error" });
     }
-}
+};
+
 
 module.exports = {
     getCandidateList,
