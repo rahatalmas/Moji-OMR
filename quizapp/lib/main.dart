@@ -3,10 +3,12 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/admin/adminPage.dart';
 import 'package:quizapp/Screens/home.dart';
+import 'package:quizapp/Screens/result/paperProcessingResult.dart';
 import 'package:quizapp/Screens/result/resultChecking.dart';
 import 'package:quizapp/handler/apis/login.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/adminProvider.dart';
+import 'package:quizapp/providers/answerProvider.dart';
 import 'package:quizapp/providers/candidateProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
@@ -24,6 +26,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => ExamProvider()),
         ChangeNotifierProvider(create: (context) => CandidateProvider()),
         ChangeNotifierProvider(create: (context) => ScholarProvider()),
+        ChangeNotifierProvider(create: (context) => AnswerProvider()),
         ChangeNotifierProvider(create: (context) => ResultProvider()),
         ChangeNotifierProvider(create: (context) => QuestionProvider()),
         ChangeNotifierProvider(create: (context) => ActionStatusProvider())
@@ -232,6 +235,17 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
                     );
                   }
                 });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.question_answer),
+              title: Text("TestPage"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context)=>PaperProcessingResult())
+                );
               },
             ),
           ],

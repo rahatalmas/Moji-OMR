@@ -18,7 +18,7 @@ Future<Uint8List> getDocumentBytes(
       build: (ctx) {
         return [
           pw.Expanded(
-            flex: 4,
+            flex: 1,
             child: pw.Container(
               // / color: PdfColor.fromHex("000000"),
               child: pw.Row(
@@ -26,7 +26,7 @@ Future<Uint8List> getDocumentBytes(
                   pw.Expanded(
                     flex: 1,
                     child: pw.Container(
-                      margin: const pw.EdgeInsets.all(6),
+                      margin: const pw.EdgeInsets.all(5),
                       // color: PdfColor.fromHex("83979d"),
                       child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -35,16 +35,12 @@ Future<Uint8List> getDocumentBytes(
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Row(
                               children: [
-                                pw.Text("Exam Id:",
-                                    textAlign: pw.TextAlign.start),
-                                pw.Text(
-                                  "4321",
-                                  textAlign: pw.TextAlign.start,
-                                ),
+                                pw.Text("Exam Id",
+                                    textAlign: pw.TextAlign.start,style: pw.TextStyle(fontSize: 10)),
                               ],
                             ),
                           ),
-                          pw.SizedBox(height: 5),
+                          pw.SizedBox(height: 10),
                           pw.Column(
                             children: [
                               ...List.generate(10, (index) {
@@ -52,7 +48,7 @@ Future<Uint8List> getDocumentBytes(
                                   OmrOptions(
                                       totalOptionCount: 4,
                                       value: index.toString()),
-                                  pw.SizedBox(height: 5),
+                                  pw.SizedBox(height: 10),
                                 ]);
                               }),
                             ],
@@ -65,7 +61,7 @@ Future<Uint8List> getDocumentBytes(
                   pw.Expanded(
                     flex: 1,
                     child: pw.Container(
-                      margin: const pw.EdgeInsets.all(9),
+                      margin: const pw.EdgeInsets.all(5),
                       // color: PdfColor.fromHex("83979d"),
                       child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -74,8 +70,8 @@ Future<Uint8List> getDocumentBytes(
                             alignment: pw.Alignment.centerLeft,
                             child: pw.Row(
                               children: [
-                                pw.Text("Serial number:",
-                                    textAlign: pw.TextAlign.start),
+                                pw.Text("Serial Number",
+                                    textAlign: pw.TextAlign.start,style: pw.TextStyle(fontSize: 10)),
                                 pw.Text(
                                   "",
                                   textAlign: pw.TextAlign.start,
@@ -83,7 +79,7 @@ Future<Uint8List> getDocumentBytes(
                               ],
                             ),
                           ),
-                          pw.SizedBox(height: 5),
+                          pw.SizedBox(height: 10),
                           pw.Column(
                             children: [
                               ...List.generate(10, (index) {
@@ -91,7 +87,7 @@ Future<Uint8List> getDocumentBytes(
                                   OmrOptions(
                                       totalOptionCount: 4,
                                       value: index.toString()),
-                                  pw.SizedBox(height: 5),
+                                  pw.SizedBox(height: 10),
                                 ]);
                               }),
                             ],
@@ -109,7 +105,7 @@ Future<Uint8List> getDocumentBytes(
             ),
           ),
           pw.Expanded(
-            flex: 1,
+            flex: 0,
             child: pw.Container(
               decoration: pw.BoxDecoration(
                 border: pw.Border.all(
@@ -119,7 +115,7 @@ Future<Uint8List> getDocumentBytes(
             ),
           ),
           pw.Expanded(
-            flex: 7,
+            flex: 2,
             child: pw.Container(
               child: pw.Row(
                 children: [
@@ -131,7 +127,7 @@ Future<Uint8List> getDocumentBytes(
                       children: [
                         ...List.generate(20, (index) {
                           return pw.Column(children: [
-                            pw.SizedBox(height: 5),
+                            pw.SizedBox(height: 8.38),
                             pw.Row(children: [
                               pw.Container(
                                 height: 15,
@@ -153,7 +149,7 @@ Future<Uint8List> getDocumentBytes(
                                       value: e,
                                       isSingle: true,
                                     ),
-                                    if (index < 5) pw.SizedBox(width: 5)
+                                    if (index < 5) pw.SizedBox(width: 8)
                                   ],
                                 );
                               })
@@ -171,7 +167,7 @@ Future<Uint8List> getDocumentBytes(
                       children: [
                         ...List.generate(20, (index) {
                           return pw.Column(children: [
-                            pw.SizedBox(height: 5),
+                            pw.SizedBox(height: 8.38),
                             pw.Row(children: [
                               pw.Container(
                                 height: 15,
@@ -193,7 +189,7 @@ Future<Uint8List> getDocumentBytes(
                                       value: e,
                                       isSingle: true,
                                     ),
-                                    if (index < 5) pw.SizedBox(width: 5)
+                                    if (index < 5) pw.SizedBox(width: 8)
                                   ],
                                 );
                               })
@@ -211,7 +207,7 @@ Future<Uint8List> getDocumentBytes(
                       children: [
                         ...List.generate(20, (index) {
                           return pw.Column(children: [
-                            pw.SizedBox(height: 5),
+                            pw.SizedBox(height: 8.38),
                             pw.Row(children: [
                               pw.Container(
                                 height: 15,
@@ -233,7 +229,7 @@ Future<Uint8List> getDocumentBytes(
                                       value: e,
                                       isSingle: true,
                                     ),
-                                    if (index < 5) pw.SizedBox(width: 5)
+                                    if (index < 5) pw.SizedBox(width: 8)
                                   ],
                                 );
                               })
@@ -251,7 +247,7 @@ Future<Uint8List> getDocumentBytes(
                       children: [
                         ...List.generate(20, (index) {
                           return pw.Column(children: [
-                            pw.SizedBox(height: 5),
+                            pw.SizedBox(height: 8.38),
                             pw.Row(children: [
                               pw.Container(
                                 height: 15,
@@ -273,7 +269,7 @@ Future<Uint8List> getDocumentBytes(
                                       value: e,
                                       isSingle: true,
                                     ),
-                                    if (index < 5) pw.SizedBox(width: 5)
+                                    if (index < 5) pw.SizedBox(width: 8)
                                   ],
                                 );
                               })

@@ -125,7 +125,7 @@ class _ExamCreatePage extends State<ExamCreatePage> {
       //resizeToAvoidBottomInset: false,
       body: _examProvider.isLoading?
       Center(
-        child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),
+        child: Lottie.asset("assets/images/loader.json",width: 100),
       )
           :
       Column(
@@ -276,12 +276,12 @@ class _ExamCreatePage extends State<ExamCreatePage> {
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                         color: colorPrimary,
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "Save",
+                      "Add",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,

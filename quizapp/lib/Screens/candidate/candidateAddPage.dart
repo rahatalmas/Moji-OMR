@@ -191,250 +191,250 @@ class _CandidateEditor extends State<CandidateEditor> {
   Widget build(BuildContext context) {
     final examProvider = Provider.of<ExamProvider>(context, listen: true);
     final candidateProvider = Provider.of<CandidateProvider>(context,listen: true);
-    return ListView(
+    return
+      ListView(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Exam filter widget (to select exam)
-            ExamFilterWidget(
-              examList: examList,
-            ),
-            const SizedBox(height: 10),
-            examProvider.selectedExam == null
-                ?
-            Center(
-              child: Column(
-                children: [
-                  SizedBox(height: 100),
-                  Image.asset(
-                    "assets/images/student.png",
-                    height: 250,
-                    width: 250,
-                  ),
-                  const SizedBox(height: 25),
-                  const Text(
-                    "Select an exam to add Candidate",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                  ),
-                ],
+        ExamFilterWidget(),
+        const SizedBox(height: 10),
+        examProvider.selectedExam == null
+            ?
+        Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Ensures the column takes minimal space
+            children: [
+              const SizedBox(height: 100),
+              Image.asset(
+                "assets/images/student.png",
+                height: 200,
+                width: 200,
               ),
+              const SizedBox(height: 25),
+              const Text(
+                "Select an exam to add Candidate",
+                //style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+              ),
+            ],
+          ),
+        )
+            :
+        examProvider.selectedExam!.numberOfCandidates == candidateProvider.candidates.length
+            ?
+        Center(
+            child:Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 100),
+                Lottie.asset("assets/images/complete2.json",height: 150),
+                Text("Registration Complete",style: TextStyle(fontSize:20,color: colorPrimary,fontWeight: FontWeight.w500),),
+                Text('Total Candidates: ${examProvider.selectedExam!.totalQuestions}'),
+                Text('Exam Date: 20/12/24')
+              ],
             )
-                :
-            examProvider.selectedExam!.numberOfCandidates == candidateProvider.candidates.length
-                ?
-            ItemWrapper()
-                :
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              decoration:const BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: neutralBG),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Mode and info
-                  InkWell(
-                    onTap: _showModeSelectionModal,
-                    child: Container(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      decoration: const BoxDecoration(
-                        border: BorderDirectional(
-                          bottom: BorderSide(color: Colors.green, width: 5),
-                        ),
-                      ),
-                      child: Column(
+        )
+            :
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          decoration:const BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              color: neutralBG),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Mode and info
+              InkWell(
+                onTap: _showModeSelectionModal,
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  decoration: const BoxDecoration(
+                    border: BorderDirectional(
+                      bottom: BorderSide(color: Colors.green, width: 5),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  const CircleAvatar(
-                                    radius: 4,
-                                    backgroundColor: Colors.purple,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const CircleAvatar(
-                                    radius: 4,
-                                    backgroundColor: Colors.indigo,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const CircleAvatar(
-                                    radius: 4,
-                                    backgroundColor: Colors.cyan,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    _modes[_selectedMode],
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ],
+                              const CircleAvatar(
+                                radius: 4,
+                                backgroundColor: Colors.purple,
                               ),
-                              const Icon(Icons.edit_road)
+                              const SizedBox(width: 4),
+                              const CircleAvatar(
+                                radius: 4,
+                                backgroundColor: Colors.indigo,
+                              ),
+                              const SizedBox(width: 4),
+                              const CircleAvatar(
+                                radius: 4,
+                                backgroundColor: Colors.cyan,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                _modes[_selectedMode],
+                                style: const TextStyle(fontSize: 16),
+                              ),
                             ],
                           ),
-                          const SizedBox(height: 8),
+                          const Icon(Icons.edit_road)
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Candidate - ${candidateProvider.candidates.length+1}',
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Candidate - ${candidateProvider.candidates.length+1}',
+                                'Total: ${examProvider.selectedExam!.numberOfCandidates}',
                                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Total: ${examProvider.selectedExam!.numberOfCandidates}',
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Remaining: ${(examProvider.selectedExam!.numberOfCandidates)-(candidateProvider.candidates.length)}',
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Response from server
-                  Container(
-                    height: 150,
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                        color: neutralWhite,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: candidateProvider.isLoading ? Column(
-                        children: [
-                          Lottie.asset("assets/images/fileAdding.json", height: 110),
-                        ],
-                      ):
-                      candidateProvider.candidates.length > 0 ?
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset("assets/images/man.png",height: 100,width: 100,),
-                          SizedBox(height: 8,),
-                          Text('last Added: ${candidateProvider.candidates[candidateProvider.candidates.length-1].name}'),
-                        ],
-                      )
-                          :
-                      Center(child: Text("no candidates added yet"))
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Mode selection
-                  _selectedMode == 0
-                      ?
-                  Column(
-                    children: [
-                      _buildTextField("Serial Number", _serialNumberController, Icons.confirmation_number),
-                      const SizedBox(height: 10),
-                      _buildTextField("Candidate Name", _candidateNameController, Icons.person),
-                      const SizedBox(height: 10),
-                      _buildTextField("School Name", _schoolNameController, Icons.school),
-                      const SizedBox(height: 10),
-                      _buildTextField("Class Level", _classLevelController, Icons.grade),
-                      const SizedBox(height: 16),
-                      InkWell(
-                        onTap: _addCandidate,
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: colorPrimary,
-                            borderRadius: const BorderRadius.all(Radius.circular(15)),
-                            border: Border.all(color: Colors.black87, width: 2),
-                          ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                              SizedBox(width: 8),
                               Text(
-                                "Add",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                'Remaining: ${(examProvider.selectedExam!.numberOfCandidates)-(candidateProvider.candidates.length)}',
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                               ),
-                              Icon(Icons.add, color: Colors.white),
                             ],
-                          ),
-                        ),
+                          )
+                        ],
                       ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Response from server
+              Container(
+                height: 150,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                    color: neutralWhite,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: candidateProvider.candidates.length > 0 ?
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/man.png",height: 100,width: 100,),
+                      SizedBox(height: 8,),
+                      Text('last Added: ${candidateProvider.candidates[candidateProvider.candidates.length-1].name}'),
                     ],
                   )
                       :
-                  _selectedMode == 2
-                      ?
-                  Column(
-                      children: [
-                        InkWell(
-                          onTap: _pickFile,
-                          child: Container(
-                          width: double.maxFinite,
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          decoration: BoxDecoration(
-                            color: brandMinus3,
-                            borderRadius: BorderRadius.circular(8)
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(Icons.file_copy_rounded),
-                              const SizedBox(height: 8),
-                              const Text(
-                                "Pick a file (CSV/Excel)",
-                                style: TextStyle(fontSize: 16, color: colorPrimary),
-                              ),
-                            ],
-                          ),
-                        )
-                        ),
-                        SizedBox(height: 16,),
-                        InkWell(
-                          onTap: (){
-                            print("file upload");
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: colorPrimary,
-                              borderRadius: const BorderRadius.all(Radius.circular(15)),
-                              border: Border.all(color: Colors.black87, width: 2),
-                            ),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Save",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                SizedBox(width: 3,),
-                                Icon(Icons.save_as, color: Colors.white),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                      :
-                  ScholarList2(examId:examProvider.selectedExam!.id),
-                ],
+                  Center(child: Text("no candidates added yet"))
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              // Mode selection
+              _selectedMode == 0
+                  ?
+              Column(
+                children: [
+                  _buildTextField("Serial Number", _serialNumberController, Icons.confirmation_number),
+                  const SizedBox(height: 10),
+                  _buildTextField("Candidate Name", _candidateNameController, Icons.person),
+                  const SizedBox(height: 10),
+                  _buildTextField("School Name", _schoolNameController, Icons.school),
+                  const SizedBox(height: 10),
+                  _buildTextField("Class Level", _classLevelController, Icons.grade),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: _addCandidate,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: colorPrimary,
+                        borderRadius: const BorderRadius.all(Radius.circular(15)),
+                        border: Border.all(color: Colors.black87, width: 2),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Add",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Icon(Icons.add, color: Colors.white),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+                  :
+              _selectedMode == 2
+                  ?
+              Column(
+                  children: [
+                    InkWell(
+                      onTap: _pickFile,
+                      child: Container(
+                      width: double.maxFinite,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        color: brandMinus3,
+                        borderRadius: BorderRadius.circular(8)
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.file_copy_rounded),
+                          const SizedBox(height: 8),
+                          const Text(
+                            "Pick a file (CSV/Excel)",
+                            style: TextStyle(fontSize: 16, color: colorPrimary),
+                          ),
+                        ],
+                      ),
+                    )
+                    ),
+                    SizedBox(height: 16,),
+                    InkWell(
+                      onTap: (){
+                        print("file upload");
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: const BorderRadius.all(Radius.circular(15)),
+                          border: Border.all(color: Colors.black87, width: 2),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Save",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            SizedBox(width: 3,),
+                            Icon(Icons.save_as, color: Colors.white),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                  :
+              ScholarList2(examId:examProvider.selectedExam!.id),
+            ],
+          ),
         ),
       ],
     );

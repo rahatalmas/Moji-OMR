@@ -3,11 +3,8 @@ import 'package:quizapp/Screens/candidate/candidatepage.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/omr/omrCreatePage.dart';
-import 'package:quizapp/Screens/question/questionScreen.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/Screens/scholar/scholarScreen.dart';
-
-
 import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/Widgets/menuButton.dart';
 import 'package:quizapp/Screens/question/questionCreatePage.dart';
@@ -20,6 +17,7 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     List _menuOptions = [
       {
         "title": "New Exam",
@@ -51,12 +49,9 @@ class Dashboard extends StatelessWidget {
         "title": "Results",
         "image": "assets/images/eleven.svg",
       },
-      {
-        "title": "Question",
-        "image": "assets/images/two.svg",
-      },
 
     ];
+
     final List<Widget> _menuoptions = [
       const ExamCreatePage(),
       const CandidateCreatePage(),
@@ -68,7 +63,6 @@ class Dashboard extends StatelessWidget {
       const ScholarScreen(),
       ExamScreen(),
       ResultScreen(),
-      QuestionScreen(),
     ];
 
     return ListView(

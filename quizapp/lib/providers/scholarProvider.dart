@@ -7,6 +7,7 @@ class ScholarProvider with ChangeNotifier {
   List<Scholar> _fiteredList = [];
   bool _isLoading = false;
   bool _dataUpdated = false;
+  bool _filterDataUpdated = false;
   String _message = '';
 
   // Getters
@@ -16,6 +17,8 @@ class ScholarProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   bool get dataUpdated => _dataUpdated;
+
+  bool get filterDataUpdated => _filterDataUpdated;
 
   void updateData(){
     _dataUpdated = false;
@@ -48,12 +51,11 @@ class ScholarProvider with ChangeNotifier {
     _isLoading = true;
     _message = '';
     notifyListeners();
-
     try {
       _fiteredList = await ScholarApi().fetchFilteredScholars(examId);
       print(_fiteredList);
       _isLoading = false;
-      _dataUpdated = true;
+      _filterDataUpdated = true;
       notifyListeners();
     } catch (e) {
       debugPrint(e.toString());
@@ -68,6 +70,24 @@ class ScholarProvider with ChangeNotifier {
 
     try {
       bool result = await ScholarApi().addScholar(newScholar);
+      _dataUpdated = false;
+      _isLoading = false;
+      notifyListeners();
+      return result;
+    } catch (e) {
+      _message = 'Failed to add exam: $e';
+      return false;
+    }
+  }
+
+  Future<bool> updateScholar(Scholar newScholar) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    try {
+      bool result = await ScholarApi().updateScholar(newScholar);
+      print(result);
       _dataUpdated = false;
       _isLoading = false;
       notifyListeners();

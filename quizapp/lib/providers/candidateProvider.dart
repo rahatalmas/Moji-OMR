@@ -62,17 +62,17 @@ class CandidateProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      print("length from add mul "+newCandidates.length.toString());
+      //print("length from add mul "+newCandidates.length.toString());
       for (int i=0;i<newCandidates.length;i++) {
         bool result = await CandidateApi().addCandidate(newCandidates[i]);
         if (result) {
           count++;
-          print("print: " + count.toString());
+          //print("print: " + count.toString());
         }
       }
 
       //if (count > 0) {
-        print("print count: " + count.toString());
+        //print("print count: " + count.toString());
         await getAllCandidates(examId);
         _dataUpdated = false;
         _isLoading = false;

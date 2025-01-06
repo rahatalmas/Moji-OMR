@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quizapp/Screens/exam/dummyExamList.dart';
+import 'package:quizapp/Screens/omr/updateAnswerScreen.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/database/models/answer.dart';
+import 'package:quizapp/database/models/exammodel.dart';
+import 'package:quizapp/providers/answerProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/routes.dart';
-
 import '../../Widgets/examFilter.dart';
 
 class OmrCreatePage extends StatefulWidget {
@@ -15,12 +17,24 @@ class OmrCreatePage extends StatefulWidget {
 }
 
 class _OmrCreatePage extends State<OmrCreatePage> {
+  // Initialize the list based on the question count
   Map<int, int> _selectedAnswers = {}; // To store <questionNumber, answerIndex>
+  List<int> l = List.filled(81, 0);
+  // late ExamProvider _examProvider;
+  // late AnswerProvider _answerProvider;
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (_examProvider.selectedExam != null || _answerProvider.dataUpdated) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _answerProvider.getAllAnswers(_examProvider.selectedExam!.id);
+  //     });
+  //   }
+  // }
 
-
-  void _handleCreateButtonPress(int totalQuestions) {
-
-    if (_selectedAnswers.length < totalQuestions) {
+  void _handleCreateButtonPress(Exam? exam) async{
+    final answerProvider = Provider.of<AnswerProvider>(context,listen: false);
+    if (_selectedAnswers.length < exam!.totalQuestions) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please select answers for all questions."),
@@ -28,7 +42,17 @@ class _OmrCreatePage extends State<OmrCreatePage> {
         ),
       );
     } else {
-      print('Correct Answers: $_selectedAnswers');
+      print('Correct Answers: $l');
+      for(int i=0;i<exam.totalQuestions;i++){
+        Answer answer = Answer(
+            examId: exam.id,
+            questionSetId: 1,
+            questionNumber: i+1,
+            correctAnswer: l[i+1]
+        );
+        bool res = await answerProvider.addAnswer(answer);
+      }
+      answerProvider.getAllAnswers(exam.id);
       Navigator.pushNamed(context, RouteNames.viewDocument);
       // Save the list to the backend or process it further.
     }
@@ -37,8 +61,8 @@ class _OmrCreatePage extends State<OmrCreatePage> {
   @override
   Widget build(BuildContext context) {
     final examProvider = Provider.of<ExamProvider>(context, listen: true);
+    final answerProvider = Provider.of<AnswerProvider>(context,listen: true);
     final totalQuestions = examProvider.selectedExam?.totalQuestions ?? 0;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -56,34 +80,7 @@ class _OmrCreatePage extends State<OmrCreatePage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ExamFilterWidget(
-                  examList: examList,
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: const [
-                        Icon(Icons.list),
-                        SizedBox(width: 3),
-                        Text("Answer list"),
-                      ],
-                    ),
-                    // Row(
-                    //   children: const [
-                    //     Text("sort"),
-                    //     SizedBox(width: 3),
-                    //     Icon(Icons.sort),
-                    //   ],
-                    // ),
-                  ],
-                ),
-              ],
+            child: ExamFilterWidget(
             ),
           ),
           Expanded(
@@ -91,41 +88,102 @@ class _OmrCreatePage extends State<OmrCreatePage> {
                 ? const Center(
               child: Text("no exam selected"),
             )
-                : ListView.builder(
-              itemCount: totalQuestions,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                :
+            answerProvider.answers.length != examProvider.selectedExam!.totalQuestions ?
+
+            ListView(
+              children: [
+                const Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('Question: ${index + 1}'),
-                          const SizedBox(width: 20),
+                        children: const [
+                          Icon(Icons.list),
+                          SizedBox(width: 3),
+                          Text("Select Correct Answer"),
                         ],
                       ),
-                      AnswerCircles(
-                        questionNumber: index + 1,
-                        onAnswerSelected: (int question, int answer) {
-                          setState(() {
-                            _selectedAnswers[question] = answer;
-                          });
-                          print(_selectedAnswers); // Debug: check the current map
-                        },
-                      ),
+                      // Row(
+                      //   children: const [
+                      //     Text("sort"),
+                      //     SizedBox(width: 3),
+                      //     Icon(Icons.sort),
+                      //   ],
+                      // ),
                     ],
                   ),
-                );
-              },
-            ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: totalQuestions,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('Question: ${index + 1}'),
+                                  const SizedBox(width: 20),
+                                ],
+                              ),
+                              AnswerCircles(
+                                questionNumber: index + 1,
+                                onAnswerSelected: (int question, int answer) {
+                                  setState(() {
+                                    _selectedAnswers[question] = answer;
+                                    l[question] = answer;
+                                  });
+                                  print(l);
+                                  print(_selectedAnswers); // Debug: check the current map
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            )
+                :
+            Center(child: Column(
+              children: [
+                Text("answers are set"),
+                InkWell(
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context){
+                          return UpdateAnswerScreen(exam:examProvider.selectedExam!);
+                        })
+                    );
+                  },
+                  child: Text("Update answer"),
+                )
+              ],
+            ),)
           ),
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.white,
             child: InkWell(
-              onTap: () => _handleCreateButtonPress(totalQuestions),
+              onTap: () {
+                  answerProvider.answers.length != examProvider.selectedExam!.totalQuestions
+                      ?
+                  _handleCreateButtonPress(examProvider.selectedExam)
+                      :
+                  Navigator.pushNamed(context, RouteNames.viewDocument);
+              },
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),

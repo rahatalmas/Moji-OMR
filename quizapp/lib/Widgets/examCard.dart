@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/Screens/exam/examUpdateScreen.dart';
 import 'package:quizapp/constant.dart';
 
-class ExamCard extends StatelessWidget {
+class ExamCard extends StatefulWidget {
   final int examId;
   final String examName;
   final DateTime examDate;
@@ -10,7 +10,7 @@ class ExamCard extends StatelessWidget {
   final int examDuration;
   final int questionCount;
   final int candidateCount;
-  final VoidCallback onDelete; // Callback for delete action
+  final VoidCallback onDelete;
 
   const ExamCard({
     Key? key,
@@ -25,16 +25,23 @@ class ExamCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _ExamCardState createState() => _ExamCardState();
+}
+
+class _ExamCardState extends State<ExamCard> {
+  bool _isExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       color: neutralWhite,
-      elevation: 4,
+      elevation: 3,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12.0),
-          onTap: (){
-            print('hello');
+          onTap: () {
+            print('Card tapped');
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -42,38 +49,49 @@ class ExamCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.only(bottom: 4),
                   decoration: BoxDecoration(
                     border: BorderDirectional(bottom: BorderSide(color: Colors.black12)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Created on: ${_formatDate(examDate)}',
-                        style: TextStyle(color: Colors.grey[600]),
+                      Row(
+                        children: [
+                          Icon(Icons.new_releases_outlined,size: 20,),
+                          SizedBox(width: 2,),
+                          Text(
+                            'Created on: ${_formatDate(widget.examDate)}',
+                            style: TextStyle(color: Colors.grey[800]),
+                          ),
+                        ],
                       ),
                       Row(
                         children: [
                           InkWell(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context)=>UpdateExamScreen(
-                                        examId: examId,
-                                        examName: examName,
-                                        examDateTime: examDate,
-                                        examLocation: examLocation,
-                                        examDuration: examDuration,
-                                        questionCount: questionCount,
-                                        candidateCount: candidateCount
-                                    )
-                                ));
-                              },
-                              child: Icon(Icons.edit_note,color: colorPrimary,)
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpdateExamScreen(
+                                    examId: widget.examId,
+                                    examName: widget.examName,
+                                    examDateTime: widget.examDate,
+                                    examLocation: widget.examLocation,
+                                    examDuration: widget.examDuration,
+                                    questionCount: widget.questionCount,
+                                    candidateCount: widget.candidateCount,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.edit_note,
+                              color: colorPrimary,
+                            ),
                           ),
-                          SizedBox(width: 5,),
+                          SizedBox(width: 5),
                           InkWell(
-                            onTap: onDelete,
+                            onTap: widget.onDelete,
                             child: Icon(Icons.delete, color: Colors.red[900]),
                           ),
                         ],
@@ -83,7 +101,7 @@ class ExamCard extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  examName,
+                  widget.examName,
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
@@ -95,7 +113,7 @@ class ExamCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.calendar_today, size: 16, color: colorPrimary),
                     const SizedBox(width: 8),
-                    Text("Date: ${_formatDate(examDate)}"),
+                    Text("Date: ${_formatDate(widget.examDate)}"),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -103,32 +121,94 @@ class ExamCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.location_on, size: 16, color: colorPrimary),
                     const SizedBox(width: 8),
-                    Text("Location: $examLocation"),
+                    Text("Location: ${widget.examLocation}"),
                   ],
                 ),
+                if (_isExpanded) ...[
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.timer, size: 16, color: colorPrimary),
+                      const SizedBox(width: 8),
+                      Text("Duration: ${widget.examDuration} hours"),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.help_outline, size: 16, color: colorPrimary),
+                      const SizedBox(width: 8),
+                      Text("Questions: ${widget.questionCount}"),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.people, size: 16, color: colorPrimary),
+                      const SizedBox(width: 8),
+                      Text("Candidates: ${widget.candidateCount}"),
+                    ],
+                  ),
+                ],
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.timer, size: 16, color: colorPrimary),
-                    const SizedBox(width: 8),
-                    Text("Duration: $examDuration hours"),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.help_outline, size: 16, color: colorPrimary),
-                    const SizedBox(width: 8),
-                    Text("Questions: $questionCount"),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.people, size: 16, color: colorPrimary),
-                    const SizedBox(width: 8),
-                    Text("Candidates: $candidateCount"),
-                  ],
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(width: 2,),
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                  color: Colors.indigo,
+                                borderRadius: BorderRadius.circular(1)
+                              ),
+                            ),
+                            SizedBox(width: 4,),
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                  color: Colors.purple,
+                                  borderRadius: BorderRadius.circular(1)
+                              ),
+                            ),
+                            SizedBox(width: 4,),
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(1)
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              _isExpanded ? "Hide details" : "Show details",
+                              style: TextStyle(color: colorPrimary),
+                            ),
+                            Icon(
+                              _isExpanded ? Icons.expand_less : Icons.expand_more,
+                              color: colorPrimary,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

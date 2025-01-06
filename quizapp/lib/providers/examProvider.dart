@@ -33,7 +33,6 @@ class ExamProvider with ChangeNotifier {
     _isLoading = true;
     _message = '';
     notifyListeners();
-
     try {
       _exams = await ExamApiUtil().fetchExams();
       _isLoading = false;

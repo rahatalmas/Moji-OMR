@@ -14,25 +14,17 @@ class ItemWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final examProvider = Provider.of<ExamProvider>(context,listen:true);
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 0),
-      padding: EdgeInsets.all(12),
-      alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: brandMinus3,
-          borderRadius: BorderRadius.circular(8),
-          //border: Border.all(color: brandP,width: 2.5)
-        ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Lottie.asset("assets/images/complete2.json",height: 112),
-          Text("Registration Complete",style: TextStyle(fontSize:20,color: colorPrimary,fontWeight: FontWeight.w500),),
-          Text('Total Candidates: ${examProvider.selectedExam!.totalQuestions}'),
-          Text('Exam Date: 20/12/24')
-        ],
-      )
+    return Center(
+      child:Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/images/complete2.json",height: 112),
+            Text("Registration Complete",style: TextStyle(fontSize:20,color: colorPrimary,fontWeight: FontWeight.w500),),
+            Text('Total Candidates: ${examProvider.selectedExam!.totalQuestions}'),
+            Text('Exam Date: 20/12/24')
+          ],
+        )
     );
   }
 }

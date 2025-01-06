@@ -203,7 +203,6 @@ class _QuestionEditor extends State<QuestionEditor> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ExamFilterWidget(
-              examList: examList,
             ),
 
             const SizedBox(height: 10),

@@ -3,8 +3,11 @@ import os
 import check
 import mysql.connector
 from mysql.connector import Error, IntegrityError
+from flask_cors import CORS  # Import flask_cors for CORS support
 
 app = Flask(__name__)
+# CORS(app)  # Enable CORS for all routes and origins
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 UPLOAD_FOLDER = './uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -131,4 +134,4 @@ def get_omr():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)

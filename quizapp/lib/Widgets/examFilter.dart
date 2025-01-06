@@ -3,17 +3,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/providers/answerProvider.dart';
 import 'package:quizapp/providers/candidateProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/scholarProvider.dart';
-
 import '../database/models/exammodel.dart';
 
 class ExamFilterWidget extends StatefulWidget {
 
   const ExamFilterWidget({
     super.key,
-    required List<Exam> examList,
   });
 
   @override
@@ -21,7 +20,7 @@ class ExamFilterWidget extends StatefulWidget {
 }
 
 class _ExamFilterWidgetState extends State<ExamFilterWidget> {
-  late ExamProvider _examProvider;
+  //late ExamProvider _examProvider;
 
   // @override
   // void initState(){
@@ -30,37 +29,36 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
   //   _examProvider.getAllExams();
   // }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _examProvider = context.watch<ExamProvider>();
-    if (!_examProvider.dataUpdated) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _examProvider.getAllExams();
-      });
-    }
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _examProvider = context.watch<ExamProvider>();
+  //   if (!_examProvider.dataUpdated) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _examProvider.getAllExams();
+  //     });
+  //   }
+  // }
 
   void _showExamFilterModal(BuildContext context) async {
-    final candidateProvider = Provider.of<CandidateProvider>(context,listen: false);
-    final scholarProvider = Provider.of<ScholarProvider>(context,listen: false);
+    final candidateProvider = Provider.of<CandidateProvider>(context, listen: false);
+    final scholarProvider = Provider.of<ScholarProvider>(context, listen: false);
+    final answerProvider = Provider.of<AnswerProvider>(context, listen: false);
+    final examProvider = Provider.of<ExamProvider>(context, listen: false);
 
-    List<Exam> examList = _examProvider.exams;
+    examProvider.getAllExams();
 
-    //the bottom sheet modal
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       isScrollControlled: true,
-      // Ensures that the bottom sheet takes up all available space
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Container(
             height: MediaQuery.of(context).size.height - 200,
-            decoration: BoxDecoration(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -70,24 +68,40 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
                 ),
                 const SizedBox(height: 10),
                 Expanded(
-                  child:
-                   _examProvider.isLoading?Center(child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),):
-                  ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: examList.length,
-                    separatorBuilder: (context, index) => const Divider(),
-                    itemBuilder: (context, index) {
-                      final exam = examList[index];
-                      return ListTile(
-                        title: Text(exam.name),
-                        subtitle: Text(
-                            "Date: ${exam.dateTime}, Location: ${exam.location}"),
-                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                        onTap: () {
-                          _examProvider.setSelectedExam(exam);
-                          candidateProvider.getAllCandidates(exam.id);
-                          scholarProvider.getFilteredScholars(exam.id);
-                          Navigator.pop(context); // Close the modal
+                  child: Consumer<ExamProvider>(
+                    builder: (context, provider, child) {
+                      if (provider.isLoading) {
+                        return Center(
+                          child: Lottie.asset("assets/images/loader.json",width: 112)
+                        );
+                      }
+
+                      if (provider.exams.isEmpty) {
+                        return const Center(
+                          child: Text("No exams available."),
+                        );
+                      }
+
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: provider.exams.length,
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemBuilder: (context, index) {
+                          final exam = provider.exams[index];
+                          return ListTile(
+                            title: Text(exam.name),
+                            subtitle: Text(
+                              "Date: ${exam.dateTime}, Location: ${exam.location}",
+                            ),
+                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                            onTap: () {
+                              provider.setSelectedExam(exam);
+                              candidateProvider.getAllCandidates(exam.id);
+                              scholarProvider.getFilteredScholars(exam.id);
+                              answerProvider.getAllAnswers(exam.id);
+                              Navigator.pop(context); // Close the modal
+                            },
+                          );
                         },
                       );
                     },
@@ -103,7 +117,7 @@ class _ExamFilterWidgetState extends State<ExamFilterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final examProvider = Provider.of<ExamProvider>(context, listen: false);
+    final examProvider = Provider.of<ExamProvider>(context, listen: true);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/candidate/CandidateListAddResult.dart';
 import 'package:quizapp/Screens/scholar/selectableScholarCard.dart';
@@ -20,15 +21,13 @@ class ScholarList2 extends StatefulWidget {
 
 class _ScholarList2State extends State<ScholarList2> {
   late ScholarProvider _scholarProvider;
-  late ExamProvider _examProvider;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _scholarProvider = context.watch<ScholarProvider>();
-    _examProvider = context.watch<ExamProvider>();
-    if (!_scholarProvider.dataUpdated) {
+    if (!_scholarProvider.filterDataUpdated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scholarProvider.getFilteredScholars(_examProvider.selectedExam!.id);
+        _scholarProvider.getFilteredScholars(widget.examId);
       });
     }
   }
@@ -129,6 +128,11 @@ class _ScholarList2State extends State<ScholarList2> {
           ),
         ),
         SizedBox(height: 8),
+        candidateProvider.isLoading ? Column(
+          children: [
+            Lottie.asset("assets/images/fileAdding.json", height: 110),
+          ],
+        ):
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -165,10 +169,10 @@ class _ScholarList2State extends State<ScholarList2> {
                 });
               },
               child: SelectableScholarCard(
-                scholarId: scholar.scholarId, // Integer ID here
+                scholarId: scholar.scholarId,
                 scholarName: scholar.scholarName,
                 scholarPicture: scholar.scholarPicture,
-                schoolName: scholar.scholarSchool, // Corrected to scholarSchool
+                schoolName: scholar.scholarSchool,
                 classLevel: scholar.classLevel,
                 isMarked: isMarked,
               ),
@@ -178,13 +182,13 @@ class _ScholarList2State extends State<ScholarList2> {
         const SizedBox(height: 16),
         InkWell(
           onTap: () async {
-            print(_markedScholars);
-            if(_selectedCandidates.length == 0){
+            //print(_markedScholars);
+            if(_selectedCandidates.isEmpty){
               print("Nothing selected");
               print(examProvider.selectedExam!.name);
             }else{
               if(examProvider.selectedExam != null){
-                int c = 0;
+                int c = 1;
                 c = await candidateProvider.addMultipleCandidate(_selectedCandidates,examProvider.selectedExam!.id);
                 //print("popped "+c.toString());
                 if (c > 0) {

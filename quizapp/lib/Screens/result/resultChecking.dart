@@ -1,13 +1,14 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import 'package:quizapp/Screens/exam/dummyExamList.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'dart:io';
-
 import 'package:quizapp/constant.dart';
-
-import '../../database/models/exammodel.dart';
+import 'package:http/http.dart' as http;
+import 'package:quizapp/providers/examProvider.dart';
+import 'package:quizapp/providers/resultProvider.dart';
 
 class ResultCheckScreen extends StatefulWidget {
   const ResultCheckScreen({super.key});
@@ -27,7 +28,124 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
       selectedImages!.addAll(pickedFiles);
     });
   }
-  Exam? _selectedExam;
+
+  // Show the popup dialog
+  Future<void> _showResponseDialog(String message, Color color, bool clearFiles) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Checker Response"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                final resultProvidr = Provider.of<ResultProvider>(context,listen: false);
+                resultProvidr.getAllResults();
+                Navigator.of(context).pop();
+                if (clearFiles) {
+                  setState(() {
+                    selectedImages?.clear(); // Clear the images on success
+                  });
+                }
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _uploadImages(int examId) async {
+    if (selectedImages == null || selectedImages!.isEmpty) {
+      print("No images selected");
+      return;
+    }
+
+    for (XFile image in selectedImages!) {
+      try {
+        print("Uploading: ${image.name}");
+        final request = http.MultipartRequest(
+          'POST',
+          Uri.parse('http://192.168.66.213:5000/getomr'),
+        );
+
+        // Add examId as form data
+        request.fields['examId'] = examId.toString();
+
+        // Attach image file
+        request.files.add(await http.MultipartFile.fromPath(
+          'image', // Field name must match the server's expectation
+          image.path,
+        ));
+
+        // Send the request and wait for a response
+        final response = await request.send();
+
+        // Handle response
+        if (response.statusCode == 200) {
+          final responseBody = await response.stream.bytesToString();
+          print("Server Response: $responseBody");
+
+          // Show success popup and clear files
+          _showResponseDialog(
+            "Result Updated Successfully",
+            Colors.green,
+            true,
+          );
+        } else if (response.statusCode == 400) {
+          final responseBody = await response.stream.bytesToString();
+          print("Server Response: $responseBody");
+          _showResponseDialog(
+            "Bad request. Check the image or exam ID",
+            Colors.red,
+            false,
+          );
+        } else if (response.statusCode == 404) {
+          final responseBody = await response.stream.bytesToString();
+          print("Server Response: $responseBody");
+          _showResponseDialog(
+            "Invalid Data",
+            Colors.red,
+            false,
+          );
+        } else if (response.statusCode == 409) {
+          final responseBody = await response.stream.bytesToString();
+          print("Server Response: $responseBody");
+          _showResponseDialog(
+            "Result Already Exist",
+            Colors.red,
+            true,
+          );
+        } else if (response.statusCode == 500) {
+          final responseBody = await response.stream.bytesToString();
+          print("Server Response: $responseBody");
+          _showResponseDialog(
+            "Internal server error occurred",
+            Colors.red,
+            false,
+          );
+        } else {
+          final responseBody = await response.stream.bytesToString();
+          print("Server Response: $responseBody");
+          _showResponseDialog(
+            "Failed to upload image: ${image.name}",
+            Colors.red,
+            false,
+          );
+        }
+      } catch (e) {
+        print("Error uploading image ${image.name}: $e");
+        _showResponseDialog(
+          "Error uploading image ${image.name}: $e",
+          Colors.red,
+          false,
+        );
+      }
+    }
+  }
+
   void _viewAllImages() {
     Navigator.push(
       context,
@@ -43,23 +161,15 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
       ),
     );
   }
-  // for exam selection
-  void _onExamSelected(Exam exam) {
-    setState(() {
-      _selectedExam = exam;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     int imageCount = selectedImages?.length ?? 0;
-
+    final _examProvider = Provider.of<ExamProvider>(context, listen: true);
     return ListView(
       children: [
-        ExamFilterWidget(
-          examList: examList,
-        ),
-        SizedBox(height: 16,),
+        ExamFilterWidget(),
+        SizedBox(height: 16),
         Row(
           children: [
             Expanded(
@@ -183,14 +293,14 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
           ],
         ),
         const SizedBox(height: 10),
-        selectedImages!.length > 0 ?
-        InkWell(
+        selectedImages!.length > 0
+            ? InkWell(
           child: Container(
             padding: EdgeInsets.all(8),
             width: double.maxFinite,
             decoration: BoxDecoration(
-                color: colorPrimary,
-                borderRadius: BorderRadius.circular(8)
+              color: colorPrimary,
+              borderRadius: BorderRadius.circular(8),
             ),
             alignment: Alignment.center,
             child: Text(
@@ -203,22 +313,25 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
             ),
           ),
           onTap: () {
-            print('hello');
+            print(selectedImages);
+            _examProvider.selectedExam != null
+                ? _uploadImages(_examProvider.selectedExam!.id)
+                : print("No exam selected");
           },
         )
-            :
-            Center(
-              child: Column(
-                children: [
-                  Lottie.asset("assets/images/animation3.json"),
-                  Text("Select Answer papers")
-                ],
-              ),
-            )
+            : Center(
+          child: Column(
+            children: [
+              Lottie.asset("assets/images/animation3.json"),
+              Text("Select Answer papers")
+            ],
+          ),
+        )
       ],
     );
   }
 }
+
 
 
 // all images

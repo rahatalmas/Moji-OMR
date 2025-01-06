@@ -49,6 +49,7 @@ def process(block,Q):
     if len(sorted_contours)==4:
         _, thresholded_block_img = cv.threshold(grey_block_image, 150, 255, cv.THRESH_BINARY_INV)
         filled_circles, filled_circle_indices = processColumnContours(sorted_contours, thresholded_block_img)
+        
         print(f"Question: {Q} Answer: {filled_circle_indices} : filled circles {filled_circles}")
         if len(filled_circle_indices) > 0:
             return {Q: filled_circle_indices[0]}

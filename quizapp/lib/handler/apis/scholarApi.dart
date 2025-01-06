@@ -5,13 +5,12 @@ import 'package:quizapp/constant.dart';
 import 'package:quizapp/database/models/scholar.dart';
 import 'package:quizapp/handler/apis/login.dart';
 
-
 class ScholarApi with ChangeNotifier {
   ScholarApi._privateConstructor();
 
   static final ScholarApi _instance = ScholarApi._privateConstructor();
 
-  factory ScholarApi(){
+  factory ScholarApi() {
     return _instance;
   }
 
@@ -33,8 +32,8 @@ class ScholarApi with ChangeNotifier {
         'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
         'Content-Type': 'application/json',
       };
-      final response = await http.get(
-          Uri.parse('$BASE_URL/api/scholar/list'), headers: headers);
+      final response = await http.get(Uri.parse('$BASE_URL/api/scholar/list'),
+          headers: headers);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
         scholars = jsonData.map((data) => Scholar.fromJson(data)).toList();
@@ -65,7 +64,8 @@ class ScholarApi with ChangeNotifier {
       };
       print("filtered scholar list called");
       final response = await http.get(
-          Uri.parse('$BASE_URL/api/scholar/filteredlist/$examId'), headers: headers);
+          Uri.parse('$BASE_URL/api/scholar/filteredlist/$examId'),
+          headers: headers);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
         scholars = jsonData.map((data) => Scholar.fromJson(data)).toList();
@@ -118,6 +118,41 @@ class ScholarApi with ChangeNotifier {
     }
   }
 
+  Future<bool> updateScholar(Scholar newScholar) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+
+      final body = jsonEncode(newScholar.toJson());
+
+      final response = await http.post(
+        Uri.parse('$BASE_URL/api/scholar/update'),
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 204) {
+        print('scholar added successfully');
+        return true;
+      } else {
+        _message = 'Error: ${response.statusCode}, ${response.body}';
+        return false;
+      }
+    } catch (e) {
+      _message = 'Failed to add scholar: $e';
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<bool> deleteScholar(int id) async {
     try {
       final headers = {
@@ -142,6 +177,4 @@ class ScholarApi with ChangeNotifier {
       notifyListeners();
     }
   }
-
 }
-

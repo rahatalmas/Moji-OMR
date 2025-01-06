@@ -6,6 +6,7 @@ import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/examProvider.dart';
+import 'package:quizapp/providers/resultProvider.dart';
 
 class ExamScreen extends StatefulWidget {
   @override
@@ -48,7 +49,7 @@ class _ExamScreenState extends State<ExamScreen> {
                     context,
                     MaterialPageRoute(builder: (context) => ExamCreatePage()),
                   ),
-              child: Icon(Icons.add)),
+              child: Icon(Icons.search)),
           SizedBox(
             width: 16,
           ),
@@ -62,82 +63,82 @@ class _ExamScreenState extends State<ExamScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Lottie.asset("assets/images/animation5.json", height: 150),
-                  Text("Fetching Data...")
+                  const Text("Fetching Data...")
                 ],
               )
             : _examProvider.message.isNotEmpty
                 ? Text(_examProvider.message)
                 : Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: ListView(
+                    child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 12),
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: neutralBG,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                blurRadius: 1,
-                                spreadRadius: 1, // Spread of shadow
-                                offset:
-                                    Offset.zero, // Shadow is even on all sides
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.newspaper,
-                                    color: colorPrimary,
-                                  ),
-                                  SizedBox(
-                                    width: 3,
-                                  ),
-                                  Text(
-                                    "All Time",
-                                    style: TextStyle(color: colorPrimary),
-                                  )
-                                ],
-                              ),
-                              SvgPicture.asset(
-                                "assets/images/filter.svg",
-                                height: 20,
-                                color: colorPrimary,
-                              )
-                            ],
-                          ),
+                        const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [SizedBox(width: 1,),Icon(Icons.list), Text("List Exams")],
+                            ),
+                            Row(
+                              children: [
+                                Text("filter"),
+                                Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  size: 24,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                         SizedBox(
-                          height: 7,
+                          height: 8,
                         ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _examProvider.exams.length,
-                          itemBuilder: (context, index) {
-                            final exam = _examProvider.exams[index];
-                            return ExamCard(
-                              examId: exam.id,
-                              examName: exam.name,
-                              examDate: DateTime.parse(exam.dateTime),
-                              examLocation: exam.location,
-                              examDuration: exam.duration,
-                              questionCount: exam.totalQuestions,
-                              candidateCount: exam.numberOfCandidates,
-                              onDelete: () {
-                                _examProvider.deleteExam(exam.id);
-                              },
-                            );
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: _examProvider.exams.length,
+                            itemBuilder: (context, index) {
+                              final exam = _examProvider.exams[index];
+                              return ExamCard(
+                                examId: exam.id,
+                                examName: exam.name,
+                                examDate: DateTime.parse(exam.dateTime),
+                                examLocation: exam.location,
+                                examDuration: exam.duration,
+                                questionCount: exam.totalQuestions,
+                                candidateCount: exam.numberOfCandidates,
+                                onDelete: () async {
+                                  bool res = await _examProvider.deleteExam(exam.id);
+                                  if(res){
+                                    Provider.of<ResultProvider>(context,listen: false).getAllResults();
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ExamCreatePage()));
                           },
-                        ),
+                          child: Ink(
+                            width: double.maxFinite,
+                            height: 48,
+                            decoration: BoxDecoration(
+                                color: colorPrimary,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Add New",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),

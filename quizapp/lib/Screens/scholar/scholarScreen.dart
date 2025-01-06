@@ -27,6 +27,7 @@ class _ScholarScreenState extends State<ScholarScreen> {
       });
     }
   }
+
   List<String> selectedSchools = [];
   String? selectedSortOption;
   bool isAscending = true;
@@ -70,7 +71,9 @@ class _ScholarScreenState extends State<ScholarScreen> {
     if (selectedSchools.isEmpty) {
       return scholars;
     } else {
-      return scholars.where((scholar) => selectedSchools.contains(scholar.schoolName)).toList();
+      return scholars
+          .where((scholar) => selectedSchools.contains(scholar.schoolName))
+          .toList();
     }
   }
 
@@ -86,83 +89,106 @@ class _ScholarScreenState extends State<ScholarScreen> {
         backgroundColor: neutralWhite,
         actions: [
           InkWell(
-          onTap: () => Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ScholarAddScreen()),
-    ),
-              child: Icon(Icons.add)
-          ),
+              onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScholarAddScreen()),
+                  ),
+              child: Icon(Icons.search)),
           SizedBox(width: 16),
         ],
       ),
-      body: _scholarProvider.isLoading?Center(
-        child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),
-      ):
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            // Filters Row
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: _scholarProvider.isLoading
+          ? Center(
+              child: Lottie.asset("assets/images/loader.json",
+                  width: 100
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.list),
-                      SizedBox(width: 3),
-                      Text("Scholar list")
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => showSchoolFilterDialog(context),
-                        child: Row(
+                  // Filters Row
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Text("School"),
-                            Icon(Icons.arrow_drop_down),
+                            Icon(Icons.list),
+                            SizedBox(width: 3),
+                            Text("Scholar list")
                           ],
                         ),
-                      ),
-                      SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () => showSortOptionsDialog(context),
-                        child: Row(
+                        Row(
                           children: [
-                            Text("Sort"),
-                            Icon(Icons.arrow_drop_down),
+                            GestureDetector(
+                              onTap: () => showSchoolFilterDialog(context),
+                              child: Row(
+                                children: [
+                                  Text("School"),
+                                  Icon(Icons.arrow_drop_down),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            GestureDetector(
+                              onTap: () => showSortOptionsDialog(context),
+                              child: Row(
+                                children: [
+                                  Text("Sort"),
+                                  Icon(Icons.arrow_drop_down),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  SizedBox(height: 8),
+                  // Scholar List
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _scholarProvider.scholars.length,
+                      itemBuilder: (context, index) {
+                        final scholar = _scholarProvider.scholars[index];
+                        print(_scholarProvider.scholars.length);
+                        return ScholarCard(
+                          scholarId: scholar.scholarId,
+                          scholarName: scholar.scholarName,
+                          schoolName: scholar.scholarSchool,
+                          classLevel: scholar.classLevel,
+                          scholarPicture: null,
+                          scholar: _scholarProvider.scholars[index],
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: () {},
+                    child: Ink(
+                      width: double.maxFinite,
+                      height: 48,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Add New",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  )
+
                 ],
               ),
             ),
-            SizedBox(height: 8),
-
-            // Scholar List
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _scholarProvider.scholars.length,
-              itemBuilder: (context, index) {
-                final scholar = _scholarProvider.scholars[index];
-                return ScholarCard(
-                  scholarId: scholar.scholarId,
-                  scholarName: scholar.scholarName,
-                  schoolName: scholar.scholarSchool,
-                  classLevel: scholar.classLevel,
-                  scholarPicture: null,
-                );
-              },
-            )
-            //ScholarList2(scholars: filteredScholars)
-          ],
-        ),
-      ),
     );
   }
 
@@ -177,7 +203,8 @@ class _ScholarScreenState extends State<ScholarScreen> {
               children: [
                 ...scholars.map((scholar) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4.0, horizontal: 16.0),
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -220,7 +247,6 @@ class _ScholarScreenState extends State<ScholarScreen> {
       },
     );
   }
-
 
   // Sort options dialog
   void showSortOptionsDialog(BuildContext context) {
@@ -289,4 +315,3 @@ class _ScholarScreenState extends State<ScholarScreen> {
     );
   }
 }
-
