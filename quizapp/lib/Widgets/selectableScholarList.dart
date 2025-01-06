@@ -215,7 +215,23 @@ class _ScholarList2State extends State<ScholarList2> {
               borderRadius: const BorderRadius.all(Radius.circular(15)),
               border: Border.all(color: Colors.black87, width: 2),
             ),
-            child: const Row(
+            child:
+            candidateProvider.isLoading?
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "saving...",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                SizedBox(width: 3),
+                Icon(Icons.connecting_airports, color: Colors.white),
+              ],
+            ):
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(

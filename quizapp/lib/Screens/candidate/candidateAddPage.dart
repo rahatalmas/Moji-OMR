@@ -326,7 +326,7 @@ class _CandidateEditor extends State<CandidateEditor> {
                     children: [
                       Image.asset("assets/images/man.png",height: 100,width: 100,),
                       SizedBox(height: 8,),
-                      Text('last Added: ${candidateProvider.candidates[candidateProvider.candidates.length-1].name}'),
+                      Text('last Added: ${candidateProvider.candidates[candidateProvider.candidates.length-1].serialNumber}'),
                     ],
                   )
                       :
