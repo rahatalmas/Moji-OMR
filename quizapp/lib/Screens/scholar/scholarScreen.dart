@@ -166,7 +166,9 @@ class _ScholarScreenState extends State<ScholarScreen> {
                   ),
                   const SizedBox(height: 16),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ScholarAddScreen()));
+                    },
                     child: Ink(
                       width: double.maxFinite,
                       height: 48,

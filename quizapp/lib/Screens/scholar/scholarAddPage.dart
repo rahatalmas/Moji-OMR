@@ -332,7 +332,7 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
                       onTap: widget.scholar!=null ? updateScholar :addScholar,
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: colorPrimary,
                           borderRadius: BorderRadius.circular(10),
