@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
+import 'package:quizapp/Screens/scholar/scholarUpdateScreen.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/database/models/scholar.dart';
 import 'package:quizapp/providers/scholarProvider.dart';
@@ -52,7 +53,7 @@ class ScholarCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ScholarAddScreen(scholar: scholar),
+                    builder: (context) => ScholarUpdateScreen(scholarId: scholarId, name: scholarName, schoolName: schoolName, classLevel: classLevel),
                   ),
                 );
               },

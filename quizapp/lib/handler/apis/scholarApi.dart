@@ -131,7 +131,7 @@ class ScholarApi with ChangeNotifier {
 
       final body = jsonEncode(newScholar.toJson());
 
-      final response = await http.post(
+      final response = await http.put(
         Uri.parse('$BASE_URL/api/scholar/update'),
         headers: headers,
         body: body,
@@ -145,7 +145,7 @@ class ScholarApi with ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _message = 'Failed to add scholar: $e';
+      _message = 'Failed to update scholar: $e';
       return false;
     } finally {
       _isLoading = false;

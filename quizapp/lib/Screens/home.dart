@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/candidate/candidatepage.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/omr/omrCreatePage.dart';
+import 'package:quizapp/Screens/question/questionScreen.dart';
+import 'package:quizapp/Screens/result/resultAddScreen.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
+import 'package:quizapp/Screens/result/resultUpdateScreen.dart';
 import 'package:quizapp/Screens/scholar/scholarScreen.dart';
 import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/Widgets/menuButton.dart';
@@ -11,13 +15,51 @@ import 'package:quizapp/Screens/question/questionCreatePage.dart';
 import 'package:quizapp/Widgets/shortcutButton.dart';
 import 'package:quizapp/constant.dart';
 import 'package:collection/collection.dart';
+import 'package:quizapp/providers/adminProvider.dart';
+
+import '../handler/apis/login.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
+  String getDayShortForm() {
+    DateTime now = DateTime.now();
+    String weekdayName = '';
+
+    switch (now.weekday) {
+      case 1:
+        weekdayName = 'Mon';
+        break;
+      case 2:
+        weekdayName = 'Tue';
+        break;
+      case 3:
+        weekdayName = 'Wed';
+        break;
+      case 4:
+        weekdayName = 'Thu';
+        break;
+      case 5:
+        weekdayName = 'Fri';
+        break;
+      case 6:
+        weekdayName = 'Sat';
+        break;
+      case 7:
+        weekdayName = 'Sun';
+        break;
+      default:
+        weekdayName = 'Unknown';
+    }
+
+    return weekdayName.toUpperCase();
+  }
+
+  void main() {
+    print(getDayShortForm()); // This will print the current weekday in uppercase, e.g., 'MON'
+  }
 
   @override
   Widget build(BuildContext context) {
-
     List _menuOptions = [
       {
         "title": "New Exam",
@@ -28,12 +70,20 @@ class Dashboard extends StatelessWidget {
         "image": "assets/images/fourteen.svg",
       },
       {
-        "title": "Add Question",
+        "title": "Create Question",
         "image": "assets/images/sixteen.svg",
       },
       {
         "title": "OMR Generate",
         "image": "assets/images/three.svg",
+      },
+      {
+        "title": "Online Quiz",
+        "image": "assets/images/seven.svg",
+      },
+      {
+        "title": "Add Result",
+        "image": "assets/images/six.svg",
       },
     ];
     List _shortcutMenu = [
@@ -49,7 +99,10 @@ class Dashboard extends StatelessWidget {
         "title": "Results",
         "image": "assets/images/eleven.svg",
       },
-
+      {
+        "title": "Questions",
+        "image": "assets/images/nine.svg",
+      },
     ];
 
     final List<Widget> _menuoptions = [
@@ -57,85 +110,160 @@ class Dashboard extends StatelessWidget {
       const CandidateCreatePage(),
       const QuestionCreatePage(),
       const OmrCreatePage(),
+      const ResultUpdateScreen(examId: 1, serialNumber: 1000, correctAnswers: 20, incorrectAnswers: 0, grade: "A+"),
+      const ResultAddScreen(),
     ];
 
     final List<Widget> _shortcutOptions = [
       const ScholarScreen(),
       ExamScreen(),
       ResultScreen(),
+      QuestionScreen()
     ];
 
     return ListView(
       children: [
+        // Container(
+        //   padding: const EdgeInsets.all(15),
+        //   width: MediaQuery.of(context).size.width,
+        //   decoration: BoxDecoration(
+        //     color: neutralBG,
+        //     borderRadius: const BorderRadius.all(
+        //       Radius.circular(15),
+        //     ),
+        //   ),
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Row(
+        //         children: [
+        //           Image.asset("assets/images/leading2.png", width: 50),
+        //           const Text(
+        //             "Search Query",
+        //             style: TextStyle(
+        //                 fontWeight: FontWeight.bold,
+        //                 fontSize: 15,
+        //                 color: Colors.black),
+        //           ),
+        //         ],
+        //       ),
+        //       const SizedBox(height: 5),
+        //       TextField(
+        //         decoration: InputDecoration(
+        //           labelText: "type here...",
+        //           hintText: "O Level Final",
+        //           hintStyle: const TextStyle(color: Colors.black),
+        //           labelStyle: const TextStyle(color: Colors.black),
+        //           prefixIcon: Padding(
+        //             padding: const EdgeInsets.only(left: 15, right: 5),
+        //             child: Icon(Icons.terminal_sharp,
+        //                 size: 30, color: Colors.brown[800]),
+        //           ),
+        //           border: OutlineInputBorder(
+        //             borderRadius: BorderRadius.circular(25.0),
+        //             borderSide:
+        //                 const BorderSide(color: Colors.black, width: 3.5),
+        //           ),
+        //           enabledBorder: OutlineInputBorder(
+        //             borderRadius: BorderRadius.circular(25.0),
+        //             borderSide:
+        //                 const BorderSide(color: Colors.black, width: 3.5),
+        //           ),
+        //           focusedBorder: OutlineInputBorder(
+        //             borderRadius: BorderRadius.circular(25.0),
+        //             borderSide:
+        //                 const BorderSide(color: Colors.black, width: 3.5),
+        //           ),
+        //           errorBorder: OutlineInputBorder(
+        //             borderRadius: BorderRadius.circular(25.0),
+        //             borderSide: const BorderSide(color: Colors.red, width: 3.5),
+        //           ),
+        //           focusedErrorBorder: OutlineInputBorder(
+        //             borderRadius: BorderRadius.circular(25.0),
+        //             borderSide: const BorderSide(color: Colors.red, width: 3.5),
+        //           ),
+        //           fillColor: Colors.white,
+        //           filled: true,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // const SizedBox(height: 12),
         Container(
           padding: const EdgeInsets.all(15),
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: neutralBG,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(15),
+          decoration:const BoxDecoration(
+            color: brandMinus3,
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/leading2.png", width: 50),
-                  const Text(
-                    "Search Query",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.black),
+                  Row(
+                    children: [
+                      Text(
+                        'Hello, ${ Auth().loginData!.username}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 26,
+                            color: colorPrimary
+                        ),
+                      ),
+                    ],
                   ),
+                  Text("Have a great day, you have got ",style: TextStyle(),),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text("3 Tasks Today",style: TextStyle())
+                    ],
+                  )
                 ],
               ),
-              const SizedBox(height: 5),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "type here...",
-                  hintText: "O Level Final",
-                  hintStyle: const TextStyle(color: Colors.black),
-                  labelStyle: const TextStyle(color: Colors.black),
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 5),
-                    child: Icon(Icons.terminal_sharp,
-                        size: 30, color: Colors.brown[800]),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Text("Today",style: TextStyle(fontSize:20),),
+                      SizedBox(width: 4,),
+                      Icon(Icons.calendar_month,size: 24,color: colorPrimary,)
+                    ],
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 3.5),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DateTime.now().day > 10 ?
+                          Text('${DateTime.now().day}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.blue[500],)) :
+                          Text('0${DateTime.now().day}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.blue[500],),),
+                          DateTime.now().month > 10 ?
+                          Text('${DateTime.now().month}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.indigo,)) :
+                          Text('0${DateTime.now().month}',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.indigo,),),
+                        ],
+                      ),
+                      SizedBox(width: 4,),
+                      Container(child: Text('${getDayShortForm()}',style: TextStyle(fontSize: 36,fontWeight: FontWeight.w500,color: Colors.orange[500],letterSpacing: 0),)),
+                    ],
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 3.5),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 3.5),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 3.5),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: const BorderSide(color: Colors.red, width: 3.5),
-                  ),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-              ),
+                ],
+              )
             ],
-          ),
+          )
         ),
         const SizedBox(height: 12),
-
+        //menu
         Row(
           children: [
             Row(

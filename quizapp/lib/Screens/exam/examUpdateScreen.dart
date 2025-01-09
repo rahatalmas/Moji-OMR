@@ -146,7 +146,13 @@ class _UpdateExamScreenState extends State<UpdateExamScreen> {
       backgroundColor: neutralWhite,
       body:
       _examProvider.isLoading?Center(
-        child: Lottie.asset("assets/images/loader.json",height: 150,width: 150),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
+          ],
+        ),
       ):
       Column(
         children: [

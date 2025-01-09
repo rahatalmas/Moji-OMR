@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
+import 'package:quizapp/Screens/result/models/ErrorResponse.dart';
+import 'package:quizapp/Screens/result/models/successResponse.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/providers/examProvider.dart';
-import 'package:quizapp/providers/scholarProvider.dart';
 
 class PaperProcessingResult extends StatelessWidget {
-
-  PaperProcessingResult(
-      {super.key}
-      );
+  final List<SuccessResponse> success;
+  final List<ErrorResponse> errors;
+  const PaperProcessingResult(
+      {super.key, required this.success, required this.errors});
 
   @override
   Widget build(BuildContext context) {
-    final scholarProvider = Provider.of<ScholarProvider>(context,listen:true);
-    final examProvider = Provider.of<ExamProvider>(context,listen: true);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -30,9 +27,9 @@ class PaperProcessingResult extends StatelessWidget {
         actions: [
           InkWell(
               onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ResultScreen()),
-              ),
+                    context,
+                    MaterialPageRoute(builder: (context) => ResultScreen()),
+                  ),
               child: Icon(Icons.add)),
           SizedBox(width: 16),
         ],
@@ -45,215 +42,311 @@ class PaperProcessingResult extends StatelessWidget {
             // success container
             Container(
               width: double.maxFinite,
-              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 16),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
               decoration: BoxDecoration(
                 color: brandMinus3,
                 borderRadius: BorderRadius.circular(8),
                 //border: Border.all(color: brandP,width: 2.5)
               ),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Lottie.asset("assets/images/success1.json",width: 112),
-                  Text('Checking Successful',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: colorPrimary),),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Requested: ${10}',style: TextStyle(color: colorPrimary)),
-                      SizedBox(width: 4,),
-                      Text('Valid: ${5}',style: TextStyle(color: colorPrimary)),
-                      SizedBox(width: 4,),
-                      Text('Invalid: ${5}',style: TextStyle(color: colorPrimary)),
+                  Expanded(
+                    flex: 1,
+                    child: Lottie.asset("assets/images/animations/summary.json",height: 112),),
+                  Expanded(
+                    flex: 2,
+                      child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Checking Summary',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: colorPrimary),
+                        ),
+                        Text(
+                            'Total Papers: ${success.length + errors.length}',
+                            style: TextStyle(color: colorPrimary)
+                        ),
+                        Text('Valid: ${success.length}',
+                            style: TextStyle(color: colorPrimary)),
+                        Text('Invalid: ${errors.length}',
+                            style: TextStyle(color: colorPrimary)),
                     ],
-                  ),
-                  SizedBox(height: 8,),
-                  InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 100,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: colorPrimary,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text("Done",style: TextStyle(color: neutralWhite,fontWeight: FontWeight.w500),),
-                    ),
-                  )
+                  ))
                 ],
               ),
             ),
-            SizedBox(height: 8,),
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            Expanded(
+                child: ListView(
               children: [
-                Row(
+                //valid papers
+                SizedBox(
+                  height: 8,
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.list,size: 21,),
-                    Text("Output List")
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 2,
+                        ),
+                        Icon(
+                          Icons.list,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text("Valid Papers"),
+                      ],
+                    ),
+                    Icon(
+                      Icons.info,
+                      color: colorPrimary,
+                      size: 20,
+                    )
                   ],
                 ),
-                Row(
-                  children: [
-                    Text("Filter"),
-                    Icon(Icons.filter_vintage_rounded,size: 18,),
-                  ],
-                )
-              ],
-            ),
-            SizedBox(height: 4,),
-            Expanded(
-                child: ListView.builder(
-                  itemCount:10,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 4,horizontal: 2.5),
-                          padding:EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              color: neutralWhite,
-                              boxShadow: [BoxShadow(color: Colors.black12,blurRadius: 2,spreadRadius: 1)],
-                              borderRadius: BorderRadius.circular(6)
-                          ),
-
-                          child:  index>=5
-                              ?
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  //Image.asset("assets/images/man.png",width: 50,),
-                                  SizedBox(width: 4,),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text('Serial Number: ${'1001'}'),
-                                      Row(
-                                        children: [
-                                          Text('Result Already Exist'),
-                                          SizedBox(width: 8,),
-                                          //Text('Out Of: ${'40'}'),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: index<5
-                                    ?
-                                Column(
-                                  children: [
-                                    Icon(Icons.cloud_done,color: Colors.green,),
-                                    Text("saved",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.green),)
-                                  ],
-                                )
-                                    :
-                                Column(
-                                  children: [
-                                    Icon(Icons.cancel_rounded,color: Colors.red,),
-                                    Text("Canceled",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.red),)
-                                  ],
-                                )
-                                ,
-                              ),
-                            ],
-                          )
-                              :
-                          //Card for candidates result
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset("assets/images/man.png",width: 50,),
-                                  SizedBox(width: 4,),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text('Serial Number: ${'1001'}'),
-                                      Row(
-                                        children: [
-                                          Text('Correct: ${'35'}'),
-                                          SizedBox(width: 8,),
-                                          Text('Out Of: ${'40'}'),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: index<5
-                                    ?
-                                Column(
-                                  children: [
-                                    Icon(Icons.cloud_done,color: Colors.green,),
-                                    Text("saved",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.green),)
-                                  ],
-                                )
-                                    :
-                                Column(
-                                  children: [
-                                    Icon(Icons.cancel_rounded,color: Colors.red,),
-                                    Text("Canceled",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.red),)
-                                  ],
-                                )
-                                ,
-                              ),
-                            ],
-                          ),
+                SizedBox(
+                  height: 4,
+                ),
+                success.length == 0
+                    ? Center(
+                        child: Column(
+                          children: [
+                            Lottie.asset("assets/images/animations/novalidpaper.json",height: 200),
+                            Text("No Valid Papers")
+                          ],
                         ),
-                        if (index == 5 - 1) ...[
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.cancel_schedule_send,size: 16,
-                              ),
-                              SizedBox(width: 8,),
-                              Text("Invalid Papers"),
-                              SizedBox(width: 8,),
-                              Expanded(
-                                  flex: 4,
-                                  child: Container(
-                                    height: 2,
-                                    color: brandMinus3,
-                                  )
-                              ),
-                            ],
-                          ),
-                        ]
+                    )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: success.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 2.5),
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                                color: neutralWhite,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 2,
+                                      spreadRadius: 1)
+                                ],
+                                borderRadius: BorderRadius.circular(6)),
+                            //Card for candidates result
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/man.png",
+                                      width: 50,
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                            'Serial Number: ${success[index].serialNumber}'),
+                                        Row(
+                                          children: [
+                                            Text(
+                                                'Correct: ${success[index].correctAnswers}'),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Text(
+                                                'Out Of: ${success[index].totalQuestion}'),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          Icons.cloud_done,
+                                          color: Colors.green,
+                                        ),
+                                        Text(
+                                          "saved",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.green),
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                SizedBox(
+                  height: 4,
+                ),
+
+                //invalid papers...
+                SizedBox(
+                  height: 8,
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 2,
+                        ),
+                        Icon(
+                          Icons.cancel_schedule_send_outlined,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text("Invalid Papers"),
                       ],
-                    );
-                  },
-                )),
-            SizedBox(height: 8,),
+                    ),
+                    Icon(
+                      Icons.info,
+                      color: colorPrimary,
+                      size: 20,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+
+                errors.length == 0
+                    ?  Center(
+                  child: Column(
+                    children: [
+                      Lottie.asset("assets/images/animations/novalidpaper.json",height: 200),
+                      Text("No Invalid Papers")
+                    ],
+                  ),
+                )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: errors.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 2.5),
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  color: neutralWhite,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black12,
+                                        blurRadius: 2,
+                                        spreadRadius: 1)
+                                  ],
+                                  borderRadius: BorderRadius.circular(6)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      //Image.asset("assets/images/man.png",width: 50,),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                              'Serial Number: ${errors[index].serialNumber}'),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '${ errors[index].message.length > 40?
+                                                    errors[index].message.substring(0,40)+"...":
+                                                    errors[index].message
+                                                }',
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,// This will prevent overflow and add ellipsis
+                                              ),
+                                              SizedBox(width: 8),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          Icons.cancel_rounded,
+                                          color: Colors.red,
+                                        ),
+                                        Text(
+                                          "Canceled",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.red),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ));
+                        },
+                      ),
+                SizedBox(
+                  height: 8,
+                ),
+              ],
+            )),
+
             InkWell(
-              onTap: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context)=>ResultScreen())
-                     );
+              onTap: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ResultScreen()));
               },
               child: Container(
                 alignment: Alignment.center,
                 width: double.maxFinite,
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: colorPrimary,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text("Home",style: TextStyle(color: neutralWhite,fontWeight: FontWeight.w500),),
+                child: Text(
+                  "Results",
+                  style: TextStyle(
+                      color: neutralWhite, fontWeight: FontWeight.w500),
+                ),
               ),
             )
           ],

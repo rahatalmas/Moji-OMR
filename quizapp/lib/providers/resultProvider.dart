@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/handler/apis/resultApi.dart';
 import 'package:quizapp/database/models/getresult.dart';
 
+import '../database/models/result.dart';
+
 class ResultProvider with ChangeNotifier {
   List<GetResult> _results = [];
   List<Map<String, dynamic>> _groupedResults = [];
@@ -38,6 +40,44 @@ class ResultProvider with ChangeNotifier {
       _message = 'Failed to fetch results: $e';
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<bool> addResult(Result newResult) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    try {
+      bool  res = await ResultApi().addResult(newResult);
+      _isLoading = false;
+      _dataUpdated = false;
+      notifyListeners();
+      return res;
+    } catch (e) {
+      _message = 'Failed to add result: $e';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> updateResult(Result updateResult,int examId) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    try {
+      bool  res = await ResultApi().updateResult(updateResult, examId);
+      _isLoading = false;
+      _dataUpdated = false;
+      notifyListeners();
+      return res;
+    } catch (e) {
+      _message = 'Failed to update result: $e';
+      _isLoading = false;
+      notifyListeners();
+      return false;
     }
   }
 
@@ -88,4 +128,7 @@ class ResultProvider with ChangeNotifier {
       },
     );
   }
+
+
+
 }

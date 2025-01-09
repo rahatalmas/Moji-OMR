@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/omr/updateAnswerScreen.dart';
 import 'package:quizapp/constant.dart';
@@ -78,20 +79,30 @@ class _OmrCreatePage extends State<OmrCreatePage> {
       backgroundColor: neutralWhite,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: ExamFilterWidget(
             ),
           ),
+          examProvider.selectedExam == null
+              ? Expanded(
+                child: const Center(
+                              child: Text("no exam selected"),
+                            ),
+              )
+              :
+          answerProvider.answers.length != examProvider.selectedExam!.totalQuestions ?
+          answerProvider.isLoading?
+          //loader
           Expanded(
-            child: examProvider.selectedExam == null
-                ? const Center(
-              child: Text("no exam selected"),
-            )
-                :
-            answerProvider.answers.length != examProvider.selectedExam!.totalQuestions ?
-
-            ListView(
+            child: Center(
+              child: Lottie.asset("assets/images/animations/geometryloader.json",width: 100),
+            ),
+          )
+              :
+          //answer list for storing
+          Expanded(
+            child: ListView(
               children: [
                 const Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -154,29 +165,69 @@ class _OmrCreatePage extends State<OmrCreatePage> {
                   },
                 ),
               ],
-            )
-                :
-            Center(child: Column(
-              children: [
-                Text("answers are set"),
-                InkWell(
-                  onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context){
-                          return UpdateAnswerScreen(exam:examProvider.selectedExam!);
-                        })
-                    );
-                  },
-                  child: Text("Update answer"),
-                )
+            ),
+          )
+              :
+          //answer is set
+          Expanded(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Lottie.asset("assets/images/animations/answerchecked.json",height: 300),
+                      const Text("Answers Are Set")
+                    ],
+                  ),
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context){
+                            return UpdateAnswerScreen(exam:examProvider.selectedExam!);
+                          })
+                      );
+                    },
+                    child: const Text(
+                      "Update answer",
+                      style: TextStyle(
+                          color: Colors.deepPurple,
+                          fontSize: 16,
+                          decoration: TextDecoration.underline
+                      ),
+                    ),
+                  )
               ],
-            ),)
+            ),),
           ),
+          examProvider.selectedExam == null
+              ?
+              Container()
+              :
+          answerProvider.isLoading?
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.white,
-            child: InkWell(
+            child:
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: colorPrimary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Center(
+                child: CircularProgressIndicator(color: neutralWhite,),
+              ),
+            ),
+          ):
+          Container(
+            padding: const EdgeInsets.all(16),
+            color: Colors.white,
+            child:
+            InkWell(
               onTap: () {
                   answerProvider.answers.length != examProvider.selectedExam!.totalQuestions
                       ?
@@ -193,8 +244,8 @@ class _OmrCreatePage extends State<OmrCreatePage> {
                 ),
                 child: const Center(
                   child: Text(
-                    "Create",
-                    style: TextStyle(color: neutralWhite, fontSize: 22),
+                    "Download",
+                    style: TextStyle(color: neutralWhite, fontSize: 18),
                   ),
                 ),
               ),

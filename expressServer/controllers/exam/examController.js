@@ -69,7 +69,7 @@ const updateExam = async (req,res)=>{
              } = req.body;
         console.log({exam_id,exam_name,exam_date,exam_location,exam_duration,question_count,candidate_count});
         
-        const [exam] = await db.query(examsQ.getSpecificById,[ex]);
+        const [exam] = await db.query(examsQ.getSpecificById,[exam_id]);
         if(exam.length != 1){
             console.log("Exam Id: ",id);
             console.log("No exam found with this id");

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:quizapp/Screens/result/models/ErrorResponse.dart';
+import 'package:quizapp/Screens/result/models/successResponse.dart';
+import 'package:quizapp/Screens/result/paperProcessingResult.dart';
 import 'package:quizapp/Widgets/examFilter.dart';
 import 'dart:io';
 import 'package:quizapp/constant.dart';
@@ -18,8 +21,13 @@ class ResultCheckScreen extends StatefulWidget {
 }
 
 class _ResultCheckScreen extends State<ResultCheckScreen> {
+  bool _isloading = false;
+  int counter = 0;
   final ImagePicker _picker = ImagePicker();
   List<XFile>? selectedImages = [];
+
+  List<SuccessResponse> _results = [];
+  List<ErrorResponse> _errors = [];
 
   Future<void> _pickImage() async {
     final List<XFile> pickedFiles = await _picker.pickMultiImage();
@@ -31,6 +39,10 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
 
   // Show the popup dialog
   Future<void> _showResponseDialog(String message, Color color, bool clearFiles) async {
+    print(_results);
+    print(_errors.isNotEmpty ? _errors[0].message : "No errors");
+    if (!mounted) return; // Prevent dialog if the widget is not mounted
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -40,14 +52,18 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                final resultProvidr = Provider.of<ResultProvider>(context,listen: false);
-                resultProvidr.getAllResults();
-                Navigator.of(context).pop();
-                if (clearFiles) {
-                  setState(() {
-                    selectedImages?.clear(); // Clear the images on success
-                  });
+                if (mounted) {
+                  final resultProvider = Provider.of<ResultProvider>(context, listen: false);
+                  resultProvider.getAllResults();
+                  Navigator.of(context).pop();
+
+                  if (clearFiles) {
+                    setState(() {
+                      selectedImages?.clear(); // Clear the images on success
+                    });
+                  }
                 }
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>PaperProcessingResult(success: _results, errors: _errors)));
               },
               child: Text("OK"),
             ),
@@ -57,94 +73,64 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
     );
   }
 
+  //omr cheking function ...
   Future<void> _uploadImages(int examId) async {
     if (selectedImages == null || selectedImages!.isEmpty) {
       print("No images selected");
       return;
     }
 
+    List<SuccessResponse> successResponses = [];
+    List<ErrorResponse> errorResponses = [];
+    setState(() {
+      _isloading = true;
+    });
     for (XFile image in selectedImages!) {
+      setState(() {
+        counter = counter+1;
+      });
       try {
         print("Uploading: ${image.name}");
         final request = http.MultipartRequest(
           'POST',
-          Uri.parse('http://192.168.66.213:5000/getomr'),
+          Uri.parse('$OMR_URL/getomr'),
         );
 
-        // Add examId as form data
         request.fields['examId'] = examId.toString();
+        request.files.add(await http.MultipartFile.fromPath('image', image.path));
 
-        // Attach image file
-        request.files.add(await http.MultipartFile.fromPath(
-          'image', // Field name must match the server's expectation
-          image.path,
-        ));
-
-        // Send the request and wait for a response
         final response = await request.send();
+        final responseBody = await response.stream.bytesToString();
+        final Map<String, dynamic> jsonData = json.decode(responseBody);
 
-        // Handle response
         if (response.statusCode == 200) {
-          final responseBody = await response.stream.bytesToString();
-          print("Server Response: $responseBody");
-
-          // Show success popup and clear files
-          _showResponseDialog(
-            "Result Updated Successfully",
-            Colors.green,
-            true,
-          );
-        } else if (response.statusCode == 400) {
-          final responseBody = await response.stream.bytesToString();
-          print("Server Response: $responseBody");
-          _showResponseDialog(
-            "Bad request. Check the image or exam ID",
-            Colors.red,
-            false,
-          );
-        } else if (response.statusCode == 404) {
-          final responseBody = await response.stream.bytesToString();
-          print("Server Response: $responseBody");
-          _showResponseDialog(
-            "Invalid Data",
-            Colors.red,
-            false,
-          );
-        } else if (response.statusCode == 409) {
-          final responseBody = await response.stream.bytesToString();
-          print("Server Response: $responseBody");
-          _showResponseDialog(
-            "Result Already Exist",
-            Colors.red,
-            true,
-          );
-        } else if (response.statusCode == 500) {
-          final responseBody = await response.stream.bytesToString();
-          print("Server Response: $responseBody");
-          _showResponseDialog(
-            "Internal server error occurred",
-            Colors.red,
-            false,
-          );
+          final successResponse = SuccessResponse.fromJson(jsonData);
+          successResponses.add(successResponse);
         } else {
-          final responseBody = await response.stream.bytesToString();
-          print("Server Response: $responseBody");
-          _showResponseDialog(
-            "Failed to upload image: ${image.name}",
-            Colors.red,
-            false,
-          );
+          final errorResponse = ErrorResponse.fromJson(jsonData);
+          errorResponses.add(errorResponse);
         }
       } catch (e) {
-        print("Error uploading image ${image.name}: $e");
-        _showResponseDialog(
-          "Error uploading image ${image.name}: $e",
-          Colors.red,
-          false,
-        );
+        errorResponses.add(ErrorResponse(
+          message: "Error uploading ${image.name}: $e",
+          serialNumber: 0,
+        ));
       }
     }
+
+    if (mounted) {
+      setState(() {
+        _results.addAll(successResponses);
+        _errors.addAll(errorResponses);
+        selectedImages = [];
+        _isloading = false;
+      });
+
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>PaperProcessingResult(success: _results, errors: _errors)));
+    }
   }
+
+
 
   void _viewAllImages() {
     Navigator.push(
@@ -166,7 +152,24 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
   Widget build(BuildContext context) {
     int imageCount = selectedImages?.length ?? 0;
     final _examProvider = Provider.of<ExamProvider>(context, listen: true);
-    return ListView(
+    return
+      _isloading?
+          Column(
+            children: [
+              Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Lottie.asset("assets/images/animations/resultCheckingLoader.json",width: 350,height: 350),
+                      Text("Checking Papers...",style: TextStyle(fontSize: 18),),
+                      Text('Completed: ${counter}/${selectedImages!.length}')
+                    ],
+                  )
+              )
+            ],
+          ):
+      ListView(
       children: [
         ExamFilterWidget(),
         SizedBox(height: 16),
@@ -312,7 +315,7 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
               ),
             ),
           ),
-          onTap: () {
+          onTap: (){
             print(selectedImages);
             _examProvider.selectedExam != null
                 ? _uploadImages(_examProvider.selectedExam!.id)
@@ -331,6 +334,7 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
     );
   }
 }
+
 
 
 

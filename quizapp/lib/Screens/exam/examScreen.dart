@@ -62,8 +62,7 @@ class _ExamScreenState extends State<ExamScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Lottie.asset("assets/images/animation5.json", height: 150),
-                  const Text("Fetching Data...")
+                  Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
                 ],
               )
             : _examProvider.message.isNotEmpty

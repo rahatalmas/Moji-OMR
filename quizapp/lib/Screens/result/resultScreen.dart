@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
+import 'package:quizapp/Screens/result/resultAddScreen.dart';
 import 'package:quizapp/Screens/result/resultDetails.dart';
 import 'package:quizapp/constant.dart';
 import 'package:quizapp/providers/examProvider.dart';
@@ -50,33 +51,39 @@ class _ResultScreen extends State<ResultScreen> {
       ),
       backgroundColor: neutralWhite,
       body: _resultProvider.isLoading
-          ? SizedBox(
-              width: double.maxFinite,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Lottie.asset("assets/images/animation5.json", width: 200),
-                  const Text("Fetching Data...")
-                ],
-              ),
-            )
+          ? Center(
+            child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+            Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
+                    ],
+                  ),
+          )
           : _resultProvider.results.length == 0
               ? Center(
                   child: Column(
                     mainAxisSize: MainAxisSize
                         .min, // Ensures the column takes minimal space
                     children: [
-                      Image.asset(
-                        "assets/images/student.png",
-                        height: 200,
-                        width: 200,
-                      ),
+                      Lottie.asset("assets/images/animations/emptybox.json",height: 300),
                       const SizedBox(height: 25),
                       const Text(
                         "The Result Database is Empty",
                         //style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                       ),
+                      InkWell(
+                        onTap: (){
+                        },
+                        child: const Text(
+                          "Add Result",
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontSize: 16,
+                              decoration: TextDecoration.underline
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -286,7 +293,9 @@ class _ResultScreen extends State<ResultScreen> {
                       ),
                       const SizedBox(height: 16),
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ResultAddScreen()));
+                        },
                         child: Ink(
                           width: double.maxFinite,
                           height: 48,

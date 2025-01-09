@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/admin/adminAddScreen.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/database/models/admin.dart';
 import 'package:quizapp/handler/apis/login.dart';
 
 import '../../providers/adminProvider.dart';

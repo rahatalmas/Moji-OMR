@@ -67,7 +67,6 @@ class ScholarProvider with ChangeNotifier {
     _isLoading = true;
     _message = '';
     notifyListeners();
-
     try {
       bool result = await ScholarApi().addScholar(newScholar);
       _dataUpdated = false;
@@ -75,7 +74,7 @@ class ScholarProvider with ChangeNotifier {
       notifyListeners();
       return result;
     } catch (e) {
-      _message = 'Failed to add exam: $e';
+      _message = 'Failed to add Scholar: $e';
       return false;
     }
   }
@@ -93,7 +92,7 @@ class ScholarProvider with ChangeNotifier {
       notifyListeners();
       return result;
     } catch (e) {
-      _message = 'Failed to add exam: $e';
+      _message = 'Failed to update scholar: $e';
       return false;
     }
   }

@@ -1,5 +1,5 @@
 const db = require("../../config/db");
-const { scholarQ } = require("../../queries/queries");
+const { scholarQ, candidateQ } = require("../../queries/queries");
 const { roles } = require("../utility/keys");
 
 const getScholarList = async (req, res) => {
@@ -63,6 +63,7 @@ const AddScholar = async (req, res) => {
 }
 
 const UpdateScholar = async (req, res) => {
+    console.log("update function called");
     try {
         try {
             const {

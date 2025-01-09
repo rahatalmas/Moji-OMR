@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/database/models/answer.dart';
 import 'package:quizapp/providers/answerProvider.dart';
@@ -47,7 +48,19 @@ class _UpdateAnswerScreenState extends State<UpdateAnswerScreen> {
         shadowColor: Colors.grey,
       ),
       backgroundColor: neutralWhite,
-      body: Column(
+      body:
+      answerProvider.isLoading
+          ? Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
+          ],
+        ),
+      )
+          :
+      Column(
         children: [
           Expanded(
             child: ListView.builder(
@@ -93,9 +106,9 @@ class _UpdateAnswerScreenState extends State<UpdateAnswerScreen> {
                 Navigator.pop(context); // Navigate back when the button is pressed
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
-                  color: kColorPrimary,
+                  color: colorPrimary,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Center(
@@ -104,6 +117,7 @@ class _UpdateAnswerScreenState extends State<UpdateAnswerScreen> {
                     style: TextStyle(
                       color: neutralWhite,
                       fontWeight: FontWeight.bold,
+                      fontSize: 18
                     ),
                   ),
                 ),
@@ -119,7 +133,7 @@ class _UpdateAnswerScreenState extends State<UpdateAnswerScreen> {
 class AnswerCircles extends StatelessWidget {
   final int questionNumber;
   final int correctAnswer;
-  final Function(int) onAnswerSelect; // Callback for answer selection
+  final Function(int) onAnswerSelect;
 
   const AnswerCircles({
     super.key,
@@ -144,7 +158,7 @@ class AnswerCircles extends StatelessWidget {
         children: [
           for (int i = 0; i < 4; i++)
             InkWell(
-              onTap: () => onAnswerSelect(i + 1), // Pass the selected answer to the callback
+              onTap: () => onAnswerSelect(i + 1),
               child: AnswerCircle(
                 label: String.fromCharCode(65 + i),
                 isSelected: (i + 1) == correctAnswer,
@@ -173,16 +187,16 @@ class AnswerCircle extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isSelected ? Colors.green : Colors.white,
-        border: Border.all(
-          color: isSelected ? Colors.green : kColorPrimary, // Border for unselected circles
-        ),
+        color: isSelected ? Colors.green : Colors.blue,
+        // border: Border.all(
+        //   color: isSelected ? Colors.green : Colors.black, // Border for unselected circles
+        // ),
       ),
       child: Center(
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? neutralWhite : kColorPrimary,
+            color: neutralWhite,
           ),
         ),
       ),

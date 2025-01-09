@@ -241,11 +241,11 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
               leading: Icon(Icons.question_answer),
               title: Text("TestPage"),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context)=>PaperProcessingResult())
-                );
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context)=>PaperProcessingResult(success: [], errors: []))
+                // );
               },
             ),
           ],

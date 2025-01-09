@@ -99,10 +99,14 @@ class _ScholarScreenState extends State<ScholarScreen> {
       ),
       body: _scholarProvider.isLoading
           ? Center(
-              child: Lottie.asset("assets/images/loader.json",
-                  width: 100
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
+                ],
               ),
-            )
+          )
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(

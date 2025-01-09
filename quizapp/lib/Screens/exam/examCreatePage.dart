@@ -123,9 +123,15 @@ class _ExamCreatePage extends State<ExamCreatePage> {
       ),
       backgroundColor: neutralWhite,
       //resizeToAvoidBottomInset: false,
-      body: _examProvider.isLoading?
+      body: _examProvider.isLoading ?
       Center(
-        child: Lottie.asset("assets/images/loader.json",width: 100),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
+          ],
+        ),
       )
           :
       Column(

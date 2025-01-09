@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:quizapp/Screens/result/resultUpdateScreen.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/providers/resultProvider.dart';
 
 class ResultDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> examResult;
@@ -27,7 +30,7 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
         actions: [
           InkWell(
             onTap: () {
-              // Search functionality or any action you want
+
             },
             child: Icon(Icons.search),
           ),
@@ -197,6 +200,19 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
                                               ),
                                             ],
                                           ),
+                                          SizedBox(width: 4),
+                                          InkWell(
+                                              onTap:(){
+                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ResultUpdateScreen(
+                                                    examId: examResult['exam_id'],
+                                                    serialNumber: examResult['candidates'][index]['serial_number'],
+                                                    correctAnswers: examResult['candidates'][index]['correct_answers'],
+                                                    incorrectAnswers: examResult['candidates'][index]['incorrect_answers'],
+                                                    grade: examResult['candidates'][index]['grade']
+                                                )));
+                                              },
+                                              child: Icon(Icons.edit_note)
+                                          )
                                         ],
                                       ),
                                       Text('Serial: ${examResult['candidates'][index]['serial_number']}'),

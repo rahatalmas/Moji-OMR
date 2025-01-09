@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizapp/Screens/exam/examDetailsScreen.dart';
 import 'package:quizapp/Screens/exam/examUpdateScreen.dart';
 import 'package:quizapp/constant.dart';
 
@@ -41,7 +42,7 @@ class _ExamCardState extends State<ExamCard> {
         child: InkWell(
           borderRadius: BorderRadius.circular(12.0),
           onTap: () {
-            print('Card tapped');
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>ExamDetailsScreen()));
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),

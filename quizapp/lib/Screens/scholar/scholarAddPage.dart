@@ -237,7 +237,7 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
     final bool isKeyboardVisible =
         KeyboardVisibilityProvider.isKeyboardVisible(context);
     final scholarProvider =
-        Provider.of<ScholarProvider>(context, listen: false);
+        Provider.of<ScholarProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -252,9 +252,14 @@ class _ScholarAddScreenState extends State<ScholarAddScreen> {
       backgroundColor: neutralWhite,
       body: scholarProvider.isLoading
           ? Center(
-              child: Lottie.asset("assets/images/loader.json",
-                  height: 150, width: 150),
-            )
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
+          ],
+        ),
+      )
           : Column(
               children: [
                 Expanded(
