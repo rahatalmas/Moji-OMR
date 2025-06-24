@@ -1,9 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:quizapp/handler/apis/login.dart';
-
-import '../constant.dart';
+import '../database/models/examdetails.dart';
 import '../database/models/exammodel.dart';
 import '../handler/apis/examApiUtil.dart';
 
@@ -12,9 +8,11 @@ class ExamProvider with ChangeNotifier {
   bool _isLoading = false;
   bool _dataUpdated = false;
   String _message = '';
+  Exam? _selectedExam;
 
   // Getters
   List<Exam> get exams => _exams;
+
 
   bool get isLoading => _isLoading;
 
@@ -22,6 +20,12 @@ class ExamProvider with ChangeNotifier {
 
   String get message => _message;
 
+  Exam? get selectedExam => _selectedExam;
+
+  void setSelectedExam(Exam exam){
+    _selectedExam = exam;
+    notifyListeners();
+  }
   void reset() {
     _dataUpdated = false;
     notifyListeners();
@@ -31,16 +35,16 @@ class ExamProvider with ChangeNotifier {
     _isLoading = true;
     _message = '';
     notifyListeners();
-
     try {
       _exams = await ExamApiUtil().fetchExams();
       _isLoading = false;
-      _dataUpdated = false;
+      _dataUpdated = true;
       notifyListeners();
     } catch (e) {
       debugPrint(e.toString());
     }
   }
+
 
   Future<bool> addExam(Exam newExam) async {
     _isLoading = true;
@@ -49,7 +53,7 @@ class ExamProvider with ChangeNotifier {
 
     try {
       bool result = await ExamApiUtil().addExam(newExam);
-      _dataUpdated = result;
+      _dataUpdated = false;
       _isLoading = false;
       notifyListeners();
       return result;
@@ -59,32 +63,38 @@ class ExamProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> deleteExam(int id) async {
-    print(exams.length);
-    try {
-      final headers = {
-        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
-        'Content-Type': 'application/json',
-      };
-      final response = await http.delete(
-        Uri.parse('$BASE_URL/api/exam/delete/$id'),
-        headers: headers,
-      );
+  Future<bool> updateExam(Exam updatedData) async {
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+    try{
+       bool result = await ExamApiUtil().updateExam(updatedData);
+       _dataUpdated = false;
+       _isLoading = false;
+       notifyListeners();
+       return result;
+    }catch(err){
+      _message = 'failed to update $err';
+      return false;
+    }finally{
+      _isLoading = false;
+      _dataUpdated = false;
+    }
+  }
 
-      if (response.statusCode == 201) {
-        print(_exams.length);
-        _exams.removeWhere((exam) => exam.id == id);
-        notifyListeners();
-        print('Exam deleted successfully');
-        return true;
-      } else {
-        throw Exception('Error: ${response.statusCode}, ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete exam: $e');
-    } finally {
+  Future<bool> deleteExam(int id) async {
+    try {
+      bool result = await ExamApiUtil().deleteExam(id);
+      _dataUpdated = false;
       _isLoading = false;
       notifyListeners();
+      if(result){
+        _selectedExam = null;
+      }
+      return result;
+    } catch (e) {
+      _message = 'Failed to delete exam: $e';
+      return false;
     }
   }
 }

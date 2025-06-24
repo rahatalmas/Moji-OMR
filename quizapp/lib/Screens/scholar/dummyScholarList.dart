@@ -1,12 +1,12 @@
 import 'package:quizapp/Screens/scholar/scholarScreen.dart';
-class Scholar {
+class DummyScholar {
   final String scholarId;
   final String scholarName;
   final String? scholarPicture;
   final String schoolName;
   final String classLevel;
 
-  Scholar({
+  DummyScholar({
     required this.scholarId,
     required this.scholarName,
     this.scholarPicture,
@@ -15,22 +15,22 @@ class Scholar {
   });
 }
 
-List<Scholar> scholars = [
-  Scholar(
+List<DummyScholar> scholars = [
+  DummyScholar(
     scholarId: '1',
     scholarName: 'Alice Johnson',
     scholarPicture: null,
     schoolName: 'Greenwood High',
     classLevel: 'Grade 10',
   ),
-  Scholar(
+  DummyScholar(
     scholarId: '2',
     scholarName: 'Bob Smith',
     scholarPicture: null,
     schoolName: 'Sunrise Academy',
     classLevel: 'Grade 12',
   ),
-  Scholar(
+  DummyScholar(
     scholarId: '3',
     scholarName: 'Charlie Brown',
     scholarPicture: null,

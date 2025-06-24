@@ -17,7 +17,7 @@ const verifyToken = (token)=>{
 const generateAccessToken = (data) =>{
     console.log("Access token generator called")
     try{
-        const token = jwt.sign(data,SECRET_KEY,{expiresIn:'10m',algorithm:'HS512'});
+        const token = jwt.sign(data,SECRET_KEY,{expiresIn:'7d',algorithm:'HS512'});
         return token
     }catch(err){
         console.log("Token generation error: ",err);

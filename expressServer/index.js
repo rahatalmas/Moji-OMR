@@ -3,6 +3,10 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/userRoutes');
 const examRouter = require('./routes/examRoutes');
+const ScholarRouter = require('./routes/scholarRoutes');
+const candidateRouter = require('./routes/candidateRoutes');
+const resultRouter = require('./routes/resultRoutes');
+const answerRouter = require('./routes/answerRoutes');
 
 const app = express();
 app.use(cors());
@@ -16,6 +20,10 @@ app.get("/",(req,res)=>{
 
 app.use("/api/user",userRouter);
 app.use("/api/exam",examRouter);
+app.use("/api/scholar",ScholarRouter);
+app.use("/api/candidate",candidateRouter);
+app.use("/api/result",resultRouter);
+app.use("/api/answer",answerRouter);
 
 app.listen(PORT, (err)=>{
     if(err){

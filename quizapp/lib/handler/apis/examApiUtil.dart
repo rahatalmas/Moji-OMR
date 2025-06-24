@@ -2,17 +2,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../constant.dart';
+import '../../database/models/examdetails.dart';
 import '../../database/models/exammodel.dart';
 import 'login.dart';
 
 class ExamApiUtil with ChangeNotifier {
-  // Private constructor for singleton pattern
   ExamApiUtil._privateConstructor();
 
-  // Static instance of ExamApiUtil
   static final ExamApiUtil _instance = ExamApiUtil._privateConstructor();
 
-  // Factory constructor to return the same instance
   factory ExamApiUtil() {
     return _instance;
   }
@@ -20,7 +18,6 @@ class ExamApiUtil with ChangeNotifier {
   bool _isLoading = false;
   String _message = '';
 
-  // Getters
   bool get isLoading => _isLoading;
   String get message => _message;
 
@@ -90,6 +87,41 @@ class ExamApiUtil with ChangeNotifier {
     }
   }
 
+  Future<bool> updateExam(Exam updatedData) async{
+    _isLoading = true;
+    _message = '';
+    notifyListeners();
+
+    try {
+      final headers = {
+        'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
+        'Content-Type': 'application/json',
+      };
+
+      final body = jsonEncode(updatedData.toJson());
+
+      final response = await http.put(
+        Uri.parse('$BASE_URL/api/exam/update'),
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 204) {
+        print('Exam updated successfully: ${response.statusCode}');
+        return true;
+      } else {
+        _message = 'Error: ${response.statusCode}, ${response.body}';
+        return false;
+      }
+    } catch (e) {
+      _message = 'Failed to add exam: $e';
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<bool> deleteExam(int id) async {
     try {
       final headers = {
@@ -102,7 +134,7 @@ class ExamApiUtil with ChangeNotifier {
         headers: headers,
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         return true;
       } else {
         throw Exception('Error: ${response.statusCode}, ${response.body}');

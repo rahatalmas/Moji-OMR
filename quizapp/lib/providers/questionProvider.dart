@@ -25,7 +25,12 @@ class QuestionProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
+  void removeQuestion(int index) {
+    if (index >= 0 && index < _questions.length) {
+      _questions.removeAt(index);
+      notifyListeners();
+    }
+  }
   void addQuestion(Question newQuestion) {
     _questions.add(newQuestion);
     notifyListeners();

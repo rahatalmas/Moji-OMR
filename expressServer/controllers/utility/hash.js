@@ -27,6 +27,8 @@ const generateHash = async (data) => {
 };
 
 const hashCompare = async (data,hashedData)=>{
+    console.log("hash function called");
+    console.log(data,hashedData);
     result = await bcrypt.compare(data,hashedData)
     return result
 }

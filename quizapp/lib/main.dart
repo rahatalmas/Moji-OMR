@@ -2,21 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/admin/adminPage.dart';
+import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/home.dart';
+import 'package:quizapp/Screens/result/paperProcessingResult.dart';
+import 'package:quizapp/Screens/result/resultChecking.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/handler/apis/login.dart';
 import 'package:quizapp/providers/actionProvider.dart';
+import 'package:quizapp/providers/adminProvider.dart';
+import 'package:quizapp/providers/answerProvider.dart';
+import 'package:quizapp/providers/candidateProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/questionProvider.dart';
+import 'package:quizapp/providers/resultProvider.dart';
+import 'package:quizapp/providers/scholarProvider.dart';
 import 'package:quizapp/routes.dart';
-
 import 'constant.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => AdminProvider()),
         ChangeNotifierProvider(create: (context) => ExamProvider()),
+        ChangeNotifierProvider(create: (context) => CandidateProvider()),
+        ChangeNotifierProvider(create: (context) => ScholarProvider()),
+        ChangeNotifierProvider(create: (context) => AnswerProvider()),
+        ChangeNotifierProvider(create: (context) => ResultProvider()),
         ChangeNotifierProvider(create: (context) => QuestionProvider()),
         ChangeNotifierProvider(create: (context) => ActionStatusProvider())
       ],
@@ -61,7 +73,7 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
 
   final List<Widget> _children = [
     const Dashboard(),
-    const ResultScreen(),
+    const ResultCheckScreen(),
   ];
 
   // Global key to access the scaffold state
@@ -160,8 +172,8 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
               decoration: BoxDecoration(
                 color: colorPrimary,
               ),
-              accountName: const Text("Admin"),
-              accountEmail: const Text("Admin@gmail.com"),
+              accountName: Text('${Auth().loginData!.username}'),
+              accountEmail: Text('Role: ${Auth().loginData!.permission==1?"Admin":"Editor"}'),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: kColorPrimary,
                 child: ClipOval(
@@ -176,7 +188,7 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: Text("Admin"),
+              title: Text("Profile"),
               onTap: () {
                 Navigator.push(
                   context,
@@ -189,21 +201,14 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
               leading: Icon(Icons.article),
               title: Text("All Exams"),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> ExamScreen()));
               },
             ),
             ListTile(
               leading: Icon(Icons.list),
               title: Text("All Results"),
               onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.question_answer),
-              title: Text("All Questions"),
-              onTap: () {
-                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> ResultScreen()));
               },
             ),
             ListTile(
@@ -224,6 +229,17 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
                     );
                   }
                 });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.question_answer),
+              title: Text("TestPage"),
+              onTap: () {
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context)=>PaperProcessingResult(success: [], errors: []))
+                // );
               },
             ),
           ],

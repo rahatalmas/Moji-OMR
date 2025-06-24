@@ -28,7 +28,7 @@ class _AnswerCirclesState extends State<AnswerCircles> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 5),
+      margin:const EdgeInsets.only(bottom: 5),
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: neutralWhite,

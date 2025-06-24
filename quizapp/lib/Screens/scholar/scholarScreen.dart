@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/scholar/dummyScholarList.dart';
 import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
-import 'package:quizapp/Widgets/scholarList.dart';
+import 'package:quizapp/Screens/scholar/scholarCard.dart';
 import 'package:quizapp/constant.dart';
+import 'package:quizapp/providers/scholarProvider.dart';
 
 class ScholarScreen extends StatefulWidget {
   const ScholarScreen({Key? key}) : super(key: key);
@@ -12,7 +15,18 @@ class ScholarScreen extends StatefulWidget {
 }
 
 class _ScholarScreenState extends State<ScholarScreen> {
+  late ScholarProvider _scholarProvider;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scholarProvider = context.watch<ScholarProvider>();
+    if (!_scholarProvider.dataUpdated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scholarProvider.getAllScholars();
+      });
+    }
+  }
 
   List<String> selectedSchools = [];
   String? selectedSortOption;
@@ -53,11 +67,13 @@ class _ScholarScreenState extends State<ScholarScreen> {
   }
 
   // Filtered scholars based on selected schools
-  List<Scholar> get filteredScholars {
+  List<DummyScholar> get filteredScholars {
     if (selectedSchools.isEmpty) {
       return scholars;
     } else {
-      return scholars.where((scholar) => selectedSchools.contains(scholar.schoolName)).toList();
+      return scholars
+          .where((scholar) => selectedSchools.contains(scholar.schoolName))
+          .toList();
     }
   }
 
@@ -73,66 +89,106 @@ class _ScholarScreenState extends State<ScholarScreen> {
         backgroundColor: neutralWhite,
         actions: [
           InkWell(
-          onTap: () => Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ScholarAddScreen()),
-    ),
-              child: Icon(Icons.add)
-          ),
+              onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScholarAddScreen()),
+                  ),
+              child: Icon(Icons.add)),
           SizedBox(width: 16),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            // Filters Row
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: _scholarProvider.isLoading
+          ? Center(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.list),
-                      SizedBox(width: 3),
-                      Text("Scholar list")
-                    ],
+                  Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
+                ],
+              ),
+          )
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  // Filters Row
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        // Row(
+                        //   children: [
+                        //     GestureDetector(
+                        //       onTap: () => showSchoolFilterDialog(context),
+                        //       child: Row(
+                        //         children: [
+                        //           Text("School"),
+                        //           Icon(Icons.arrow_drop_down),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //     SizedBox(width: 16),
+                        //     GestureDetector(
+                        //       onTap: () => showSortOptionsDialog(context),
+                        //       child: Row(
+                        //         children: [
+                        //           Text("all"),
+                        //           Icon(Icons.arrow_drop_down),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => showSchoolFilterDialog(context),
-                        child: Row(
-                          children: [
-                            Text("School"),
-                            Icon(Icons.arrow_drop_down),
-                          ],
+                  SizedBox(height: 8),
+                  // Scholar List
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _scholarProvider.scholars.length,
+                      itemBuilder: (context, index) {
+                        final scholar = _scholarProvider.scholars[index];
+                        print(_scholarProvider.scholars.length);
+                        return ScholarCard(
+                          scholarId: scholar.scholarId,
+                          scholarName: scholar.scholarName,
+                          schoolName: scholar.scholarSchool,
+                          classLevel: scholar.classLevel,
+                          scholarPicture: null,
+                          scholar: _scholarProvider.scholars[index],
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ScholarAddScreen()));
+                    },
+                    child: Ink(
+                      width: double.maxFinite,
+                      height: 48,
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Add New",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
                         ),
                       ),
-                      SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () => showSortOptionsDialog(context),
-                        child: Row(
-                          children: [
-                            Text("Sort"),
-                            Icon(Icons.arrow_drop_down),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  )
+
                 ],
               ),
             ),
-            SizedBox(height: 8),
-
-            // Scholar List
-            ScholarList(scholars: filteredScholars),
-            //ScholarList2(scholars: filteredScholars)
-          ],
-        ),
-      ),
     );
   }
 
@@ -147,7 +203,8 @@ class _ScholarScreenState extends State<ScholarScreen> {
               children: [
                 ...scholars.map((scholar) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4.0, horizontal: 16.0),
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -190,7 +247,6 @@ class _ScholarScreenState extends State<ScholarScreen> {
       },
     );
   }
-
 
   // Sort options dialog
   void showSortOptionsDialog(BuildContext context) {
@@ -259,4 +315,3 @@ class _ScholarScreenState extends State<ScholarScreen> {
     );
   }
 }
-

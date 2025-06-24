@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:quizapp/constant.dart';
 import 'package:quizapp/handler/api_handler.dart';
 import 'package:quizapp/handler/models/login.dart';
 import 'package:http/http.dart' as http;
@@ -52,7 +53,7 @@ class Auth implements BaseAuthHandler {
     required String user,
     required String password,
   }) async {
-    String apiLink = "http://192.168.31.184:8080/api/user/login/";
+    String apiLink = '$BASE_URL/api/user/login';
     try {
       var url = Uri.parse(apiLink);
       var response = await http.post(

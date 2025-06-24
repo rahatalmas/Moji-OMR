@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/Screens/candidate/candidateAddPage.dart';
+import 'package:quizapp/Screens/candidate/candidatePreviewpage.dart';
 import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
 import 'package:quizapp/constant.dart';
 
@@ -15,7 +16,7 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
 
   final List<Widget> _widgetOptions = <Widget>[
     CandidateEditor(),
-    Center(child: Text("preview"),),
+    CandidatePreviewScreen(),
   ];
 
   @override
