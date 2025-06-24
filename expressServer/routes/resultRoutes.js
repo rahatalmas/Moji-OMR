@@ -6,7 +6,7 @@ resultRouter.get("/allresult",getAllResultWithExamAndCandidate);
 resultRouter.get("/all/:examId",getAllResult);
 resultRouter.get("/all/myresult/:examId/:serialNumber",myResult);
 resultRouter.post("/add",addResult);
-resultRouter.put("/update",updateExamResults);
+resultRouter.put("/update/:examId",updateExamResults);
 resultRouter.delete("/delete/:examId",deleteExamResults);
 resultRouter.delete("/delete/individual/:examId/:serialNumber",deleteMyResult);
 

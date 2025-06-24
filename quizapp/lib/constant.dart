@@ -2,8 +2,11 @@ import 'dart:ui';
 
 //const String BASE_URL = "https://api.rahatalmas.com";  //domain
 //const String BASE_URL = "http://192.168.66.213:5050";  //for mobile hots spot
-const String BASE_URL = "http://192.168.31.184:8080";    //local ip
-const String OMR_URL =  "http://192.168.31.184:5000";
+//const String BASE_URL = "http://192.168.31.184:8080";    //local ip
+
+//vps
+const String BASE_URL = "http://107.167.94.246:8080";  // api
+const String OMR_URL =  "http://107.167.94.246:5000";  //omr api
 
 const kColorPrimary = Color(0xFFF5F5F5);
 const appTextPrimary = Color(0xFF070F2B);

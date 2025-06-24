@@ -101,29 +101,29 @@ class _ScholarList2State extends State<ScholarList2> {
                   Text("Scholar list")
                 ],
               ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => showSchoolFilterDialog(context),
-                    child: Row(
-                      children: [
-                        Text("School"),
-                        Icon(Icons.arrow_drop_down),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  GestureDetector(
-                    onTap: () => showSortOptionsDialog(context),
-                    child: Row(
-                      children: [
-                        Text("Sort"),
-                        Icon(Icons.arrow_drop_down),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     GestureDetector(
+              //       onTap: () => showSchoolFilterDialog(context),
+              //       child: Row(
+              //         children: [
+              //           Text("School"),
+              //           Icon(Icons.arrow_drop_down),
+              //         ],
+              //       ),
+              //     ),
+              //     SizedBox(width: 16),
+              //     GestureDetector(
+              //       onTap: () => showSortOptionsDialog(context),
+              //       child: Row(
+              //         children: [
+              //           Text("Sort"),
+              //           Icon(Icons.arrow_drop_down),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),

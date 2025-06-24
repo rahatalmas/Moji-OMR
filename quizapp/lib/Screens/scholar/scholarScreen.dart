@@ -93,7 +93,7 @@ class _ScholarScreenState extends State<ScholarScreen> {
                     context,
                     MaterialPageRoute(builder: (context) => ScholarAddScreen()),
                   ),
-              child: Icon(Icons.search)),
+              child: Icon(Icons.add)),
           SizedBox(width: 16),
         ],
       ),
@@ -116,36 +116,30 @@ class _ScholarScreenState extends State<ScholarScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Icon(Icons.list),
-                            SizedBox(width: 3),
-                            Text("Scholar list")
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () => showSchoolFilterDialog(context),
-                              child: Row(
-                                children: [
-                                  Text("School"),
-                                  Icon(Icons.arrow_drop_down),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 16),
-                            GestureDetector(
-                              onTap: () => showSortOptionsDialog(context),
-                              child: Row(
-                                children: [
-                                  Text("Sort"),
-                                  Icon(Icons.arrow_drop_down),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+
+                        // Row(
+                        //   children: [
+                        //     GestureDetector(
+                        //       onTap: () => showSchoolFilterDialog(context),
+                        //       child: Row(
+                        //         children: [
+                        //           Text("School"),
+                        //           Icon(Icons.arrow_drop_down),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //     SizedBox(width: 16),
+                        //     GestureDetector(
+                        //       onTap: () => showSortOptionsDialog(context),
+                        //       child: Row(
+                        //         children: [
+                        //           Text("all"),
+                        //           Icon(Icons.arrow_drop_down),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

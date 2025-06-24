@@ -98,6 +98,7 @@ class _ResultAddScreenState extends State<ResultAddScreen> {
         const SnackBar(content: Text("Result saved successfully.")),
       );
       //Navigator.pop(context);
+      resultProvider.getAllResults();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Failed to save result.")),
@@ -119,7 +120,6 @@ class _ResultAddScreenState extends State<ResultAddScreen> {
     final bool isKeyboardVisible =
     KeyboardVisibilityProvider.isKeyboardVisible(context);
     final resultProvider = Provider.of<ResultProvider>(context, listen: true);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -147,7 +147,8 @@ class _ResultAddScreenState extends State<ResultAddScreen> {
                 children: [
                  const SizedBox(height: 12,),
                  Image.asset("assets/images/leading3.png",width: 200,height: 200,),
-                  const SizedBox(height: 12,),
+
+                  const SizedBox(height: 16,),
                   // Serial Number Field
                   TextField(
                     controller: _serialNumberController,

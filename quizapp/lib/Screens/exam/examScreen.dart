@@ -49,7 +49,7 @@ class _ExamScreenState extends State<ExamScreen> {
                     context,
                     MaterialPageRoute(builder: (context) => ExamCreatePage()),
                   ),
-              child: Icon(Icons.search)),
+              child: Icon(Icons.add)),
           SizedBox(
             width: 16,
           ),
@@ -80,7 +80,7 @@ class _ExamScreenState extends State<ExamScreen> {
                             ),
                             Row(
                               children: [
-                                Text("filter"),
+                                Text("All"),
                                 Icon(
                                   Icons.arrow_drop_down_outlined,
                                   size: 24,

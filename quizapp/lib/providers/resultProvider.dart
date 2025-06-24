@@ -70,7 +70,7 @@ class ResultProvider with ChangeNotifier {
     try {
       bool  res = await ResultApi().updateResult(updateResult, examId);
       _isLoading = false;
-      _dataUpdated = false;
+      _dataUpdated =false;
       notifyListeners();
       return res;
     } catch (e) {
@@ -128,7 +128,5 @@ class ResultProvider with ChangeNotifier {
       },
     );
   }
-
-
 
 }

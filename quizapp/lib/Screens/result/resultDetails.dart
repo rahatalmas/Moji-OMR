@@ -267,43 +267,100 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
   }
 
   // Method to generate and download the PDF
+// Method to generate and download the PDF
   Future<void> _generateAndDownloadPDF() async {
     try {
       final pdf = pw.Document();
 
-      // Add a page to the PDF
-      pdf.addPage(
-        pw.Page(
-          build: (pw.Context context) {
-            return pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-                pw.Text('Exam Results', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(height: 20),
-                // Table headers
-                pw.Row(
-                  children: [
-                    pw.Expanded(child: pw.Text('Serial Number', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-                    pw.Expanded(child: pw.Text('Name', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-                    pw.Expanded(child: pw.Text('Grade', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-                  ],
-                ),
-                pw.SizedBox(height: 10),
-                // Table rows without school column
-                ...widget.examResult['candidates'].map<pw.Widget>((candidate) {
-                  return pw.Row(
+      // Constants for pagination
+      const int itemsPerPage = 20; // Number of rows per page
+      final List<dynamic> candidates = widget.examResult['candidates'];
+      final int totalItems = candidates.length;
+      final int totalPages = (totalItems / itemsPerPage).ceil();
+
+      for (int page = 0; page < totalPages; page++) {
+        final start = page * itemsPerPage;
+        final end = (start + itemsPerPage > totalItems) ? totalItems : start + itemsPerPage;
+
+        // Add a page to the PDF
+        pdf.addPage(
+          pw.Page(
+            build: (pw.Context context) {
+              return pw.Stack(
+                children: [
+                  // Main content
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Expanded(child: pw.Text(candidate['serial_number'].toString())),
-                      pw.Expanded(child: pw.Text(candidate['candidate_name'])),
-                      pw.Expanded(child: pw.Text(candidate['grade'])),
+                      // Header
+                      pw.Text(
+                        'Exam Results',
+                        style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                      ),
+                      pw.SizedBox(height: 20),
+
+                      // Table headers
+                      pw.Row(
+                        children: [
+                          pw.Expanded(
+                            child: pw.Text(
+                              'Serial Number',
+                              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              'Name',
+                              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              'Grade',
+                              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      pw.Divider(),
+
+                      // Table rows for this page
+                      ...candidates.sublist(start, end).map<pw.Widget>((candidate) {
+                        return pw.Row(
+                          children: [
+                            pw.Expanded(
+                              child: pw.Text(candidate['serial_number'].toString()),
+                            ),
+                            pw.Expanded(
+                              child: pw.Text(candidate['candidate_name']),
+                            ),
+                            pw.Expanded(
+                              child: pw.Text(candidate['grade']),
+                            ),
+                          ],
+                        );
+                      }).toList(),
                     ],
-                  );
-                }).toList(),
-              ],
-            );
-          },
-        ),
-      );
+                  ),
+
+                  // Footer (page number)
+                  pw.Positioned(
+                    bottom: 0, // Align at the bottom of the page
+                    left: 0,
+                    right: 0,
+                    child: pw.Center(
+                      child: pw.Text(
+                        'Page ${page + 1} of $totalPages',
+                        style: pw.TextStyle(fontSize: 12, fontStyle: pw.FontStyle.italic),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      }
 
       // Save PDF to local directory
       final output = await getTemporaryDirectory();
@@ -311,11 +368,15 @@ class _ResultDetailsScreen extends State<ResultDetailsScreen> {
       await file.writeAsBytes(await pdf.save());
 
       // Use the printing package to download the file
-      Printing.sharePdf(bytes: await file.readAsBytes(), filename: 'exam_result.pdf');
+      await Printing.sharePdf(
+        bytes: await file.readAsBytes(),
+        filename: 'exam_result.pdf',
+      );
     } catch (e) {
       print('Error generating PDF: $e');
     }
   }
+
 
 }
 

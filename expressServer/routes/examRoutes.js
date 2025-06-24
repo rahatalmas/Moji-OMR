@@ -8,7 +8,7 @@ examRouter.use(authCheck);
 examRouter.get("/list",getExamList);
 //examRouter.get("/listwithcandidates",getExamList);
 //examRouter.get("/listwithquestions",getExamList);
-//examRouter.get("/listwitheverything",getExamList);
+//examRouter.get("/listwitheverything/:examId",getExamList);
 examRouter.get("/list/:examId",getExamWithDetails); // incomplete
 examRouter.post("/add",addExam);
 examRouter.put("/update",updateExam);

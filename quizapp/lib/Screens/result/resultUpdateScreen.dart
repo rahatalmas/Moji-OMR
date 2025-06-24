@@ -93,16 +93,26 @@ class _ResultUpdateScreenState extends State<ResultUpdateScreen> {
     final bool isKeyboardVisible = KeyboardVisibilityProvider.isKeyboardVisible(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Update Result",
-          style: TextStyle(color: Colors.black),
+        appBar: AppBar(
+          title: const Text(
+            "Update Result",
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: neutralWhite,
+          iconTheme: const IconThemeData(color: Colors.black),
+          elevation: 3,
+          shadowColor: Colors.grey,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              // Pop until you reach the first screen in the navigation stack
+              //Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          ),
         ),
-        backgroundColor: neutralWhite,
-        iconTheme: const IconThemeData(color: Colors.black),
-        elevation: 3,
-        shadowColor: Colors.grey,
-      ),
+        
       backgroundColor: neutralWhite,
       body: _resultProvider.isLoading
           ? Center(
@@ -204,6 +214,8 @@ class _ResultUpdateScreenState extends State<ResultUpdateScreen> {
                         backgroundColor: Colors.green,
                       ),
                     );
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

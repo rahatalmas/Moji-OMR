@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../constant.dart';
+import '../../providers/examProvider.dart';
 import 'examCreatePage.dart';
 
 class ExamDetailsScreen extends StatefulWidget {
+  ExamDetailsScreen({super.key,required this.examId});
+
+  int examId;
+
   @override
   _ExamDetailsScreenState createState() => _ExamDetailsScreenState();
 }
 
 class _ExamDetailsScreenState extends State<ExamDetailsScreen> {
   int? _expandedIndex;
+  late ExamProvider _examProvider;
+
+  // @override
+  // void initState(){
+  //   super.initState();
+  //   _examProvider = context.watch<ExamProvider>();
+  //   _examProvider.getAllExams();
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _examProvider = context.watch<ExamProvider>();
+  //   //if (!_examProvider.dataUpdated) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _examProvider.getExamDetails(widget.examId);
+  //     });
+  //   //}
+  // }
 
   void _showBottomModal(BuildContext context) {
     showModalBottomSheet(
@@ -74,6 +99,23 @@ class _ExamDetailsScreenState extends State<ExamDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final examprovider = Provider.of<ExamProvider>(context,listen: true);
+
+    // // Check if selectedExamDetails is null
+    // if (examprovider.selectedExamDetails == null) {
+    //   return Scaffold(
+    //     appBar: AppBar(
+    //       title: const Text('Exam Details'),
+    //       centerTitle: true,
+    //       elevation: 3,
+    //       backgroundColor: neutralWhite,
+    //     ),
+    //     body: const Center(
+    //       child: CircularProgressIndicator(), // Show loading spinner
+    //     ),
+    //   );
+    // }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Exam Details'),
@@ -116,7 +158,8 @@ class _ExamDetailsScreenState extends State<ExamDetailsScreen> {
                           children: [
                             Expanded(
                               child: Text(
-                                "Final Defense Fall2024",
+                                //examprovider.selectedExamDetails!.examName,
+                                "hello",
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -166,7 +209,16 @@ class _ExamDetailsScreenState extends State<ExamDetailsScreen> {
                         SizedBox(height: 4),
                         Row(
                           children: [
-                            Icon(Icons.fact_check_outlined,
+                            Icon(Icons.discount,
+                                size: 20, color: colorPrimary),
+                            SizedBox(width: 8),
+                            Text("Total Questions: 5"),
+                          ],
+                        ),
+                        SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(Icons.man,
                                 size: 20, color: colorPrimary),
                             SizedBox(width: 8),
                             Text('Registered: 80'),

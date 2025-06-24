@@ -150,25 +150,25 @@ class _AdminPageState extends State<AdminPage> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () => {print("profile edit button")},
-                                  // Edit profile
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "edit",
-                                        style: TextStyle(
-                                            color: Colors.black87,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Icon(
-                                        Icons.edit_note,
-                                        color: Colors.black87,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // GestureDetector(
+                                //   onTap: () => {print("profile edit button")},
+                                //   // Edit profile
+                                //   child: Row(
+                                //     children: [
+                                //       Text(
+                                //         "edit",
+                                //         style: TextStyle(
+                                //             color: Colors.black87,
+                                //             fontSize: 16,
+                                //             fontWeight: FontWeight.w400),
+                                //       ),
+                                //       Icon(
+                                //         Icons.edit_note,
+                                //         color: Colors.black87,
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             ),
                             Text(
@@ -290,13 +290,13 @@ class _AdminPageState extends State<AdminPage> {
                       if (profileOwnerRole == "Admin")
                         Row(
                           children: [
-                            IconButton(
-                              onPressed: () {
-                                print('edit button');
-                              },
-                              icon:
-                              Icon(Icons.edit, color: colorPrimary),
-                            ),
+                            // IconButton(
+                            //   onPressed: () {
+                            //     print('edit button');
+                            //   },
+                            //   icon:
+                            //   Icon(Icons.edit, color: colorPrimary),
+                            // ),
                             IconButton(
                               onPressed: ()async {
                                 print('delete button');

@@ -1,3 +1,0 @@
-i fount the error while installing npm in hosting
-
-->An error occured during installation of modules. The operation was performed, but check availability of application has failed. Web application responds, but its return code "None" or content type before operation "text/html" doesn't equal to contet type after operation "application/json; charset=utf-8".

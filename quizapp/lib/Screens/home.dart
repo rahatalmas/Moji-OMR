@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/candidate/candidatepage.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/omr/omrCreatePage.dart';
-import 'package:quizapp/Screens/question/questionScreen.dart';
 import 'package:quizapp/Screens/result/resultAddScreen.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
-import 'package:quizapp/Screens/result/resultUpdateScreen.dart';
+import 'package:quizapp/Screens/scholar/scholarAddPage.dart';
 import 'package:quizapp/Screens/scholar/scholarScreen.dart';
 import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/Widgets/menuButton.dart';
@@ -15,7 +13,6 @@ import 'package:quizapp/Screens/question/questionCreatePage.dart';
 import 'package:quizapp/Widgets/shortcutButton.dart';
 import 'package:quizapp/constant.dart';
 import 'package:collection/collection.dart';
-import 'package:quizapp/providers/adminProvider.dart';
 
 import '../handler/apis/login.dart';
 
@@ -78,7 +75,7 @@ class Dashboard extends StatelessWidget {
         "image": "assets/images/three.svg",
       },
       {
-        "title": "Online Quiz",
+        "title": "Add Scholar",
         "image": "assets/images/seven.svg",
       },
       {
@@ -99,10 +96,6 @@ class Dashboard extends StatelessWidget {
         "title": "Results",
         "image": "assets/images/eleven.svg",
       },
-      {
-        "title": "Questions",
-        "image": "assets/images/nine.svg",
-      },
     ];
 
     final List<Widget> _menuoptions = [
@@ -110,7 +103,7 @@ class Dashboard extends StatelessWidget {
       const CandidateCreatePage(),
       const QuestionCreatePage(),
       const OmrCreatePage(),
-      const ResultUpdateScreen(examId: 1, serialNumber: 1000, correctAnswers: 20, incorrectAnswers: 0, grade: "A+"),
+      const ScholarAddScreen(),
       const ResultAddScreen(),
     ];
 
@@ -118,7 +111,6 @@ class Dashboard extends StatelessWidget {
       const ScholarScreen(),
       ExamScreen(),
       ResultScreen(),
-      QuestionScreen()
     ];
 
     return ListView(
@@ -219,11 +211,11 @@ class Dashboard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Text("Have a great day, you have got ",style: TextStyle(),),
+                  Text("Have a great day,",style: TextStyle(),),
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text("3 Tasks Today",style: TextStyle())
+                      Text("Manage you exam plans",style: TextStyle())
                     ],
                   )
                 ],

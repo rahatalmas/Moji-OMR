@@ -1,57 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:quizapp/Screens/exam/dummyExamList.dart';
-import 'package:quizapp/Widgets/answerCircle.dart';
-import 'package:quizapp/Widgets/examFilter.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/providers/examProvider.dart';
-
-import '../../database/models/exammodel.dart';
 import '../../database/models/question.dart';
+import '../../providers/questionProvider.dart';
 
 class QuestionEditor extends StatefulWidget {
   const QuestionEditor({super.key});
 
   @override
-  State<QuestionEditor> createState() => _QuestionEditor();
+  State<QuestionEditor> createState() => _QuestionEditorState();
 }
 
-class _QuestionEditor extends State<QuestionEditor> {
-  String? _selectedAnswer;
-  String _selectedMode = "Default Editing";
-  void _handleAnswerSelection(String label) {
-    setState(() {
-      _selectedAnswer = label;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$label selected')),
-    );
-  }
+class _QuestionEditorState extends State<QuestionEditor> {
   final TextEditingController _questionController = TextEditingController();
   List<TextEditingController> _optionControllers = [];
-  int totalQuestions = 10; // Default total questions
   int optionsPerQuestion = 4; // Default options per question
-  int currentQuestionIndex = 1; // To track the current question number
 
   final InputDecoration _textFieldDecoration = InputDecoration(
     labelText: "Type here...",
     hintText: "Enter value",
     hintStyle: const TextStyle(color: Colors.black),
     labelStyle: const TextStyle(color: Colors.black),
-    prefixIcon: const Icon(Icons.input, size: 30, color: kColorPrimary),
+    prefixIcon: const Icon(Icons.input, size: 30, color: Colors.blue),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15.0),
-      borderSide: const BorderSide(color: kColorSecondary, width: 2.5),
+      borderSide: const BorderSide(color: Colors.grey, width: 2.5),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15.0),
-      borderSide: const BorderSide(color: kColorSecondary, width: 2.5),
+      borderSide: const BorderSide(color: Colors.grey, width: 2.5),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15.0),
-      borderSide: const BorderSide(color: kColorSecondary, width: 2.5),
+      borderSide: const BorderSide(color: Colors.blue, width: 2.5),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15.0),
@@ -71,340 +52,161 @@ class _QuestionEditor extends State<QuestionEditor> {
     _initializeOptionControllers();
   }
 
-  //option editor
   void _initializeOptionControllers() {
     _optionControllers =
         List.generate(optionsPerQuestion, (_) => TextEditingController());
   }
 
-  void _showModeSelectionModal() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-      ),
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                "Select Mode",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text("Default Editing"),
-                onTap: () {
-                  setState(() {
-                    _selectedMode = "Default Editing";
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.storage),
-                title: const Text("Add from Database"),
-                onTap: () {
-                  setState(() {
-                    _selectedMode = "Add from Database";
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.upload_file),
-                title: const Text("Upload File"),
-                onTap: () {
-                  setState(() {
-                    _selectedMode = "Upload File";
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  //answer circle widget
-  /*idget _answerCircle(BuildContext context, String label) {
-    final isSelected = _selectedAnswer == label;
-
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedAnswer = label;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$label selected')),
-        );
-      },
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isSelected ? Colors.green : Colors.blue,
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          label,
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }*/
-
   void _addQuestion() {
-    final question = _questionController.text;
+
+    final qProvider= Provider.of<QuestionProvider>(context, listen: false);
+    if(qProvider.questions.length == 80){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('80 questions filled')),
+      );
+      return;
+    }
+    final questionText = _questionController.text;
     final options =
     _optionControllers.map((controller) => controller.text).toList();
 
-    if (question.isEmpty ||
-        options.any((option) => option.isEmpty) ||
-        _selectedAnswer == null) {
+    if (questionText.isEmpty || options.any((option) => option.isEmpty)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Please fill in all fields and select an answer.')),
-
+            content: Text('Please fill in all fields before adding a question.')),
       );
       return;
     }
 
     // Create a new Question object
     final newQuestion = Question(
-      questionText: question,
+      questionText: questionText,
       options: options,
-      correctAnswer: _selectedAnswer!,
     );
+
+
+    qProvider.addQuestion(newQuestion);
 
     // Reset the fields
     _questionController.clear();
     for (var controller in _optionControllers) {
       controller.clear();
     }
-    setState(() {
-      _selectedAnswer = null; // Reset selected answer
-      currentQuestionIndex++; // Increment the current question index
-    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Question added successfully!')),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final examProvider = Provider.of<ExamProvider>(context,listen:true);
+    final qProvider= Provider.of<QuestionProvider>(context, listen: true);
     return ListView(
+      padding: const EdgeInsets.all(16.0),
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ExamFilterWidget(
-            ),
-
-            const SizedBox(height: 10),
-            examProvider.selectedExam == null
-                ? Center(
-              child: Column(
-                children: [
-                  Image.asset("assets/images/leading1.png",height: 300,width: 300,),
-                  SizedBox(height: 25,),
-                  Text("Select an exam to add Question",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),)
-                ],
-              ),
-            )
-                :
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              decoration:const BoxDecoration(
-                color: neutralBG,
-                borderRadius:  BorderRadius.all(Radius.circular(10)),
-                boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 1)],
-              ),
-              child: Column(
+        Container(
+           padding: EdgeInsets.symmetric(vertical:0,horizontal: 10),
+          decoration: BoxDecoration(
+            color: brandMinus3,
+            borderRadius: BorderRadius.circular(8)
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  // Mode and info
-                  InkWell(
-                    onTap: _showModeSelectionModal,
-                    child: Container(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      decoration: const BoxDecoration(
-                        border: BorderDirectional(
-                          bottom: BorderSide(color: Colors.green, width: 5),
+                  Row(
+                    children: [
+                      Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(10)
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const CircleAvatar(
-                                    radius: 4,
-                                    backgroundColor: Colors.purple,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const CircleAvatar(
-                                    radius: 4,
-                                    backgroundColor: Colors.indigo,
-                                  ),
-                                  const SizedBox(width: 4,),
-                                  const CircleAvatar(
-                                    radius: 4,
-                                    backgroundColor: Colors.cyan,
-                                  ),
-                                  const SizedBox(width: 4,),
-                                  Text(
-                                    _selectedMode,
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                              const Icon(Icons.edit_road)
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Question no: ${61}",
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                              ),
-                              Row(
-                                children: const [
-                                  Text(
-                                    "Total: ${80}",
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    "Remaining: ${20}",
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
+                      SizedBox(width: 4,),
+                      const Text(
+                        "Add a Question",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  //response from server
-                  Container(
-                    height: 150,
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                        color: neutralWhite,
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Lottie.asset("assets/images/fileAdding.json",height: 110),
-                          Text("Last Added: What is an apple?")
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16,),
-
-                  //form fields
-                  const Text(
-                    "Question - ${1}",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(height: 2),
-                  const Text(
-                    "Type Your Question",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5),
-                  TextField(
-                    controller: _questionController,
-                    decoration: _textFieldDecoration.copyWith(
-                      labelText: "Question",
-                      hintText: "Type Question",
-                      prefixIcon: const Icon(Icons.question_mark,
-                          size: 24, color: kColorPrimary),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Type Options",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5),
-                  for (int i = 0; i < optionsPerQuestion; i++) ...[
-                    TextField(
-                      controller: _optionControllers[i],
-                      decoration: _textFieldDecoration.copyWith(
-                        labelText: "Option ${String.fromCharCode(65 + i)}",
-                        hintText: "Enter text here",
-                        prefixIcon: Icon(Icons.circle,
-                            size: 16, color: Colors.brown[800]),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  const Text(
-                    "Select correct answer",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5),
-
-                  //circles for correct answer
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      for (int i = 0; i < optionsPerQuestion; i++)
-                       // An(context, String.fromCharCode(65 + i)),
-                       AnswerCircle(
-                           label: String.fromCharCode(65 + i),
-                           isSelected: _selectedAnswer ==  String.fromCharCode(65 + i),
-                           onTap: _handleAnswerSelection)
                     ],
                   ),
-                  const SizedBox(height: 15),
-
-                  //adding button
-                  InkWell(
-                    onTap: _addQuestion,
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: colorPrimary,
-                        borderRadius: const BorderRadius.all(Radius.circular(15)),
-                        border: Border.all(color: Colors.black87, width: 2),
+                  Row(
+                    children: [
+                      Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                            color: Colors.purple,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Add",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          Icon(Icons.add, color: Colors.white),
-                        ],
+                      SizedBox(width: 4,),
+                      Text(
+                        'Last Index: ${qProvider.questions.length}',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
+              Image.asset("assets/images/leading2.png",height: 100,width: 100,),
+
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 16),
+        TextField(
+          controller: _questionController,
+          decoration: _textFieldDecoration.copyWith(
+            labelText: "Question",
+            hintText: "Type your question here",
+            prefixIcon: const Icon(Icons.question_mark,
+                size: 24, color: Colors.blue),
+          ),
+        ),
+        const SizedBox(height: 16),
+        const Text(
+          "Options",
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        for (int i = 0; i < optionsPerQuestion; i++) ...[
+          TextField(
+            controller: _optionControllers[i],
+            decoration: _textFieldDecoration.copyWith(
+              labelText: "Option ${String.fromCharCode(65 + i)}",
+              hintText: "Enter option ${String.fromCharCode(65 + i)}",
+              prefixIcon: Icon(Icons.circle, size: 16, color: Colors.grey[800]),
             ),
-          ],
+          ),
+          const SizedBox(height: 10),
+        ],
+        const SizedBox(height: 20),
+        InkWell(
+          onTap: _addQuestion,
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: colorPrimary,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: Text(
+                "Add Question",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
         ),
       ],
     );

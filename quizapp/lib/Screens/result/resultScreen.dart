@@ -42,7 +42,7 @@ class _ResultScreen extends State<ResultScreen> {
               context,
               MaterialPageRoute(builder: (context) => ExamCreatePage()),
             ),
-            child: Icon(Icons.search),
+            child: Icon(Icons.add),
           ),
           SizedBox(
             width: 16,
@@ -74,6 +74,7 @@ class _ResultScreen extends State<ResultScreen> {
                       ),
                       InkWell(
                         onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ResultAddScreen()));
                         },
                         child: const Text(
                           "Add Result",
@@ -104,7 +105,7 @@ class _ResultScreen extends State<ResultScreen> {
                           ),
                           Row(
                             children: [
-                              Text("filter"),
+                              Text("All"),
                               Icon(
                                 Icons.arrow_drop_down_outlined,
                                 size: 24,

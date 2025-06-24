@@ -10,6 +10,7 @@ import 'package:quizapp/Widgets/examFilter.dart';
 import 'dart:io';
 import 'package:quizapp/constant.dart';
 import 'package:http/http.dart' as http;
+import 'package:quizapp/providers/answerProvider.dart';
 import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/resultProvider.dart';
 
@@ -28,7 +29,16 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
 
   List<SuccessResponse> _results = [];
   List<ErrorResponse> _errors = [];
-
+  late AnswerProvider answerProvider;
+  late ResultProvider resultProvider;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      answerProvider = Provider.of<AnswerProvider>(context, listen: false);
+      resultProvider = Provider.of<ResultProvider>(context,listen: false);
+    });
+  }
   Future<void> _pickImage() async {
     final List<XFile> pickedFiles = await _picker.pickMultiImage();
 
@@ -37,46 +47,29 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
     });
   }
 
-  // Show the popup dialog
-  Future<void> _showResponseDialog(String message, Color color, bool clearFiles) async {
-    print(_results);
-    print(_errors.isNotEmpty ? _errors[0].message : "No errors");
-    if (!mounted) return; // Prevent dialog if the widget is not mounted
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Checker Response"),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                if (mounted) {
-                  final resultProvider = Provider.of<ResultProvider>(context, listen: false);
-                  resultProvider.getAllResults();
-                  Navigator.of(context).pop();
-
-                  if (clearFiles) {
-                    setState(() {
-                      selectedImages?.clear(); // Clear the images on success
-                    });
-                  }
-                }
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>PaperProcessingResult(success: _results, errors: _errors)));
-              },
-              child: Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
+  void _resetResults() {
+    setState(() {
+      _results.clear();
+      _errors.clear();
+    });
   }
-
   //omr cheking function ...
   Future<void> _uploadImages(int examId) async {
     if (selectedImages == null || selectedImages!.isEmpty) {
       print("No images selected");
+      return;
+    }
+    answerProvider.getAllAnswers(examId);
+    if (answerProvider.answers.length == 0) {
+      // Show Snackbar
+      Future.delayed(Duration.zero, () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('There are answers available!'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      });
       return;
     }
 
@@ -117,16 +110,29 @@ class _ResultCheckScreen extends State<ResultCheckScreen> {
         ));
       }
     }
-
+    await resultProvider.getAllResults();
     if (mounted) {
       setState(() {
         _results.addAll(successResponses);
         _errors.addAll(errorResponses);
         selectedImages = [];
+        counter=0;
         _isloading = false;
       });
 
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>PaperProcessingResult(success: _results, errors: _errors)));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PaperProcessingResult(
+            success: _results,
+            errors: _errors,
+          ),
+        ),
+      ).then((_) {
+        print("paper processing popped");
+        _resetResults();
+      });
+
     }
   }
 

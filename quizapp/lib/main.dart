@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/admin/adminPage.dart';
+import 'package:quizapp/Screens/exam/examScreen.dart';
 import 'package:quizapp/Screens/home.dart';
 import 'package:quizapp/Screens/result/paperProcessingResult.dart';
 import 'package:quizapp/Screens/result/resultChecking.dart';
+import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/handler/apis/login.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/adminProvider.dart';
@@ -15,7 +17,6 @@ import 'package:quizapp/providers/questionProvider.dart';
 import 'package:quizapp/providers/resultProvider.dart';
 import 'package:quizapp/providers/scholarProvider.dart';
 import 'package:quizapp/routes.dart';
-
 import 'constant.dart';
 
 void main() {
@@ -200,21 +201,14 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
               leading: Icon(Icons.article),
               title: Text("All Exams"),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> ExamScreen()));
               },
             ),
             ListTile(
               leading: Icon(Icons.list),
               title: Text("All Results"),
               onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.question_answer),
-              title: Text("All Questions"),
-              onTap: () {
-                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> ResultScreen()));
               },
             ),
             ListTile(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../database/models/examdetails.dart';
 import '../database/models/exammodel.dart';
 import '../handler/apis/examApiUtil.dart';
 
@@ -11,6 +12,7 @@ class ExamProvider with ChangeNotifier {
 
   // Getters
   List<Exam> get exams => _exams;
+
 
   bool get isLoading => _isLoading;
 
@@ -42,6 +44,7 @@ class ExamProvider with ChangeNotifier {
       debugPrint(e.toString());
     }
   }
+
 
   Future<bool> addExam(Exam newExam) async {
     _isLoading = true;

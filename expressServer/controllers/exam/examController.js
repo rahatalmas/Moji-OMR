@@ -21,7 +21,8 @@ const getExamList = async (req,res)=>{
 
 const getExamWithDetails = async (req,res)=>{
     try{
-
+        const examId = req.params.examId;
+        //need to fetch exam table info, candidiates for this exam, result of candidates for this exam;
     }catch(err){
         console.log(err.message);
         res.status(500).json({"message":"Internal Server Error"});
