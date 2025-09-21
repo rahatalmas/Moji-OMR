@@ -8,6 +8,8 @@ import 'package:quizapp/Screens/result/paperProcessingResult.dart';
 import 'package:quizapp/Screens/result/resultChecking.dart';
 import 'package:quizapp/Screens/result/resultScreen.dart';
 import 'package:quizapp/handler/apis/login.dart';
+import 'package:quizapp/pdf/omrSheetPage.dart';
+import 'package:quizapp/pdf/screens/view_document.dart';
 import 'package:quizapp/providers/actionProvider.dart';
 import 'package:quizapp/providers/adminProvider.dart';
 import 'package:quizapp/providers/answerProvider.dart';
@@ -235,11 +237,11 @@ class _Root extends State<Root> with SingleTickerProviderStateMixin {
               leading: Icon(Icons.question_answer),
               title: Text("TestPage"),
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context)=>PaperProcessingResult(success: [], errors: []))
-                // );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context)=>ViewDocument())
+                );
               },
             ),
           ],
