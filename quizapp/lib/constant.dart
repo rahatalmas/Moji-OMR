@@ -5,8 +5,8 @@ import 'dart:ui';
 //const String BASE_URL = "http://192.168.31.184:8080";    //local ip
 
 //vps
-const String BASE_URL = "http://107.167.94.246:8080";  // api
-const String OMR_URL =  "http://107.167.94.246:5000";  //omr api
+const String BASE_URL = "http://23.95.200.168:8080";  // api
+const String OMR_URL =  "http://192.168.0.102:5000";  //omr api
 
 const kColorPrimary = Color(0xFFF5F5F5);
 const appTextPrimary = Color(0xFF070F2B);
