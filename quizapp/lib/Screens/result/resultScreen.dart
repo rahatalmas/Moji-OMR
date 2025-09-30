@@ -5,12 +5,14 @@ import 'package:quizapp/Screens/exam/examCreatePage.dart';
 import 'package:quizapp/Screens/result/resultAddScreen.dart';
 import 'package:quizapp/Screens/result/resultDetails.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/providers/examProvider.dart';
+
 import 'package:quizapp/providers/resultProvider.dart';
 
 class ResultScreen extends StatefulWidget {
+  const ResultScreen({super.key});
+
   @override
-  _ResultScreen createState() => _ResultScreen();
+  State<ResultScreen> createState() => _ResultScreen();
 }
 
 class _ResultScreen extends State<ResultScreen> {
@@ -31,7 +33,7 @@ class _ResultScreen extends State<ResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Results'),
+        title: const Text('Results'),
         centerTitle: true,
         elevation: 3,
         shadowColor: Colors.grey,
@@ -40,11 +42,13 @@ class _ResultScreen extends State<ResultScreen> {
           InkWell(
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ExamCreatePage()),
+              MaterialPageRoute(
+                builder: (context) => const ExamCreatePage(),
+              ),
             ),
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
         ],
@@ -52,36 +56,41 @@ class _ResultScreen extends State<ResultScreen> {
       backgroundColor: neutralWhite,
       body: _resultProvider.isLoading
           ? Center(
-            child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-            Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
-                    ],
-                  ),
-          )
-          : _resultProvider.results.length == 0
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset("assets/images/animations/geometryloader.json",
+                      height: 125),
+                ],
+              ),
+            )
+          : _resultProvider.results.isEmpty
               ? Center(
                   child: Column(
-                    mainAxisSize: MainAxisSize
-                        .min, // Ensures the column takes minimal space
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Lottie.asset("assets/images/animations/emptybox.json",height: 300),
+                      Lottie.asset("assets/images/animations/emptybox.json",
+                          height: 300),
                       const SizedBox(height: 25),
                       const Text(
                         "The Result Database is Empty",
-                        //style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                       ),
                       InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ResultAddScreen()));
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ResultAddScreen(),
+                            ),
+                          );
                         },
                         child: const Text(
                           "Add Result",
                           style: TextStyle(
-                              color: Colors.deepPurple,
-                              fontSize: 16,
-                              decoration: TextDecoration.underline
+                            color: Colors.deepPurple,
+                            fontSize: 16,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       )
@@ -114,7 +123,7 @@ class _ResultScreen extends State<ResultScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Expanded(
@@ -134,9 +143,10 @@ class _ResultScreen extends State<ResultScreen> {
                                 borderRadius: BorderRadius.circular(4),
                                 boxShadow: const [
                                   BoxShadow(
-                                      color: Colors.black12,
-                                      blurRadius: 1,
-                                      spreadRadius: 1)
+                                    color: Colors.black12,
+                                    blurRadius: 1,
+                                    spreadRadius: 1,
+                                  )
                                 ],
                               ),
                               child: Material(
@@ -144,18 +154,19 @@ class _ResultScreen extends State<ResultScreen> {
                                 borderRadius: BorderRadius.circular(4),
                                 child: InkWell(
                                   onTap: () {
-                                    print("Result Card");
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return ResultDetailsScreen(
-                                        examResult: result,
-                                      );
-                                    }));
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return ResultDetailsScreen(
+                                            examResult: result,
+                                          );
+                                        },
+                                      ),
+                                    );
                                   },
-
-                                  //result screen card
-                                  child: Container(
-                                    padding: EdgeInsets.all(8),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
                                     child: Column(
                                       children: [
                                         Row(
@@ -194,7 +205,7 @@ class _ResultScreen extends State<ResultScreen> {
                                             const SizedBox(width: 8),
                                             InkWell(
                                                 onTap: () {
-                                                  print("info");
+                                                  // TODO: Implement info action
                                                 },
                                                 child: const Icon(
                                                   Icons.new_releases_outlined,
@@ -203,36 +214,36 @@ class _ResultScreen extends State<ResultScreen> {
                                                 ))
                                           ],
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 2,
                                         ),
                                         Row(
                                           children: [
                                             Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.supervisor_account,
                                                   size: 20,
                                                   color: colorPrimary,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 2,
                                                 ),
                                                 Text(result['candidate_count']
                                                     .toString()),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 8,
                                             ),
                                             Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.fact_check_outlined,
                                                   size: 20,
                                                   color: colorPrimary,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 2,
                                                 ),
                                                 Text(
@@ -241,31 +252,31 @@ class _ResultScreen extends State<ResultScreen> {
                                             )
                                           ],
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 2,
                                         ),
                                         Row(
                                           children: [
                                             Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.check_circle,
                                                   size: 20,
                                                   color: Colors.green,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 4,
                                                 ),
                                                 Text(
                                                     'Passed: ${result['candidates'].length - result['fail_count']}'),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 8,
                                             ),
                                             Row(
                                               children: [
-                                                CircleAvatar(
+                                                const CircleAvatar(
                                                     radius: 8,
                                                     backgroundColor:
                                                         Colors.redAccent,
@@ -274,7 +285,7 @@ class _ResultScreen extends State<ResultScreen> {
                                                       size: 12,
                                                       color: Colors.white,
                                                     )),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 4,
                                                 ),
                                                 Text(
@@ -295,7 +306,12 @@ class _ResultScreen extends State<ResultScreen> {
                       const SizedBox(height: 16),
                       InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ResultAddScreen()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ResultAddScreen(),
+                            ),
+                          );
                         },
                         child: Ink(
                           width: double.maxFinite,
@@ -308,9 +324,10 @@ class _ResultScreen extends State<ResultScreen> {
                             child: Text(
                               "Add Result",
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
