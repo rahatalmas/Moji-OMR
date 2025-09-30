@@ -11,12 +11,13 @@ class CandidateCreatePage extends StatefulWidget {
   State<CandidateCreatePage> createState() => _CandidateCreatePage();
 }
 
-class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerProviderStateMixin{
+class _CandidateCreatePage extends State<CandidateCreatePage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final List<Widget> _widgetOptions = <Widget>[
-    CandidateEditor(),
-    CandidatePreviewScreen(),
+  final _widgetOptions = [
+    const CandidateEditor(),
+    const CandidatePreviewScreen(),
   ];
 
   @override
@@ -46,26 +47,33 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
         shadowColor: Colors.grey,
         actions: [
           InkWell(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ScholarAddScreen()),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ScholarAddScreen(),
               ),
-              child: Icon(Icons.add)
+            ),
+            child: const Icon(Icons.add),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
         ],
       ),
       backgroundColor: neutralWhite,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 12.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 12.0,
+        ),
         child: TabBarView(
           controller: _tabController,
           children: _widgetOptions,
         ),
-      ), // Display the selected widget
+      ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 16),
+        margin: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 16,
+        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: neutralBG,
@@ -77,10 +85,12 @@ class _CandidateCreatePage extends State<CandidateCreatePage> with SingleTickerP
             color: brandMinus2, // Green color for the selected tab
             borderRadius: BorderRadius.circular(10), // Optional rounded corners
           ),
-          indicatorSize: TabBarIndicatorSize.tab, // Ensures the indicator spans the full tab width
+          indicatorSize: TabBarIndicatorSize
+              .tab, // Ensures the indicator spans the full tab width
           labelPadding: EdgeInsets.zero, // Removes padding around the label
-          labelColor:colorPrimary, // Text and icon color for the selected tab
-          unselectedLabelColor: Colors.grey, // Text and icon color for unselected tabs
+          labelColor: colorPrimary, // Text and icon color for the selected tab
+          unselectedLabelColor:
+              Colors.grey, // Text and icon color for unselected tabs
           tabs: const [
             Tab(icon: Icon(Icons.edit_note), text: "Editor"),
             Tab(icon: Icon(Icons.preview), text: "Preview"),
