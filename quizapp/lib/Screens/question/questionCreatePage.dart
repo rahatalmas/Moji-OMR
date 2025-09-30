@@ -12,17 +12,12 @@ class QuestionCreatePage extends StatefulWidget {
 
 class _QuestionCreatePage extends State<QuestionCreatePage>
     with SingleTickerProviderStateMixin {
-
-  late TabController _tabController; // Declare the TabController
-  final List<Widget> _widgetOptions = <Widget>[
-    QuestionEditor(),
-    QuestionTemplate()
-  ];
+  late TabController _tabController;
+  final _widgetOptions = const [QuestionEditor(), QuestionTemplate()];
 
   @override
   void initState() {
     super.initState();
-    // Ensure the TabController length matches the number of tabs and views
     _tabController = TabController(length: _widgetOptions.length, vsync: this);
   }
 
@@ -47,12 +42,12 @@ class _QuestionCreatePage extends State<QuestionCreatePage>
       ),
       backgroundColor: neutralWhite,
       body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: TabBarView(
-            controller: _tabController,
-            children: _widgetOptions,
-          )
-      ), // Display the selected widget
+        padding: const EdgeInsets.all(10),
+        child: TabBarView(
+          controller: _tabController,
+          children: _widgetOptions,
+        ),
+      ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         decoration: BoxDecoration(
@@ -63,15 +58,13 @@ class _QuestionCreatePage extends State<QuestionCreatePage>
           controller: _tabController,
           dividerColor: Colors.transparent,
           indicator: BoxDecoration(
-            color: brandMinus2, // Green color for the selected tab
-            borderRadius: BorderRadius.circular(10), // Optional rounded corners
+            color: brandMinus2,
+            borderRadius: BorderRadius.circular(10),
           ),
-          indicatorSize: TabBarIndicatorSize
-              .tab, // Ensures the indicator spans the full tab width
-          labelPadding: EdgeInsets.zero, // Removes padding around the label
-          labelColor: colorPrimary, // Text and icon color for the selected tab
-          unselectedLabelColor:
-              Colors.grey, // Text and icon color for unselected tabs
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelPadding: EdgeInsets.zero,
+          labelColor: colorPrimary,
+          unselectedLabelColor: Colors.grey,
           tabs: const [
             Tab(icon: Icon(Icons.edit_note), text: "Editor"),
             Tab(icon: Icon(Icons.preview), text: "Preview"),
