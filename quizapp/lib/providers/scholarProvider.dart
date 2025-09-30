@@ -20,7 +20,7 @@ class ScholarProvider with ChangeNotifier {
 
   bool get filterDataUpdated => _filterDataUpdated;
 
-  void updateData(){
+  void updateData() {
     _dataUpdated = false;
   }
 
@@ -61,7 +61,6 @@ class ScholarProvider with ChangeNotifier {
       debugPrint(e.toString());
     }
   }
-
 
   Future<bool> addScholar(Scholar newScholar) async {
     _isLoading = true;
@@ -112,5 +111,4 @@ class ScholarProvider with ChangeNotifier {
       return false;
     }
   }
-
 }

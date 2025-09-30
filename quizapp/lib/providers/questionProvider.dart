@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-
 import '../database/models/question.dart';
 
 class QuestionProvider with ChangeNotifier {
-  List<Question> _questions = [];
+  final List<Question> _questions = [];
 
   List<Question> get questions => List.unmodifiable(_questions);
 
-  get questionCount => _questions.length;
+  int get questionCount => _questions.length;
 
   // Method to get questions
-  List<Question> getQuestions() {
-    return _questions;
-  }
+  List<Question> get getQuestions => _questions;
 
   void resetQuestions() {
     _questions.clear();
@@ -25,12 +22,14 @@ class QuestionProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
   void removeQuestion(int index) {
     if (index >= 0 && index < _questions.length) {
       _questions.removeAt(index);
       notifyListeners();
     }
   }
+
   void addQuestion(Question newQuestion) {
     _questions.add(newQuestion);
     notifyListeners();

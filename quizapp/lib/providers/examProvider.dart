@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../database/models/examdetails.dart';
 import '../database/models/exammodel.dart';
 import '../handler/apis/examApiUtil.dart';
 
@@ -13,7 +12,6 @@ class ExamProvider with ChangeNotifier {
   // Getters
   List<Exam> get exams => _exams;
 
-
   bool get isLoading => _isLoading;
 
   bool get dataUpdated => _dataUpdated;
@@ -22,10 +20,11 @@ class ExamProvider with ChangeNotifier {
 
   Exam? get selectedExam => _selectedExam;
 
-  void setSelectedExam(Exam exam){
+  void setSelectedExam(Exam exam) {
     _selectedExam = exam;
     notifyListeners();
   }
+
   void reset() {
     _dataUpdated = false;
     notifyListeners();
@@ -44,7 +43,6 @@ class ExamProvider with ChangeNotifier {
       debugPrint(e.toString());
     }
   }
-
 
   Future<bool> addExam(Exam newExam) async {
     _isLoading = true;
@@ -67,16 +65,16 @@ class ExamProvider with ChangeNotifier {
     _isLoading = true;
     _message = '';
     notifyListeners();
-    try{
-       bool result = await ExamApiUtil().updateExam(updatedData);
-       _dataUpdated = false;
-       _isLoading = false;
-       notifyListeners();
-       return result;
-    }catch(err){
+    try {
+      bool result = await ExamApiUtil().updateExam(updatedData);
+      _dataUpdated = false;
+      _isLoading = false;
+      notifyListeners();
+      return result;
+    } catch (err) {
       _message = 'failed to update $err';
       return false;
-    }finally{
+    } finally {
       _isLoading = false;
       _dataUpdated = false;
     }
@@ -88,7 +86,7 @@ class ExamProvider with ChangeNotifier {
       _dataUpdated = false;
       _isLoading = false;
       notifyListeners();
-      if(result){
+      if (result) {
         _selectedExam = null;
       }
       return result;

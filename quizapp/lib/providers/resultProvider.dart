@@ -49,7 +49,7 @@ class ResultProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      bool  res = await ResultApi().addResult(newResult);
+      bool res = await ResultApi().addResult(newResult);
       _isLoading = false;
       _dataUpdated = false;
       notifyListeners();
@@ -62,15 +62,15 @@ class ResultProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> updateResult(Result updateResult,int examId) async {
+  Future<bool> updateResult(Result updateResult, int examId) async {
     _isLoading = true;
     _message = '';
     notifyListeners();
 
     try {
-      bool  res = await ResultApi().updateResult(updateResult, examId);
+      bool res = await ResultApi().updateResult(updateResult, examId);
       _isLoading = false;
-      _dataUpdated =false;
+      _dataUpdated = false;
       notifyListeners();
       return res;
     } catch (e) {
@@ -99,7 +99,6 @@ class ResultProvider with ChangeNotifier {
         };
       }
 
-
       if (result.grade == 'F') {
         examsMap[result.examId]!['fail_count'] += 1;
       }
@@ -122,11 +121,10 @@ class ResultProvider with ChangeNotifier {
 
   Map<String, dynamic> getResultByExamId(int examId) {
     return _groupedResults.firstWhere(
-          (exam) => exam['exam_id'] == examId,
+      (exam) => exam['exam_id'] == examId,
       orElse: () {
         throw Exception('No result found for examId: $examId');
       },
     );
   }
-
 }
