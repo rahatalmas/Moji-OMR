@@ -44,8 +44,8 @@ class _UpdateExamScreenState extends State<UpdateExamScreen> {
     hintText: "Enter value",
     hintStyle: const TextStyle(color: Colors.black),
     labelStyle: const TextStyle(color: Colors.black),
-    prefixIcon: Padding(
-      padding: const EdgeInsets.only(left: 15, right: 5),
+    prefixIcon: const Padding(
+      padding: EdgeInsets.only(left: 15, right: 5),
       child: Icon(Icons.input, size: 30, color: kColorPrimary),
     ),
     border: OutlineInputBorder(
@@ -79,11 +79,15 @@ class _UpdateExamScreenState extends State<UpdateExamScreen> {
 
     // Initialize controllers with the passed-in values
     _examNameController = TextEditingController(text: widget.examName);
-    _examDateController = TextEditingController(text: widget.examDateTime.toString());
+    _examDateController =
+        TextEditingController(text: widget.examDateTime.toString());
     _examLocationController = TextEditingController(text: widget.examLocation);
-    _examDurationController = TextEditingController(text: widget.examDuration.toString());
-    _questionCountController = TextEditingController(text: widget.questionCount.toString());
-    _candidateCountController = TextEditingController(text: widget.candidateCount.toString());
+    _examDurationController =
+        TextEditingController(text: widget.examDuration.toString());
+    _questionCountController =
+        TextEditingController(text: widget.questionCount.toString());
+    _candidateCountController =
+        TextEditingController(text: widget.candidateCount.toString());
   }
 
   @override
@@ -106,6 +110,7 @@ class _UpdateExamScreenState extends State<UpdateExamScreen> {
     );
 
     if (selectedDate != null) {
+      if (!mounted) return;
       TimeOfDay? selectedTime = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.now(),
@@ -130,7 +135,7 @@ class _UpdateExamScreenState extends State<UpdateExamScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardVisible =
-    KeyboardVisibilityProvider.isKeyboardVisible(context);
+        KeyboardVisibilityProvider.isKeyboardVisible(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -144,176 +149,192 @@ class _UpdateExamScreenState extends State<UpdateExamScreen> {
         shadowColor: Colors.grey,
       ),
       backgroundColor: neutralWhite,
-      body:
-      _examProvider.isLoading?Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
-          ],
-        ),
-      ):
-      Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(16),
+      body: _examProvider.isLoading
+          ? Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset("assets/images/animations/geometryloader.json",
+                      height: 125),
+                ],
+              ),
+            )
+          : Column(
               children: [
-                SizedBox(height: 16),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/exam.png",
-                      height: 250,
-                      width: 250,
-                    )
-                  ],
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.all(16),
+                    children: [
+                      const SizedBox(height: 16),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/exam.png",
+                            height: 250,
+                            width: 250,
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      // Exam Name Field
+                      TextField(
+                        controller: _examNameController,
+                        decoration: _textFieldDecoration.copyWith(
+                          labelText: "Exam Name",
+                          hintText: "Enter exam name",
+                          prefixIcon: const Icon(
+                            Icons.terminal_sharp,
+                            size: 25,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Exam Date Field with DateTime Picker
+                      GestureDetector(
+                        onTap: _selectDateTime,
+                        child: AbsorbPointer(
+                          child: TextField(
+                            controller: _examDateController,
+                            decoration: _textFieldDecoration.copyWith(
+                              labelText: "Exam Date & Time",
+                              hintText: "Select date and time",
+                              prefixIcon: const Icon(
+                                Icons.calendar_today,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Exam Location Field
+                      TextField(
+                        controller: _examLocationController,
+                        decoration: _textFieldDecoration.copyWith(
+                          labelText: "Exam Location",
+                          hintText: "e.g., School Auditorium",
+                          prefixIcon: const Icon(
+                            Icons.location_on_outlined,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Last Three Fields in a Row
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _examDurationController,
+                              keyboardType: TextInputType.number,
+                              decoration: _textFieldDecoration.copyWith(
+                                labelText: "Duration (min)",
+                                hintText: "e.g., 90",
+                                prefixIcon: const Icon(
+                                  Icons.timer,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: TextField(
+                              controller: _questionCountController,
+                              keyboardType: TextInputType.number,
+                              decoration: _textFieldDecoration.copyWith(
+                                labelText: "Questions",
+                                hintText: "e.g., 50",
+                                prefixIcon: const Icon(Icons.numbers),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: TextField(
+                              controller: _candidateCountController,
+                              keyboardType: TextInputType.number,
+                              decoration: _textFieldDecoration.copyWith(
+                                labelText: "Candidates",
+                                hintText: "e.g., 100",
+                                prefixIcon: const Icon(Icons.numbers),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 16),
-                // Exam Name Field
-                TextField(
-                  controller: _examNameController,
-                  decoration: _textFieldDecoration.copyWith(
-                      labelText: "Exam Name",
-                      hintText: "Enter exam name",
-                      prefixIcon: Icon(
-                        Icons.terminal_sharp,
-                        size: 25,
-                      )),
-                ),
-                const SizedBox(height: 10),
-                // Exam Date Field with DateTime Picker
-                GestureDetector(
-                  onTap: _selectDateTime,
-                  child: AbsorbPointer(
-                    child: TextField(
-                      controller: _examDateController,
-                      decoration: _textFieldDecoration.copyWith(
-                        labelText: "Exam Date & Time",
-                        hintText: "Select date and time",
-                        prefixIcon: const Icon(
-                          Icons.calendar_today,
+                Visibility(
+                  visible: !isKeyboardVisible,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: InkWell(
+                      onTap: () async {
+                        print("Updated Exam Details:");
+                        print("Name: ${_examNameController.text}");
+                        print("DateTime: ${_examDateController.text}");
+                        print("Location: ${_examLocationController.text}");
+                        print("Duration: ${_examDurationController.text}");
+                        print("Questions: ${_questionCountController.text}");
+                        print("Candidates: ${_candidateCountController.text}");
+
+                        Exam updatedExam = Exam(
+                          id: widget.examId,
+                          name: _examNameController.text,
+                          dateTime: _examDateController.text,
+                          location: _examLocationController.text,
+                          duration: int.parse(_examDurationController.text),
+                          totalQuestions:
+                              int.parse(_questionCountController.text),
+                          numberOfCandidates:
+                              int.parse(_candidateCountController.text),
+                        );
+                        bool isSuccess =
+                            await _examProvider.updateExam(updatedExam);
+
+                        if (isSuccess) {
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              duration: Duration.zero,
+                              content: Text('Exam updated successfully!'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } else {
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              duration: Duration.zero,
+                              content: Text('Failed to update exam'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Text(
+                          "Update",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                // Exam Location Field
-                TextField(
-                  controller: _examLocationController,
-                  decoration: _textFieldDecoration.copyWith(
-                      labelText: "Exam Location",
-                      hintText: "e.g., School Auditorium",
-                      prefixIcon: const Icon(Icons.location_on_outlined)),
-                ),
-                const SizedBox(height: 10),
-                // Last Three Fields in a Row
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _examDurationController,
-                        keyboardType: TextInputType.number,
-                        decoration: _textFieldDecoration.copyWith(
-                            labelText: "Duration (min)",
-                            hintText: "e.g., 90",
-                            prefixIcon: const Icon(Icons.timer)),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: _questionCountController,
-                        keyboardType: TextInputType.number,
-                        decoration: _textFieldDecoration.copyWith(
-                            labelText: "Questions",
-                            hintText: "e.g., 50",
-                            prefixIcon: const Icon(Icons.numbers)),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: _candidateCountController,
-                        keyboardType: TextInputType.number,
-                        decoration: _textFieldDecoration.copyWith(
-                            labelText: "Candidates",
-                            hintText: "e.g., 100",
-                            prefixIcon: const Icon(Icons.numbers)),
-                      ),
-                    ),
-                  ],
-                ),
+                )
               ],
             ),
-          ),
-          Visibility(
-            visible: !isKeyboardVisible,
-            child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: InkWell(
-                  onTap: () async {
-                    print("Updated Exam Details:");
-                    print("Name: ${_examNameController.text}");
-                    print("DateTime: ${_examDateController.text}");
-                    print("Location: ${_examLocationController.text}");
-                    print("Duration: ${_examDurationController.text}");
-                    print("Questions: ${_questionCountController.text}");
-                    print("Candidates: ${_candidateCountController.text}");
-
-                    Exam updatedExam = Exam(
-                      id: widget.examId,
-                      name: _examNameController.text,
-                      dateTime: _examDateController.text,
-                      location: _examLocationController.text,
-                      duration: int.parse(_examDurationController.text),
-                      totalQuestions: int.parse(_questionCountController.text),
-                      numberOfCandidates: int.parse(_candidateCountController.text),
-                    );
-                     bool isSuccess = await _examProvider.updateExam(updatedExam);
-
-                    if (isSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration.zero,
-                          content: Text('Exam updated successfully!'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          duration: Duration.zero,
-                          content: Text('Failed to update exam'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: colorPrimary,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      "Update",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                )),
-          )
-        ],
-      ),
     );
   }
 }
