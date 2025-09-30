@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import 'package:quizapp/Widgets/examCard.dart';
 import 'package:quizapp/Widgets/questionCard.dart';
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/providers/examProvider.dart';
 
 class QuestionScreen extends StatefulWidget {
+  const QuestionScreen({super.key});
+
   @override
-  _QuestionScreenState createState() => _QuestionScreenState();
+  State<QuestionScreen> createState() => _QuestionScreenState();
 }
 
 class _QuestionScreenState extends State<QuestionScreen> {
@@ -20,15 +18,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Questions'),
+        title: const Text('Questions'),
         centerTitle: true,
         elevation: 3,
         shadowColor: Colors.grey,
         backgroundColor: neutralWhite,
-        actions: [
+        actions: const [
           Icon(Icons.add),
           SizedBox(
             width: 16,
@@ -42,10 +39,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
           child: ListView(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 8.0, horizontal: 12),
-                margin:
-                EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+                margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: neutralBG,
@@ -54,15 +50,14 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       color: Colors.grey.withOpacity(0.2),
                       blurRadius: 1,
                       spreadRadius: 1, // Spread of shadow
-                      offset:
-                      Offset.zero, // Shadow is even on all sides
+                      offset: Offset.zero, // Shadow is even on all sides
                     ),
                   ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
+                    const Row(
                       children: [
                         Icon(
                           Icons.newspaper,
@@ -85,20 +80,20 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 7,
               ),
               ListView.builder(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return QuestionCard(
-                      questionId: 1,
-                      questionName: "Nasa x Tesla space challenge",
-                      questionPicture:null,
-                      numberOfQuestions: 200
+                  return const QuestionCard(
+                    questionId: 1,
+                    questionName: "Nasa x Tesla space challenge",
+                    questionPicture: null,
+                    numberOfQuestions: 200,
                   );
                 },
               ),
