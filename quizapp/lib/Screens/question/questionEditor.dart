@@ -14,7 +14,7 @@ class QuestionEditor extends StatefulWidget {
 class _QuestionEditorState extends State<QuestionEditor> {
   final TextEditingController _questionController = TextEditingController();
   List<TextEditingController> _optionControllers = [];
-  int optionsPerQuestion = 4; // Default options per question
+  int optionsPerQuestion = 4;
 
   final InputDecoration _textFieldDecoration = InputDecoration(
     labelText: "Type here...",
@@ -58,23 +58,22 @@ class _QuestionEditorState extends State<QuestionEditor> {
   }
 
   void _addQuestion() {
-
-    final qProvider= Provider.of<QuestionProvider>(context, listen: false);
-    if(qProvider.questions.length == 80){
+    final qProvider = Provider.of<QuestionProvider>(context, listen: false);
+    if (qProvider.questions.length == 80) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('80 questions filled')),
+        const SnackBar(content: Text('80 questions filled')),
       );
       return;
     }
     final questionText = _questionController.text;
     final options =
-    _optionControllers.map((controller) => controller.text).toList();
+        _optionControllers.map((controller) => controller.text).toList();
 
     if (questionText.isEmpty || options.any((option) => option.isEmpty)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Please fill in all fields before adding a question.')),
+          content: Text('Please fill in all fields before adding a question.'),
+        ),
       );
       return;
     }
@@ -84,7 +83,6 @@ class _QuestionEditorState extends State<QuestionEditor> {
       questionText: questionText,
       options: options,
     );
-
 
     qProvider.addQuestion(newQuestion);
 
@@ -101,16 +99,14 @@ class _QuestionEditorState extends State<QuestionEditor> {
 
   @override
   Widget build(BuildContext context) {
-    final qProvider= Provider.of<QuestionProvider>(context, listen: true);
+    final qProvider = Provider.of<QuestionProvider>(context);
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
         Container(
-           padding: EdgeInsets.symmetric(vertical:0,horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           decoration: BoxDecoration(
-            color: brandMinus3,
-            borderRadius: BorderRadius.circular(8)
-          ),
+              color: brandMinus3, borderRadius: BorderRadius.circular(8)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -124,14 +120,16 @@ class _QuestionEditorState extends State<QuestionEditor> {
                         height: 10,
                         width: 10,
                         decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(10)
-                        ),
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(10)),
                       ),
-                      SizedBox(width: 4,),
+                      const SizedBox(
+                        width: 4,
+                      ),
                       const Text(
                         "Add a Question",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -141,33 +139,43 @@ class _QuestionEditorState extends State<QuestionEditor> {
                         height: 10,
                         width: 10,
                         decoration: BoxDecoration(
-                            color: Colors.purple,
-                            borderRadius: BorderRadius.circular(10)
+                          color: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      SizedBox(width: 4,),
+                      const SizedBox(
+                        width: 4,
+                      ),
                       Text(
                         'Last Index: ${qProvider.questions.length}',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
-              Image.asset("assets/images/leading2.png",height: 100,width: 100,),
-
+              Image.asset(
+                "assets/images/leading2.png",
+                height: 100,
+                width: 100,
+              ),
             ],
           ),
         ),
-
         const SizedBox(height: 16),
         TextField(
           controller: _questionController,
           decoration: _textFieldDecoration.copyWith(
             labelText: "Question",
             hintText: "Type your question here",
-            prefixIcon: const Icon(Icons.question_mark,
-                size: 24, color: Colors.blue),
+            prefixIcon: const Icon(
+              Icons.question_mark,
+              size: 24,
+              color: Colors.blue,
+            ),
           ),
         ),
         const SizedBox(height: 16),
