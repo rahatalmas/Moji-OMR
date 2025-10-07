@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../constant.dart';
-import '../../database/models/examdetails.dart';
 import '../../database/models/exammodel.dart';
 import 'login.dart';
 
@@ -34,7 +33,8 @@ class ExamApiUtil with ChangeNotifier {
         'Content-Type': 'application/json',
       };
 
-      final response = await http.get(Uri.parse('$BASE_URL/api/exam/list'), headers: headers);
+      final response = await http.get(Uri.parse('$BASE_URL/api/exam/list'),
+          headers: headers);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
@@ -87,7 +87,7 @@ class ExamApiUtil with ChangeNotifier {
     }
   }
 
-  Future<bool> updateExam(Exam updatedData) async{
+  Future<bool> updateExam(Exam updatedData) async {
     _isLoading = true;
     _message = '';
     notifyListeners();

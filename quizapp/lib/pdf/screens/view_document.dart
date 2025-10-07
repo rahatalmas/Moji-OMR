@@ -4,15 +4,14 @@ import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:quizapp/pdf/widgets/omr_options.dart';
-import 'package:collection/collection.dart';
 
 List<String> _omrCircleData = ['A', 'B', 'C', 'D'];
 
 Future<Uint8List> getDocumentBytes(pw.Document document) async {
-  final headerColor = PdfColor.fromInt(0xffd0e6f7); // soft blue
-  final sectionBgColor = PdfColor.fromInt(0xfff7f9fc); // very light blue/gray
-  final baseTextStyle = pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold);
-  final borderColor = PdfColors.blue800;
+  const headerColor = PdfColor.fromInt(0xffd0e6f7); // soft blue
+  const sectionBgColor = PdfColor.fromInt(0xfff7f9fc); // very light blue/gray
+  final baseTextStyle =
+      pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold);
 
   document.addPage(
     pw.Page(
@@ -38,7 +37,9 @@ Future<Uint8List> getDocumentBytes(pw.Document document) async {
                       color: PdfColors.white,
                     ),
                     child: pw.Center(
-                      child: pw.Text("OMR", style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold)),
+                      child: pw.Text("OMR",
+                          style: pw.TextStyle(
+                              fontSize: 14, fontWeight: pw.FontWeight.bold)),
                     ),
                   ),
                   pw.SizedBox(width: 20),
@@ -46,7 +47,10 @@ Future<Uint8List> getDocumentBytes(pw.Document document) async {
                   pw.Expanded(
                     child: pw.Text(
                       "EXAM NAME HERE",
-                      style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold, color: PdfColors.blue800),
+                      style: pw.TextStyle(
+                          fontSize: 22,
+                          fontWeight: pw.FontWeight.bold,
+                          color: PdfColors.blue800),
                     ),
                   ),
                 ],
@@ -67,12 +71,15 @@ Future<Uint8List> getDocumentBytes(pw.Document document) async {
                       children: [
                         pw.Container(
                           padding: const pw.EdgeInsets.only(bottom: 8),
-                          child: pw.Text("Exam ID", style: baseTextStyle.copyWith(color: PdfColors.blue900)),
+                          child: pw.Text("Exam ID",
+                              style: baseTextStyle.copyWith(
+                                  color: PdfColors.blue900)),
                         ),
                         ...List.generate(10, (index) {
                           return pw.Padding(
                             padding: const pw.EdgeInsets.only(bottom: 6),
-                            child: OmrOptions(totalOptionCount: 4, value: index.toString()),
+                            child: OmrOptions(
+                                totalOptionCount: 4, value: index.toString()),
                           );
                         }),
                       ],
@@ -88,12 +95,15 @@ Future<Uint8List> getDocumentBytes(pw.Document document) async {
                       children: [
                         pw.Container(
                           padding: const pw.EdgeInsets.only(bottom: 8),
-                          child: pw.Text("Serial Number", style: baseTextStyle.copyWith(color: PdfColors.blue900)),
+                          child: pw.Text("Serial Number",
+                              style: baseTextStyle.copyWith(
+                                  color: PdfColors.blue900)),
                         ),
                         ...List.generate(10, (index) {
                           return pw.Padding(
                             padding: const pw.EdgeInsets.only(bottom: 6),
-                            child: OmrOptions(totalOptionCount: 4, value: index.toString()),
+                            child: OmrOptions(
+                                totalOptionCount: 4, value: index.toString()),
                           );
                         }),
                       ],
@@ -107,18 +117,26 @@ Future<Uint8List> getDocumentBytes(pw.Document document) async {
                     child: pw.Container(
                       padding: const pw.EdgeInsets.all(8),
                       decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.blue800, width: 1),
+                        border:
+                            pw.Border.all(color: PdfColors.blue800, width: 1),
                         borderRadius: pw.BorderRadius.circular(6),
                         color: PdfColors.white,
                       ),
                       child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text("Instructions", style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: PdfColors.blue900)),
+                          pw.Text("Instructions",
+                              style: pw.TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: pw.FontWeight.bold,
+                                  color: PdfColors.blue900)),
                           pw.SizedBox(height: 8),
                           pw.Bullet(text: "Use black or blue pen only."),
-                          pw.Bullet(text: "Fill bubbles completely and clearly."),
-                          pw.Bullet(text: "Do not fill more than one bubble per question."),
+                          pw.Bullet(
+                              text: "Fill bubbles completely and clearly."),
+                          pw.Bullet(
+                              text:
+                                  "Do not fill more than one bubble per question."),
                           pw.Bullet(text: "Avoid stray marks or shading."),
                           pw.Bullet(text: "Keep the sheet clean and flat."),
                         ],
@@ -133,13 +151,15 @@ Future<Uint8List> getDocumentBytes(pw.Document document) async {
             // ===== Row 3: Answer Section =====
             pw.Text(
               "Answer Section",
-              style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: PdfColors.blue900),
+              style: pw.TextStyle(
+                  fontSize: 14,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.blue900),
             ),
             pw.SizedBox(height: 10),
 
             pw.Container(
               decoration: pw.BoxDecoration(
-
                 borderRadius: pw.BorderRadius.circular(4),
                 color: sectionBgColor,
               ),
@@ -154,8 +174,10 @@ Future<Uint8List> getDocumentBytes(pw.Document document) async {
                           final questionNumber = colIndex * 20 + index + 1;
                           final isEvenRow = questionNumber % 2 == 0;
                           return pw.Container(
-                            color: isEvenRow ? PdfColors.white : PdfColors.grey50,
-                            padding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+                            color:
+                                isEvenRow ? PdfColors.white : PdfColors.grey50,
+                            padding: const pw.EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 4),
                             child: pw.Row(
                               children: [
                                 // Question Number
@@ -170,18 +192,18 @@ Future<Uint8List> getDocumentBytes(pw.Document document) async {
                                 pw.SizedBox(width: 6),
 
                                 // Bubbles wrapped in boxes
-                                ..._omrCircleData.mapIndexed((i, val) {
+                                ..._omrCircleData.map((val) {
                                   return pw.Container(
-                                    margin: const pw.EdgeInsets.symmetric(horizontal: 4),
+                                    margin: const pw.EdgeInsets.symmetric(
+                                        horizontal: 4),
                                     padding: const pw.EdgeInsets.all(2),
-
                                     child: OmrOptions(
                                       totalOptionCount: 4,
                                       value: val,
                                       isSingle: true,
                                     ),
                                   );
-                                }).toList(),
+                                }),
                               ],
                             ),
                           );

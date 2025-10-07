@@ -1,11 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:quizapp/handler/apis/candidateApi.dart';
-import 'package:quizapp/providers/scholarProvider.dart';
 import '../database/models/candidate.dart';
-import '../handler/apis/login.dart';
 
 class CandidateProvider with ChangeNotifier {
   List<Candidate> _candidates = [];
@@ -37,7 +32,6 @@ class CandidateProvider with ChangeNotifier {
     }
   }
 
-
   Future<bool> addCandidate(Candidate newCandidate) async {
     _isLoading = true;
     _message = '';
@@ -55,29 +49,24 @@ class CandidateProvider with ChangeNotifier {
     }
   }
 
-  Future<int> addMultipleCandidate(List<Candidate> newCandidates,int examId) async {
+  Future<int> addMultipleCandidate(
+      List<Candidate> newCandidates, int examId) async {
     int count = 0;
     _isLoading = true;
     _message = '';
     notifyListeners();
 
     try {
-      //print("length from add mul "+newCandidates.length.toString());
-      for (int i=0;i<newCandidates.length;i++) {
+      for (int i = 0; i < newCandidates.length; i++) {
         bool result = await CandidateApi().addCandidate(newCandidates[i]);
         if (result) {
           count++;
-          //print("print: " + count.toString());
         }
       }
-
-      //if (count > 0) {
-        //print("print count: " + count.toString());
-        await getAllCandidates(examId);
-        _dataUpdated = false;
-        _isLoading = false;
-        notifyListeners();
-      //}
+      await getAllCandidates(examId);
+      _dataUpdated = false;
+      _isLoading = false;
+      notifyListeners();
       return count;
     } catch (err) {
       _message = 'Failed to add exam: $err';
@@ -87,7 +76,7 @@ class CandidateProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> deleteCandidate(int id,int examId) async {
+  Future<bool> deleteCandidate(int id, int examId) async {
     try {
       bool result = await CandidateApi().deleteCandidate(id, examId);
       _dataUpdated = false;
@@ -99,6 +88,4 @@ class CandidateProvider with ChangeNotifier {
       return false;
     }
   }
-
 }
-

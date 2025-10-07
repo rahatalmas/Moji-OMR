@@ -2,18 +2,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quizapp/constant.dart';
-import 'package:quizapp/database/models/candidate.dart';
 import 'package:quizapp/handler/apis/login.dart';
 
 import '../../database/models/admin.dart';
-
 
 class AdminApi with ChangeNotifier {
   AdminApi._privateConstructor();
 
   static final AdminApi _instance = AdminApi._privateConstructor();
 
-  factory AdminApi(){
+  factory AdminApi() {
     return _instance;
   }
 
@@ -34,12 +32,12 @@ class AdminApi with ChangeNotifier {
         'Authorization': 'Bearer ${Auth().loginData!.accesstoken}',
         'Content-Type': 'application/json',
       };
-      final response = await http.get(
-          Uri.parse('$BASE_URL/api/user/list'), headers: headers);
+      final response = await http.get(Uri.parse('$BASE_URL/api/user/list'),
+          headers: headers);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
         admins = jsonData.map((data) => Admin.fromJson(data)).toList();
-        print("Admin list fetched, length: "+admins.length.toString());
+        print("Admin list fetched, length: " + admins.length.toString());
       } else {
         _message = 'Error ${response.statusCode}';
       }
@@ -112,5 +110,4 @@ class AdminApi with ChangeNotifier {
       notifyListeners();
     }
   }
-
 }

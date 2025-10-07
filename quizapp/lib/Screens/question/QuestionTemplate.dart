@@ -21,7 +21,7 @@ class QuestionTemplate extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Lottie.asset("assets/images/animations/emptybox.json"),
-                Text("Nothing to preview")
+                const Text("Nothing to preview")
               ],
             ),
           );
@@ -31,7 +31,7 @@ class QuestionTemplate extends StatelessWidget {
           children: [
             // Top Container (Always at the top)
             Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
               decoration: BoxDecoration(
                 color: brandMinus3,
                 borderRadius: BorderRadius.circular(8),
@@ -45,12 +45,14 @@ class QuestionTemplate extends StatelessWidget {
                         height: 10,
                         width: 10,
                         decoration: BoxDecoration(
-                            color: Colors.green, borderRadius: BorderRadius.circular(10)),
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(10)),
                       ),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
                         'Total: ${questionProvider.questions.length}',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -58,16 +60,20 @@ class QuestionTemplate extends StatelessWidget {
                     onTap: () {
                       questionProvider.resetQuestions();
                     },
-                    child: Container(
-                      child: Row(
-                        children: [
-                          Text(
-                            'Reset',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.redAccent),
-                          ),
-                          Icon(Icons.delete_outline_outlined, color: Colors.red),
-                        ],
-                      ),
+                    child: const Row(
+                      children: [
+                        Text(
+                          'Reset',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent),
+                        ),
+                        Icon(
+                          Icons.delete_outline_outlined,
+                          color: Colors.red,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -79,7 +85,7 @@ class QuestionTemplate extends StatelessWidget {
                 child: Column(
                   children: List.generate(
                     questionProvider.questions.length,
-                        (index) {
+                    (index) {
                       final question = questionProvider.questions[index];
                       return Card(
                         child: Padding(
@@ -89,7 +95,8 @@ class QuestionTemplate extends StatelessWidget {
                             children: [
                               Text(
                                 'Q${index + 1}: ${question.questionText}',
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 5),
                               ...question.options.asMap().entries.map((entry) {
@@ -102,30 +109,36 @@ class QuestionTemplate extends StatelessWidget {
                               }),
                               const SizedBox(height: 5),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(
                                     child: InkWell(
                                       onTap: () {
-                                        _editQuestion(context, questionProvider, index);
+                                        _editQuestion(
+                                            context, questionProvider, index);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(8.0),
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: colorPrimary),
-                                          borderRadius: BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: colorPrimary),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           color: brandMinus2,
                                         ),
                                         child: const Center(
                                           child: Text(
                                             'Edit',
-                                            style: TextStyle(color: colorPrimary),
+                                            style:
+                                                TextStyle(color: colorPrimary),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 10), // Space between the buttons
+                                  const SizedBox(
+                                      width: 10), // Space between the buttons
                                   Flexible(
                                     child: InkWell(
                                       onTap: () {
@@ -134,14 +147,19 @@ class QuestionTemplate extends StatelessWidget {
                                       child: Container(
                                         padding: const EdgeInsets.all(8.0),
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.red),
-                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: Colors.red,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           color: Colors.red[100],
                                         ),
                                         child: const Center(
                                           child: Text(
                                             'Remove',
-                                            style: TextStyle(color: Colors.red),
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -167,7 +185,7 @@ class QuestionTemplate extends StatelessWidget {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: colorPrimary,
                     borderRadius: BorderRadius.circular(8),
@@ -185,12 +203,14 @@ class QuestionTemplate extends StatelessWidget {
     );
   }
 
-  void _editQuestion(BuildContext context, QuestionProvider questionProvider, int index) {
+  void _editQuestion(
+      BuildContext context, QuestionProvider questionProvider, int index) {
     final question = questionProvider.questions[index];
     final TextEditingController questionController =
-    TextEditingController(text: question.questionText);
-    final List<TextEditingController> optionControllers =
-    question.options.map((option) => TextEditingController(text: option)).toList();
+        TextEditingController(text: question.questionText);
+    final List<TextEditingController> optionControllers = question.options
+        .map((option) => TextEditingController(text: option))
+        .toList();
 
     showDialog(
       context: context,
@@ -211,10 +231,11 @@ class QuestionTemplate extends StatelessWidget {
                   return TextField(
                     controller: controller,
                     decoration: InputDecoration(
-                      labelText: 'Option ${String.fromCharCode(65 + optionIndex)}',
+                      labelText:
+                          'Option ${String.fromCharCode(65 + optionIndex)}',
                     ),
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),
@@ -223,14 +244,16 @@ class QuestionTemplate extends StatelessWidget {
               onTap: () {
                 final updatedQuestion = question.copyWith(
                   questionText: questionController.text,
-                  options: optionControllers.map((controller) => controller.text).toList(),
+                  options: optionControllers
+                      .map((controller) => controller.text)
+                      .toList(),
                 );
                 questionProvider.editQuestion(index, updatedQuestion);
                 Navigator.of(context).pop();
               },
               child: Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: colorPrimary,
                   borderRadius: BorderRadius.circular(8),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/Screens/exam/examCreatePage.dart';
@@ -9,19 +8,14 @@ import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/resultProvider.dart';
 
 class ExamScreen extends StatefulWidget {
+  const ExamScreen({super.key});
+
   @override
-  _ExamScreenState createState() => _ExamScreenState();
+  State<ExamScreen> createState() => _ExamScreenState();
 }
 
 class _ExamScreenState extends State<ExamScreen> {
   late ExamProvider _examProvider;
-
-  // @override
-  // void initState(){
-  //   super.initState();
-  //   _examProvider = context.watch<ExamProvider>();
-  //   _examProvider.getAllExams();
-  // }
 
   @override
   void didChangeDependencies() {
@@ -38,19 +32,22 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exams'),
+        title: const Text('Exams'),
         centerTitle: true,
         elevation: 3,
         shadowColor: Colors.grey,
         backgroundColor: neutralWhite,
         actions: [
           InkWell(
-              onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ExamCreatePage()),
-                  ),
-              child: Icon(Icons.add)),
-          SizedBox(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ExamCreatePage(),
+              ),
+            ),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(
             width: 16,
           ),
         ],
@@ -62,7 +59,10 @@ class _ExamScreenState extends State<ExamScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
+                  Lottie.asset(
+                    "assets/images/animations/geometryloader.json",
+                    height: 125,
+                  ),
                 ],
               )
             : _examProvider.message.isNotEmpty
@@ -76,7 +76,13 @@ class _ExamScreenState extends State<ExamScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
-                              children: [SizedBox(width: 1,),Icon(Icons.list), Text("List Exams")],
+                              children: [
+                                SizedBox(
+                                  width: 1,
+                                ),
+                                Icon(Icons.list),
+                                Text("List Exams")
+                              ],
                             ),
                             Row(
                               children: [
@@ -89,7 +95,7 @@ class _ExamScreenState extends State<ExamScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Expanded(
@@ -106,9 +112,14 @@ class _ExamScreenState extends State<ExamScreen> {
                                 questionCount: exam.totalQuestions,
                                 candidateCount: exam.numberOfCandidates,
                                 onDelete: () async {
-                                  bool res = await _examProvider.deleteExam(exam.id);
-                                  if(res){
-                                    Provider.of<ResultProvider>(context,listen: false).getAllResults();
+                                  bool res =
+                                      await _examProvider.deleteExam(exam.id);
+                                  if (res) {
+                                    if (!context.mounted) return;
+                                    Provider.of<ResultProvider>(
+                                      context,
+                                      listen: false,
+                                    ).getAllResults();
                                   }
                                 },
                               );
@@ -118,22 +129,29 @@ class _ExamScreenState extends State<ExamScreen> {
                         const SizedBox(height: 16),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ExamCreatePage()));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ExamCreatePage(),
+                              ),
+                            );
                           },
                           child: Ink(
                             width: double.maxFinite,
                             height: 48,
                             decoration: BoxDecoration(
-                                color: colorPrimary,
-                                borderRadius: BorderRadius.circular(12)),
+                              color: colorPrimary,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                             child: const Align(
                               alignment: Alignment.center,
                               child: Text(
                                 "Add New",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ),

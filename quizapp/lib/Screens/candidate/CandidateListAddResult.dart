@@ -8,16 +8,19 @@ import 'package:quizapp/providers/examProvider.dart';
 import 'package:quizapp/providers/scholarProvider.dart';
 
 class CandidateListAddResult extends StatelessWidget {
-  List<Candidate> candidates;
+  final List<Candidate> candidates;
   final int count;
 
-  CandidateListAddResult(
-      {super.key, required this.candidates, required this.count});
+  const CandidateListAddResult({
+    super.key,
+    required this.candidates,
+    required this.count,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final scholarProvider = Provider.of<ScholarProvider>(context,listen:true);
-    final examProvider = Provider.of<ExamProvider>(context,listen: true);
+    final scholarProvider = Provider.of<ScholarProvider>(context);
+    final examProvider = Provider.of<ExamProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -31,12 +34,15 @@ class CandidateListAddResult extends StatelessWidget {
         shadowColor: Colors.grey,
         actions: [
           InkWell(
-              onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ScholarAddScreen()),
-                  ),
-              child: Icon(Icons.add)),
-          SizedBox(width: 16),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ScholarAddScreen(),
+              ),
+            ),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(width: 16),
         ],
       ),
       backgroundColor: neutralWhite,
@@ -47,7 +53,7 @@ class CandidateListAddResult extends StatelessWidget {
             // success container
             Container(
               width: double.maxFinite,
-              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
               decoration: BoxDecoration(
                 color: brandMinus3,
                 borderRadius: BorderRadius.circular(8),
@@ -55,59 +61,104 @@ class CandidateListAddResult extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Lottie.asset("assets/images/success1.json",width: 112),
-                  Text('Registration Successful',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: colorPrimary),),
+                  Lottie.asset(
+                    "assets/images/success1.json",
+                    width: 112,
+                  ),
+                  const Text(
+                    'Registration Successful',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: colorPrimary),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Requested: ${candidates.length}',style: TextStyle(color: colorPrimary)),
-                      SizedBox(width: 4,),
-                      Text('Added: ${count}',style: TextStyle(color: colorPrimary)),
-                      SizedBox(width: 4,),
-                      Text('Failed: ${candidates.length-count}',style: TextStyle(color: colorPrimary)),
+                      Text(
+                        'Requested: ${candidates.length}',
+                        style: const TextStyle(
+                          color: colorPrimary,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        'Added: $count',
+                        style: const TextStyle(
+                          color: colorPrimary,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        'Failed: ${candidates.length - count}',
+                        style: const TextStyle(
+                          color: colorPrimary,
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(height: 8,),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   InkWell(
-                      onTap: (){
-                        candidates = [];
-                        Navigator.pop(context,candidates);
-                        scholarProvider.getFilteredScholars(examProvider.selectedExam!.id);
-                      },
+                    onTap: () {
+                      final candidates = [];
+                      Navigator.pop(context, candidates);
+                      scholarProvider
+                          .getFilteredScholars(examProvider.selectedExam!.id);
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       width: 100,
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: colorPrimary,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text("Done",style: TextStyle(color: neutralWhite,fontWeight: FontWeight.w500),),
+                      child: const Text(
+                        "Done",
+                        style: TextStyle(
+                            color: neutralWhite, fontWeight: FontWeight.w500),
+                      ),
                     ),
                   )
                 ],
               ),
             ),
-            SizedBox(height: 8,),
+            const SizedBox(
+              height: 8,
+            ),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.list,size: 21,),
+                    Icon(
+                      Icons.list,
+                      size: 21,
+                    ),
                     Text("Requested List")
                   ],
                 ),
                 Row(
                   children: [
                     Text("Filter"),
-                    Icon(Icons.filter_vintage_rounded,size: 18,),
+                    Icon(
+                      Icons.filter_vintage_rounded,
+                      size: 18,
+                    ),
                   ],
                 )
               ],
             ),
-            SizedBox(height: 4,),
+            const SizedBox(
+              height: 4,
+            ),
             Expanded(
                 child: ListView.builder(
               itemCount: candidates.length,
@@ -116,13 +167,19 @@ class CandidateListAddResult extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 4,horizontal: 2.5),
-                      padding:EdgeInsets.all(4),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 2.5),
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: neutralWhite,
-                        boxShadow: [BoxShadow(color: Colors.black12,blurRadius: 1,spreadRadius: 1)],
-                        borderRadius: BorderRadius.circular(6)
-                      ),
+                          color: neutralWhite,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 1,
+                              spreadRadius: 1,
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(6)),
 
                       //Card for candidates
                       child: Row(
@@ -130,36 +187,59 @@ class CandidateListAddResult extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Image.asset("assets/images/man.png",width: 50,),
-                              SizedBox(width: 4,),
+                              Image.asset(
+                                "assets/images/man.png",
+                                width: 50,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text('Name: ${candidates[index].name}'),
-                                  Text('Serial Number: ${candidates[index].serialNumber}'),
+                                  Text(
+                                      'Serial Number: ${candidates[index].serialNumber}'),
                                 ],
                               ),
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: index<count
-                                ?
-                            Column(
-                              children: [
-                                Icon(Icons.cloud_done,color: Colors.green,),
-                                Text("saved",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.green),)
-                              ],
-                            )
-                                :
-                            Column(
-                              children: [
-                                Icon(Icons.cancel_rounded,color: Colors.red,),
-                                Text("Canceled",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w500,color: Colors.red),)
-                              ],
-                            )
-                            ,
+                            child: index < count
+                                ? const Column(
+                                    children: [
+                                      Icon(
+                                        Icons.cloud_done,
+                                        color: Colors.green,
+                                      ),
+                                      Text(
+                                        "saved",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.green,
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : const Column(
+                                    children: [
+                                      Icon(
+                                        Icons.cancel_rounded,
+                                        color: Colors.red,
+                                      ),
+                                      Text(
+                                        "Canceled",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.red,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                           ),
                         ],
                       ),
@@ -167,18 +247,23 @@ class CandidateListAddResult extends StatelessWidget {
                     if (index == count - 1) ...[
                       Row(
                         children: [
-                          Icon(
-                            Icons.cancel_schedule_send,size: 16,
+                          const Icon(
+                            Icons.cancel_schedule_send,
+                            size: 16,
                           ),
-                          SizedBox(width: 8,),
-                          Text("Rejected"),
-                          SizedBox(width: 8,),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          const Text("Rejected"),
+                          const SizedBox(
+                            width: 8,
+                          ),
                           Expanded(
                             flex: 4,
-                              child: Container(
-                                height: 2,
-                                color: brandMinus3,
-                              )
+                            child: Container(
+                              height: 2,
+                              color: brandMinus3,
+                            ),
                           ),
                         ],
                       ),
@@ -187,22 +272,29 @@ class CandidateListAddResult extends StatelessWidget {
                 );
               },
             )),
-            SizedBox(height: 8,),
+            const SizedBox(
+              height: 8,
+            ),
             InkWell(
-              onTap: (){
-                candidates = [];
-                Navigator.pop(context,candidates);
-                scholarProvider.getFilteredScholars(examProvider.selectedExam!.id);
+              onTap: () {
+                final candidates = [];
+                Navigator.pop(context, candidates);
+                scholarProvider
+                    .getFilteredScholars(examProvider.selectedExam!.id);
               },
               child: Container(
                 alignment: Alignment.center,
                 width: double.maxFinite,
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: colorPrimary,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text("Back",style: TextStyle(color: neutralWhite,fontWeight: FontWeight.w500),),
+                child: const Text(
+                  "Back",
+                  style: TextStyle(
+                      color: neutralWhite, fontWeight: FontWeight.w500),
+                ),
               ),
             )
           ],

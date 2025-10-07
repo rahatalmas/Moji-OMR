@@ -18,23 +18,11 @@ class OmrCreatePage extends StatefulWidget {
 }
 
 class _OmrCreatePage extends State<OmrCreatePage> {
-  // Initialize the list based on the question count
-  Map<int, int> _selectedAnswers = {}; // To store <questionNumber, answerIndex>
+  final _selectedAnswers = {};
   List<int> l = List.filled(81, 0);
-  // late ExamProvider _examProvider;
-  // late AnswerProvider _answerProvider;
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   if (_examProvider.selectedExam != null || _answerProvider.dataUpdated) {
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       _answerProvider.getAllAnswers(_examProvider.selectedExam!.id);
-  //     });
-  //   }
-  // }
 
-  void _handleCreateButtonPress(Exam? exam) async{
-    final answerProvider = Provider.of<AnswerProvider>(context,listen: false);
+  void _handleCreateButtonPress(Exam? exam) async {
+    final answerProvider = Provider.of<AnswerProvider>(context, listen: false);
     if (_selectedAnswers.length < exam!.totalQuestions) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -43,26 +31,24 @@ class _OmrCreatePage extends State<OmrCreatePage> {
         ),
       );
     } else {
-      print('Correct Answers: $l');
-      for(int i=0;i<exam.totalQuestions;i++){
-        Answer answer = Answer(
+      for (int i = 0; i < exam.totalQuestions; i++) {
+        final answer = Answer(
             examId: exam.id,
             questionSetId: 1,
-            questionNumber: i+1,
-            correctAnswer: l[i+1]
-        );
-        bool res = await answerProvider.addAnswer(answer);
+            questionNumber: i + 1,
+            correctAnswer: l[i + 1]);
+        await answerProvider.addAnswer(answer);
       }
       answerProvider.getAllAnswers(exam.id);
+      if (!mounted) return;
       Navigator.pushNamed(context, RouteNames.viewDocument);
-      // Save the list to the backend or process it further.
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final examProvider = Provider.of<ExamProvider>(context, listen: true);
-    final answerProvider = Provider.of<AnswerProvider>(context,listen: true);
+    final answerProvider = Provider.of<AnswerProvider>(context, listen: true);
     final totalQuestions = examProvider.selectedExam?.totalQuestions ?? 0;
     return Scaffold(
       appBar: AppBar(
@@ -81,176 +67,188 @@ class _OmrCreatePage extends State<OmrCreatePage> {
         children: [
           const Padding(
             padding: EdgeInsets.all(16.0),
-            child: ExamFilterWidget(
-            ),
+            child: ExamFilterWidget(),
           ),
           examProvider.selectedExam == null
-              ? Expanded(
-                child: const Center(
-                              child: Text("no exam selected"),
-                            ),
-              )
-              :
-          answerProvider.answers.length != examProvider.selectedExam!.totalQuestions ?
-          answerProvider.isLoading?
-          //loader
-          Expanded(
-            child: Center(
-              child: Lottie.asset("assets/images/animations/geometryloader.json",width: 100),
-            ),
-          )
-              :
-          //answer list for storing
-          Expanded(
-            child: ListView(
-              children: [
-                const Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(Icons.list),
-                          SizedBox(width: 3),
-                          Text("Select Correct Answer"),
-                        ],
-                      ),
-                      // Row(
-                      //   children: const [
-                      //     Text("sort"),
-                      //     SizedBox(width: 3),
-                      //     Icon(Icons.sort),
-                      //   ],
-                      // ),
-                    ],
+              ? const Expanded(
+                  child: Center(
+                    child: Text("no exam selected"),
                   ),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: totalQuestions,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                )
+              : answerProvider.answers.length !=
+                      examProvider.selectedExam!.totalQuestions
+                  ? answerProvider.isLoading
+                      ?
+                      //loader
+                      Expanded(
+                          child: Center(
+                            child: Lottie.asset(
+                              "assets/images/animations/geometryloader.json",
+                              width: 100,
+                            ),
+                          ),
+                        )
+                      :
+                      //answer list for storing
+                      Expanded(
+                          child: ListView(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text('Question: ${index + 1}'),
-                                  const SizedBox(width: 20),
-                                ],
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: const [
+                                        Icon(Icons.list),
+                                        SizedBox(width: 3),
+                                        Text("Select Correct Answer"),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                              AnswerCircles(
-                                questionNumber: index + 1,
-                                onAnswerSelected: (int question, int answer) {
-                                  setState(() {
-                                    _selectedAnswers[question] = answer;
-                                    l[question] = answer;
-                                  });
-                                  print(l);
-                                  print(_selectedAnswers); // Debug: check the current map
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: totalQuestions,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 16),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text('Question: ${index + 1}'),
+                                                const SizedBox(width: 20),
+                                              ],
+                                            ),
+                                            AnswerCircles(
+                                              questionNumber: index + 1,
+                                              onAnswerSelected:
+                                                  (int question, int answer) {
+                                                setState(() {
+                                                  _selectedAnswers[question] =
+                                                      answer;
+                                                  l[question] = answer;
+                                                });
+                                                print(l);
+                                                print(
+                                                  _selectedAnswers,
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
                                 },
                               ),
                             ],
                           ),
+                        )
+                  :
+                  //answer is set
+                  Expanded(
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Lottie.asset(
+                                  "assets/images/animations/answerchecked.json",
+                                  height: 300,
+                                ),
+                                const Text("Answers Are Set")
+                              ],
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return UpdateAnswerScreen(
+                                      exam: examProvider.selectedExam!);
+                                }));
+                              },
+                              child: const Text(
+                                "Update answer",
+                                style: TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontSize: 16,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            ),
-          )
-              :
-          //answer is set
-          Expanded(
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Lottie.asset("assets/images/animations/answerchecked.json",height: 300),
-                      const Text("Answers Are Set")
-                    ],
-                  ),
-                  InkWell(
-                    onTap: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context){
-                            return UpdateAnswerScreen(exam:examProvider.selectedExam!);
-                          })
-                      );
-                    },
-                    child: const Text(
-                      "Update answer",
-                      style: TextStyle(
-                          color: Colors.deepPurple,
-                          fontSize: 16,
-                          decoration: TextDecoration.underline
                       ),
                     ),
-                  )
-              ],
-            ),),
-          ),
           examProvider.selectedExam == null
-              ?
-              Container()
-              :
-          answerProvider.isLoading?
-          Container(
-            padding: const EdgeInsets.all(16),
-            color: Colors.white,
-            child:
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: colorPrimary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Center(
-                child: CircularProgressIndicator(color: neutralWhite,),
-              ),
-            ),
-          ):
-          Container(
-            padding: const EdgeInsets.all(16),
-            color: Colors.white,
-            child:
-            InkWell(
-              onTap: () {
-                  answerProvider.answers.length != examProvider.selectedExam!.totalQuestions
-                      ?
-                  _handleCreateButtonPress(examProvider.selectedExam)
-                      :
-                  Navigator.pushNamed(context, RouteNames.viewDocument);
-              },
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: colorPrimary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Download",
-                    style: TextStyle(color: neutralWhite, fontSize: 18),
-                  ),
-                ),
-              ),
-            ),
-          ),
+              ? Container()
+              : answerProvider.isLoading
+                  ? Container(
+                      padding: const EdgeInsets.all(16),
+                      color: Colors.white,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: neutralWhite,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.all(16),
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          answerProvider.answers.length !=
+                                  examProvider.selectedExam!.totalQuestions
+                              ? _handleCreateButtonPress(
+                                  examProvider.selectedExam,
+                                )
+                              : Navigator.pushNamed(
+                                  context,
+                                  RouteNames.viewDocument,
+                                );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: colorPrimary,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "Download",
+                              style: TextStyle(
+                                color: neutralWhite,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
         ],
       ),
     );
@@ -268,7 +266,7 @@ class AnswerCircles extends StatefulWidget {
   });
 
   @override
-  _AnswerCirclesState createState() => _AnswerCirclesState();
+  State<AnswerCircles> createState() => _AnswerCirclesState();
 }
 
 class _AnswerCirclesState extends State<AnswerCircles> {
@@ -298,9 +296,9 @@ class _AnswerCirclesState extends State<AnswerCircles> {
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
       padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: neutralWhite,
-        border: const BorderDirectional(
+        border: BorderDirectional(
           bottom: BorderSide(color: neutralBG, width: 2),
         ),
       ),
@@ -355,4 +353,3 @@ class AnswerCircle extends StatelessWidget {
     );
   }
 }
-

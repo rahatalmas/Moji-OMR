@@ -8,12 +8,12 @@ import 'package:quizapp/constant.dart';
 import '../../database/models/exammodel.dart';
 
 class UpdateAnswerScreen extends StatefulWidget {
-  final Exam exam; // Receive examId as a constructor parameter
+  final Exam exam;
 
   const UpdateAnswerScreen({super.key, required this.exam});
 
   @override
-  _UpdateAnswerScreenState createState() => _UpdateAnswerScreenState();
+  State<UpdateAnswerScreen> createState() => _UpdateAnswerScreenState();
 }
 
 class _UpdateAnswerScreenState extends State<UpdateAnswerScreen> {
@@ -48,84 +48,88 @@ class _UpdateAnswerScreenState extends State<UpdateAnswerScreen> {
         shadowColor: Colors.grey,
       ),
       backgroundColor: neutralWhite,
-      body:
-      answerProvider.isLoading
+      body: answerProvider.isLoading
           ? Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset("assets/images/animations/geometryloader.json", height: 125),
-          ],
-        ),
-      )
-          :
-      Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: answers.length,
-              itemBuilder: (context, index) {
-                final answer = answers[index];
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('Question: ${answer.questionNumber}'),
-                          const SizedBox(width: 20),
-                        ],
-                      ),
-                      AnswerCircles(
-                        questionNumber: answer.questionNumber,
-                        correctAnswer: answer.correctAnswer,
-                        onAnswerSelect: (int selectedAnswer) {
-                          // Updating the whole answer object with selected answer
-                          Answer updatedAnswer = Answer(
-                              examId: widget.exam.id,
-                              questionSetId:1,
-                              questionNumber: answer.questionNumber,
-                              correctAnswer: selectedAnswer
-                          );
-                          _answerProvider.updateAnswer(updatedAnswer); // Pass the updated object
-                        },
-                      ),
-                    ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    "assets/images/animations/geometryloader.json",
+                    height: 125,
                   ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.pop(context); // Navigate back when the button is pressed
-              },
-              child: Container(
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  color: colorPrimary,
-                  borderRadius: BorderRadius.circular(8),
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: answers.length,
+                    itemBuilder: (context, index) {
+                      final answer = answers[index];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 16,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('Question: ${answer.questionNumber}'),
+                                const SizedBox(width: 20),
+                              ],
+                            ),
+                            AnswerCircles(
+                              questionNumber: answer.questionNumber,
+                              correctAnswer: answer.correctAnswer,
+                              onAnswerSelect: (int selectedAnswer) {
+                                // Updating the whole answer object with selected answer
+                                Answer updatedAnswer = Answer(
+                                    examId: widget.exam.id,
+                                    questionSetId: 1,
+                                    questionNumber: answer.questionNumber,
+                                    correctAnswer: selectedAnswer);
+                                _answerProvider.updateAnswer(updatedAnswer);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
-                child: const Center(
-                  child: Text(
-                    'Back',
-                    style: TextStyle(
-                      color: neutralWhite,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(
+                          context); // Navigate back when the button is pressed
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: colorPrimary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Back',
+                          style: TextStyle(
+                            color: neutralWhite,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -147,9 +151,9 @@ class AnswerCircles extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
       padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: neutralWhite,
-        border: const BorderDirectional(
+        border: BorderDirectional(
           bottom: BorderSide(color: neutralBG, width: 2),
         ),
       ),
@@ -188,14 +192,11 @@ class AnswerCircle extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isSelected ? Colors.green : Colors.blue,
-        // border: Border.all(
-        //   color: isSelected ? Colors.green : Colors.black, // Border for unselected circles
-        // ),
       ),
       child: Center(
         child: Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: neutralWhite,
           ),
         ),

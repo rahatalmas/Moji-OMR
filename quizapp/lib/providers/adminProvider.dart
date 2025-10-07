@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import '../database/models/admin.dart';
 import '../handler/apis/adminApi.dart';
-
 
 class AdminProvider with ChangeNotifier {
   List<Admin> _admins = [];
@@ -67,5 +64,4 @@ class AdminProvider with ChangeNotifier {
       return false;
     }
   }
-
 }
